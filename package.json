@@ -1,7 +1,7 @@
 {
 	"name": "grunt-hustler",
 	"description": "A collection of grunt tasks.",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"homepage": "https://github.com/CaryLandholt/grunt-hustler",
 	"author": {
 		"name": "Cary Landholt"
@@ -28,6 +28,7 @@
 		"coffee-script": "~1.3.3",
 		"coffeelint": "~0.4.0",
 		"grunt": "~0.3.12",
+		"grunt-exec": "~0.1.1",
 		"node-js-beautify": "~0.1.0",
 		"requirejs": "~2.0.6",
 		"rimraf": "~2.0.2",
@@ -36,6 +37,7 @@
 	"keywords": [
 		"gruntplugin",
 		"grunt.js",
-		"grunt"
+		"grunt",
+		"hustler"
 	]
 }
