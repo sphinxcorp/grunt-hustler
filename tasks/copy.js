@@ -3,17 +3,29 @@
 */
 
 module.exports = function(grunt) {
-  var fs, wrench;
+  var fs, isDirectory, wrench;
   fs = require('fs');
   wrench = require('wrench');
+  isDirectory = function(path) {
+    var isADirectory, stats;
+    stats = fs.lstatSync(path);
+    isADirectory = stats.isDirectory();
+    return isADirectory;
+  };
   return grunt.registerMultiTask('copy', 'Copies a directory', function() {
-    var dest, src;
+    var contents, dest, isSrcADirectory, src;
     src = this.file.src;
     dest = this.file.dest;
     if (!fs.existsSync(src)) {
       return;
     }
-    wrench.mkdirSyncRecursive(dest, 0x1ff);
-    return wrench.copyDirSyncRecursive(src, dest);
+    isSrcADirectory = isDirectory(src);
+    if (isSrcADirectory) {
+      wrench.mkdirSyncRecursive(dest, 0x1ff);
+      return wrench.copyDirSyncRecursive(src, dest);
+    } else {
+      contents = grunt.file.read(src);
+      return grunt.file.write(dest, contents);
+    }
   });
 };
