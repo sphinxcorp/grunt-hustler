@@ -13,16 +13,19 @@ module.exports = function(grunt) {
     return isADirectory;
   };
   return grunt.registerMultiTask('copy', 'Copies a directory', function() {
-    var contents, dest, isSrcADirectory, src;
+    var contents, dest, isSrcADirectory, merge, src, _ref;
     src = this.file.src;
     dest = this.file.dest;
+    merge = (_ref = this.data.merge) != null ? _ref : true;
     if (!fs.existsSync(src)) {
       return;
     }
     isSrcADirectory = isDirectory(src);
     if (isSrcADirectory) {
       wrench.mkdirSyncRecursive(dest, 0x1ff);
-      return wrench.copyDirSyncRecursive(src, dest);
+      return wrench.copyDirSyncRecursive(src, dest, {
+        preserve: merge
+      });
     } else {
       contents = grunt.file.read(src);
       return grunt.file.write(dest, contents);
