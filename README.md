@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/CaryLandholt/grunt-hustler.png)](http://travis-ci.org/CaryLandholt/grunt-hustler)
 # grunt-hustler
 
 A collection of [grunt](https://github.com/cowboy/grunt) tasks.
