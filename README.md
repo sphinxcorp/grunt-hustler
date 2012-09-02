@@ -3,8 +3,8 @@
 
 A collection of [grunt](https://github.com/cowboy/grunt) tasks.
 
-* coffee
-* coffeeLint
+* [coffee](#coffee) - Compile [CoffeeScript](http://coffeescript.org/) (.coffee) to JavaScript (.js)
+* [coffeeLint](#coffeeLint) - Lint CoffeeScript files using [coffeelint](http://www.coffeelint.org/)
 * copy
 * delete
 * hash
@@ -12,20 +12,97 @@ A collection of [grunt](https://github.com/cowboy/grunt) tasks.
 * server
 * template
 
-
 ## Installation
 
 ```
 npm install grunt-hustler
 ```
 
-
 ## Usage
+
+Include the following line in your Grunt file.
 
 ``` javascript
 grunt.loadNpmTasks('grunt-hustler');
 ```
 
+## Tasks
+
+### coffee
+
+Compile [CoffeeScript](http://coffeescript.org/) (*.coffee) to JavaScript (*.js)
+
+#### options
+
+* src - source directory
+* dest - destination directory
+* bare - compile the JavaScript without the [top-level function safety wrapper](http://coffeescript.org/#lexical_scope)
+
+#### Example
+
+``` javascript
+// example
+module.exports = function (grunt) {
+	grunt.initConfig({
+
+		/*
+		The following will compile all .coffee files in the src directory
+		and place the corresponding .js files in the dest directory.
+		The directory hierarchy will be maintained.
+		*/
+		coffee: {
+			dist: {
+				src: '/src/scripts/',
+				dest: '/dist/scripts/',
+				bare: true
+			}
+		}
+
+	});
+
+	grunt.loadNpmTasks('grunt-hustler');
+};
+```
+
+### coffeeLint
+
+Lint CoffeeScript files using [coffeelint](http://www.coffeelint.org/)
+
+#### options
+
+* see [coffeelint](http://www.coffeelint.org/#options) for options
+
+#### Example
+
+``` javascript
+// example
+module.exports = function (grunt) {
+	grunt.initConfig({
+
+		/*
+		The following will lint all .coffee files in the src directory
+		with indentation of one tab and no maximum line length
+		*/
+		coffeeLint: {
+			scripts: {
+				src: '/src/scripts/**/*.coffee',
+				indentation: {
+					value: 1
+				},
+				max_line_length: {
+					level: 'ignore'
+				},
+				no_tabs: {
+					level: 'ignore'
+				}
+			}
+		}
+
+	});
+
+	grunt.loadNpmTasks('grunt-hustler');
+};
+```
 
 ## Versioning
 
@@ -43,13 +120,11 @@ And constructed with the following guidelines:
 
 For more information on SemVer, please visit http://semver.org/.
 
-
 ## Bug tracker
 
 Have a bug?  Please create an issue here on GitHub!
 
 https://github.com/CaryLandholt/grunt-hustler/issues
-
 
 ## Author
 

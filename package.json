@@ -1,10 +1,12 @@
 {
 	"name": "grunt-hustler",
-	"description": "A collection of grunt tasks.",
-	"version": "0.1.3",
+	"description": "A collection of grunt tasks",
+	"version": "0.1.4",
 	"homepage": "https://github.com/CaryLandholt/grunt-hustler",
 	"author": {
-		"name": "Cary Landholt"
+		"name": "Cary Landholt",
+		"email": "cary@landholt.com",
+		"url": "https://github.com/CaryLandholt"
 	},
 	"repository": {
 		"type": "git",
