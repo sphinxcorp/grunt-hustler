@@ -8,9 +8,10 @@ module.exports = (grunt) ->
 		src = @file.src
 		dest = @file.dest
 		bare = @data.bare ? false
+		cmd = 'node'
 
-		options = [
-			'"' + './node_modules/.bin/coffee' + '"'
+		args = [
+			'node_modules/.bin/coffee'
 			'--compile'
 			'--bare' if bare
 			'--output'
@@ -18,9 +19,10 @@ module.exports = (grunt) ->
 			src
 		]
 
-		grunt.helper 'exec', "#{options.join ' '}", true, true, (err) ->
+		grunt.utils.spawn {cmd, args}, (err) ->
 			if err
-				grunt.log.write err
-				done false
+				grunt.log.error err
 			else
-				done true
+				grunt.log.write 'coffee success'
+
+			done true

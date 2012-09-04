@@ -4,26 +4,30 @@
 
 module.exports = function(grunt) {
   return grunt.registerMultiTask('server', 'Run a server', function() {
-    var config, done, options, port, src, target, watch;
+    var args, cmd, config, done, port, src, target, watch;
     done = this.async();
     src = this.file.src;
     target = this.target;
     config = this.data;
     watch = config.watch;
     port = config.port;
+    cmd = 'node';
     if (watch) {
-      options = ['"' + './node_modules/.bin/nodemon' + '"', src, '-w', watch, port];
+      args = ['node_modules/.bin/nodemon', src, '-w', watch, port];
     } else {
-      options = ['node', src, port];
+      args = [src, port];
     }
     grunt.log.write("starting \"" + target + "\" web server at \"http://localhost:" + port + "\"");
-    return grunt.helper('exec', "" + (options.join(' ')), true, true, function(err) {
+    return grunt.utils.spawn({
+      cmd: cmd,
+      args: args
+    }, function(err) {
       if (err) {
-        grunt.log.write(err);
-        return done(false);
+        grunt.log.error(err);
       } else {
-        return done(true);
+        grunt.log.write('server success');
       }
+      return done(true);
     });
   });
 };

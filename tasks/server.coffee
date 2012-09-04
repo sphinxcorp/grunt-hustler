@@ -8,27 +8,28 @@ module.exports = (grunt) ->
 		config = @data
 		watch = config.watch
 		port = config.port
+		cmd = 'node'
 
 		if watch
-			options = [
-				'"' + './node_modules/.bin/nodemon' + '"'
+			args = [
+				'node_modules/.bin/nodemon'
 				src
 				'-w'
 				watch
 				port
 			]
 		else
-			options = [
-				'node'
+			args = [
 				src
 				port
 			]
 
 		grunt.log.write "starting \"#{target}\" web server at \"http://localhost:#{port}\""
 
-		grunt.helper 'exec', "#{options.join ' '}", true, true, (err) ->
+		grunt.utils.spawn {cmd, args}, (err) ->
 			if err
-				grunt.log.write err
-				done false
+				grunt.log.error err
 			else
-				done true
+				grunt.log.write 'server success'
+
+			done true

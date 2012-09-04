@@ -6,19 +6,23 @@ module.exports = function(grunt) {
   var coffeeScript;
   coffeeScript = require('coffee-script');
   return grunt.registerMultiTask('coffee', 'Compile CoffeeScript to JavaScript', function() {
-    var bare, dest, done, options, src, _ref;
+    var args, bare, cmd, dest, done, src, _ref;
     done = this.async();
     src = this.file.src;
     dest = this.file.dest;
     bare = (_ref = this.data.bare) != null ? _ref : false;
-    options = ['"' + './node_modules/.bin/coffee' + '"', '--compile', bare ? '--bare' : void 0, '--output', dest, src];
-    return grunt.helper('exec', "" + (options.join(' ')), true, true, function(err) {
+    cmd = 'node';
+    args = ['node_modules/.bin/coffee', '--compile', bare ? '--bare' : void 0, '--output', dest, src];
+    return grunt.utils.spawn({
+      cmd: cmd,
+      args: args
+    }, function(err) {
       if (err) {
-        grunt.log.write(err);
-        return done(false);
+        grunt.log.error(err);
       } else {
-        return done(true);
+        grunt.log.write('coffee success');
       }
+      return done(true);
     });
   });
 };
