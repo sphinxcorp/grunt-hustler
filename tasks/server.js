@@ -4,15 +4,15 @@
 
 module.exports = function(grunt) {
   return grunt.registerMultiTask('server', 'Run a server', function() {
-    var config, done, options, port, src, target, watch, _ref;
+    var config, done, options, port, src, target, watch;
     done = this.async();
     src = this.file.src;
     target = this.target;
     config = this.data;
-    watch = (_ref = config.watch) != null ? _ref : false;
+    watch = config.watch;
     port = config.port;
     if (watch) {
-      options = ['"' + './node_modules/.bin/nodemon' + '"', src, '-w', src, port];
+      options = ['"' + './node_modules/.bin/nodemon' + '"', src, '-w', watch, port];
     } else {
       options = ['node', src, port];
     }

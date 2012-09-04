@@ -4,7 +4,7 @@
 A collection of [grunt](https://github.com/cowboy/grunt) tasks.
 
 * [coffee](#coffee) - Compile [CoffeeScript](http://coffeescript.org/) (.coffee) to JavaScript (.js)
-* [coffeeLint](#coffeeLint) - Lint CoffeeScript files using [coffeelint](http://www.coffeelint.org/)
+* [coffeeLint](#coffeelint) - Lint CoffeeScript files using [coffeelint](http://www.coffeelint.org/)
 * copy
 * delete
 * hash

@@ -6,7 +6,7 @@ module.exports = (grunt) ->
 		src = @file.src
 		target = @target
 		config = @data
-		watch = config.watch ? false
+		watch = config.watch
 		port = config.port
 
 		if watch
@@ -14,7 +14,7 @@ module.exports = (grunt) ->
 				'"' + './node_modules/.bin/nodemon' + '"'
 				src
 				'-w'
-				src
+				watch
 				port
 			]
 		else
