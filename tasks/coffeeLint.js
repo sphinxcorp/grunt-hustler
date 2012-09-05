@@ -3,32 +3,25 @@
 */
 
 module.exports = function(grunt) {
-  var coffeeLint, path;
+  var coffeeLint;
   coffeeLint = require('coffeelint');
-  path = require('path');
   return grunt.registerMultiTask('coffeeLint', 'Lints CoffeeScript files', function() {
-    var config, files, message, src;
+    var config, files, src;
     src = this.file.src;
     config = this.data;
     files = grunt.file.expandFiles(src);
-    message = '';
-    files.forEach(function(file, index) {
-      var errors, fullPath, source;
+    return files.forEach(function(file, index) {
+      var errors, source;
       source = grunt.file.read(file);
       errors = coffeeLint.lint(source, config);
       if (!errors.length) {
+        grunt.log.ok(file);
         return;
       }
-      fullPath = path.resolve(file);
-      message += "" + fullPath + "\n";
-      errors.forEach(function(error) {
-        return message += "#" + error.lineNumber + ": " + error.message + "\n";
+      grunt.log.header(file);
+      return errors.forEach(function(error) {
+        return grunt.log.error("#" + error.lineNumber + ": " + error.message + " (" + error.context + ")");
       });
-      return message += '\n';
     });
-    if (!message.length) {
-      return;
-    }
-    return grunt.log.writeln(message);
   });
 };
