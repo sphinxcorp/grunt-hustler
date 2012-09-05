@@ -2,32 +2,51 @@
 /*global module, require
 */
 
+/*global module, require
+*/
+
 module.exports = function(grunt) {
+  var os, path, _;
+  os = require('os');
+  path = require('path');
+  _ = grunt.utils._;
   return grunt.registerMultiTask('server', 'Run a server', function() {
-    var args, cmd, config, done, port, src, target, watch;
+    var args, child, cmd, config, done, isWindows, port, src, target, watch;
     done = this.async();
     src = this.file.src;
     target = this.target;
     config = this.data;
     watch = config.watch;
     port = config.port;
-    cmd = 'node';
-    if (watch) {
-      args = ['node_modules/.bin/nodemon', src, '-w', watch, port];
-    } else {
-      args = [src, port];
+    isWindows = !!process.platform.match(/^win/);
+    cmd = isWindows ? 'cmd' : 'node';
+    args = [];
+    if (isWindows) {
+      args.push('/c');
     }
-    grunt.log.write("starting \"" + target + "\" web server at \"http://localhost:" + port + "\"");
-    return grunt.utils.spawn({
+    args.push(watch ? path.normalize('./node_modules/.bin/nodemon') : 'node');
+    args.push(path.normalize(src));
+    if (watch) {
+      args.push('-w');
+    }
+    if (watch) {
+      args.push(path.normalize(watch));
+    }
+    args.push(port);
+    child = grunt.utils.spawn({
       cmd: cmd,
       args: args
     }, function(err) {
       if (err) {
         grunt.log.error(err);
-      } else {
-        grunt.log.write('server success');
       }
       return done(true);
+    });
+    child.stdout.on('data', function(buffer) {
+      return grunt.log.writeln(_.rtrim(buffer));
+    });
+    return child.stderr.on('data', function(buffer) {
+      return grunt.log.writeln(_.rtrim(buffer));
     });
   });
 };

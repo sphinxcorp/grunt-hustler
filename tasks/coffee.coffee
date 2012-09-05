@@ -1,28 +1,37 @@
 ###global module, require###
 
 module.exports = (grunt) ->
-	coffeeScript = require 'coffee-script'
+	os = require 'os'
+	path = require 'path'
+	_ = grunt.utils._
 
 	grunt.registerMultiTask 'coffee', 'Compile CoffeeScript to JavaScript', ->
 		done = @async()
 		src = @file.src
 		dest = @file.dest
 		bare = @data.bare ? false
-		cmd = 'node'
+		isWindows = !!process.platform.match /^win/
+		cmd = if isWindows then 'cmd' else 'node'
+		args = []
 
-		args = [
-			'node_modules/.bin/coffee'
-			'--compile'
-			'--bare' if bare
-			'--output'
-			dest
-			src
-		]
+		args.push '/c' if isWindows
+		args.push path.normalize './node_modules/.bin/coffee'
+		args.push '--compile'
+		args.push '--bare' if bare
+		args.push '--output'
+		args.push path.normalize dest
+		args.push path.normalize src
 
-		grunt.utils.spawn {cmd, args}, (err) ->
+		child = grunt.utils.spawn {cmd, args}, (err) ->
 			if err
 				grunt.log.error err
 			else
 				grunt.log.write 'coffee success'
 
 			done true
+
+		child.stdout.on 'data', (buffer) ->
+			grunt.log.writeln _.rtrim buffer
+
+		child.stderr.on 'data', (buffer) ->
+			grunt.log.writeln _.rtrim buffer

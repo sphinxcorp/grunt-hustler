@@ -3,17 +3,31 @@
 */
 
 module.exports = function(grunt) {
-  var coffeeScript;
-  coffeeScript = require('coffee-script');
+  var os, path, _;
+  os = require('os');
+  path = require('path');
+  _ = grunt.utils._;
   return grunt.registerMultiTask('coffee', 'Compile CoffeeScript to JavaScript', function() {
-    var args, bare, cmd, dest, done, src, _ref;
+    var args, bare, child, cmd, dest, done, isWindows, src, _ref;
     done = this.async();
     src = this.file.src;
     dest = this.file.dest;
     bare = (_ref = this.data.bare) != null ? _ref : false;
-    cmd = 'node';
-    args = ['node_modules/.bin/coffee', '--compile', bare ? '--bare' : void 0, '--output', dest, src];
-    return grunt.utils.spawn({
+    isWindows = !!process.platform.match(/^win/);
+    cmd = isWindows ? 'cmd' : 'node';
+    args = [];
+    if (isWindows) {
+      args.push('/c');
+    }
+    args.push(path.normalize('./node_modules/.bin/coffee'));
+    args.push('--compile');
+    if (bare) {
+      args.push('--bare');
+    }
+    args.push('--output');
+    args.push(path.normalize(dest));
+    args.push(path.normalize(src));
+    child = grunt.utils.spawn({
       cmd: cmd,
       args: args
     }, function(err) {
@@ -23,6 +37,12 @@ module.exports = function(grunt) {
         grunt.log.write('coffee success');
       }
       return done(true);
+    });
+    child.stdout.on('data', function(buffer) {
+      return grunt.log.writeln(_.rtrim(buffer));
+    });
+    return child.stderr.on('data', function(buffer) {
+      return grunt.log.writeln(_.rtrim(buffer));
     });
   });
 };
