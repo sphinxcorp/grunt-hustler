@@ -12,7 +12,7 @@ module.exports = function(grunt) {
       return grunt.log.ok(fileObject);
     });
   };
-  return grunt.registerMultiTask('remove', 'Deletes files and directories', function() {
+  return grunt.registerMultiTask('delete', 'Deletes files and directories', function() {
     var directories, files, src;
     src = this.file.src;
     files = grunt.file.expandFiles(src);

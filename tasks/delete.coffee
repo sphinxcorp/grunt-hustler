@@ -9,7 +9,7 @@ module.exports = (grunt) ->
 			command fileObject
 			grunt.log.ok fileObject
 
-	grunt.registerMultiTask 'remove', 'Deletes files and directories', ->
+	grunt.registerMultiTask 'delete', 'Deletes files and directories', ->
 		src = @file.src
 		files = grunt.file.expandFiles src
 		directories = grunt.file.expandDirs src
