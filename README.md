@@ -3,12 +3,12 @@
 
 ## Contents
 
-* [What is grunt-hustler?](#whatisgrunt-hustler)
+* [What is grunt-hustler?](#what-is-grunt-hustler)
 * [Installation](#installation)
 * [Usage](#usage)
 * [Tasks](#tasks)
 * [Versioning](#versioning)
-* [Bug Tracker](#bugtracker)
+* [Bug Tracker](#bug-tracker)
 * [Author](#author)
 * [License](#license)
 
