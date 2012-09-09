@@ -28,7 +28,7 @@ A collection of [grunt](https://github.com/cowboy/grunt) tasks.
 ## Installation
 
 ```bash
-npm install grunt-hustler
+$ npm install grunt-hustler
 ```
 
 ## Usage
