@@ -27,7 +27,7 @@ A collection of [grunt](https://github.com/cowboy/grunt) tasks.
 
 ## Installation
 
-```
+```bash
 npm install grunt-hustler
 ```
 
@@ -35,7 +35,7 @@ npm install grunt-hustler
 
 Include the following line in your Grunt file.
 
-``` javascript
+```javascript
 grunt.loadNpmTasks('grunt-hustler');
 ```
 
@@ -53,7 +53,7 @@ Compile [CoffeeScript](http://coffeescript.org/) (*.coffee) to JavaScript (*.js)
 
 #### Example
 
-``` javascript
+```javascript
 // example
 module.exports = function (grunt) {
 	grunt.initConfig({
@@ -87,7 +87,7 @@ Lint CoffeeScript files using [coffeelint](http://www.coffeelint.org/)
 
 #### Example
 
-``` javascript
+```javascript
 // example
 module.exports = function (grunt) {
 	grunt.initConfig({
