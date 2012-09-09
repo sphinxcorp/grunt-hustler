@@ -27,6 +27,7 @@
 # 	}
 # }
 module.exports = (grunt) ->
+	fs = require 'fs'
 	path = require 'path'
 	wrench = require 'wrench'
 	_ = grunt.utils._
@@ -78,6 +79,10 @@ module.exports = (grunt) ->
 			sources.push src
 
 		sources.forEach (source) ->
+			sourceExists = fs.existsSync source
+
+			return if not sourceExists
+
 			directories = grunt.file.expandDirs source
 			files = grunt.file.expandFiles source
 

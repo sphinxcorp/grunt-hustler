@@ -3,7 +3,8 @@
 */
 
 module.exports = function(grunt) {
-  var copyDirectories, copyFiles, notify, path, wrench, _;
+  var copyDirectories, copyFiles, fs, notify, path, wrench, _;
+  fs = require('fs');
   path = require('path');
   wrench = require('wrench');
   _ = grunt.utils._;
@@ -53,7 +54,11 @@ module.exports = function(grunt) {
       sources.push(src);
     }
     return sources.forEach(function(source) {
-      var directories, files;
+      var directories, files, sourceExists;
+      sourceExists = fs.existsSync(source);
+      if (!sourceExists) {
+        return;
+      }
       directories = grunt.file.expandDirs(source);
       files = grunt.file.expandFiles(source);
       copyDirectories(directories, dest, merge);
