@@ -3,9 +3,10 @@
 */
 
 module.exports = function(grunt) {
-  var deleteFileObjects, fs, rimraf;
+  var deleteFileObjects, fs, rimraf, _;
   fs = require('fs');
   rimraf = require('rimraf');
+  _ = grunt.utils._;
   deleteFileObjects = function(command, fileObjects) {
     return fileObjects.forEach(function(fileObject) {
       command(fileObject);
@@ -13,11 +14,25 @@ module.exports = function(grunt) {
     });
   };
   return grunt.registerMultiTask('delete', 'Deletes files and directories', function() {
-    var directories, files, src;
+    var isArray, sources, src;
     src = this.file.src;
-    files = grunt.file.expandFiles(src);
-    directories = grunt.file.expandDirs(src);
-    deleteFileObjects(fs.unlinkSync, files);
-    return deleteFileObjects(rimraf.sync, directories);
+    sources = src;
+    isArray = _.isArray(src);
+    if (!isArray) {
+      sources = [];
+      sources.push(src);
+    }
+    return sources.forEach(function(source) {
+      var directories, exists, files;
+      exists = fs.existsSync(source);
+      console.log('source', exists);
+      if (!exists) {
+        return;
+      }
+      files = grunt.file.expandFiles(source);
+      directories = grunt.file.expandDirs(source);
+      deleteFileObjects(fs.unlinkSync, files);
+      return deleteFileObjects(rimraf.sync, directories);
+    });
   });
 };

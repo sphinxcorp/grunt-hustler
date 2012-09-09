@@ -3,6 +3,7 @@
 module.exports = (grunt) ->
 	fs = require 'fs'
 	rimraf = require 'rimraf'
+	_ = grunt.utils._
 
 	deleteFileObjects = (command, fileObjects) ->
 		fileObjects.forEach (fileObject) ->
@@ -11,8 +12,21 @@ module.exports = (grunt) ->
 
 	grunt.registerMultiTask 'delete', 'Deletes files and directories', ->
 		src = @file.src
-		files = grunt.file.expandFiles src
-		directories = grunt.file.expandDirs src
+		sources = src
+		isArray = _.isArray src
 
-		deleteFileObjects fs.unlinkSync, files
-		deleteFileObjects rimraf.sync, directories
+		if not isArray
+			sources = []
+			sources.push src
+
+		sources.forEach (source) ->
+			exists = fs.existsSync source
+			console.log 'source', exists
+
+			return if not exists
+
+			files = grunt.file.expandFiles source
+			directories = grunt.file.expandDirs source
+
+			deleteFileObjects fs.unlinkSync, files
+			deleteFileObjects rimraf.sync, directories
