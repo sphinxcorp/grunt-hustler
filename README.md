@@ -1,6 +1,19 @@
 [![build status](https://secure.travis-ci.org/CaryLandholt/grunt-hustler.png)](http://travis-ci.org/CaryLandholt/grunt-hustler)
 # grunt-hustler
 
+## Contents
+
+* [What is grunt-hustler?](#whatisgrunt-hustler)
+* [Installation](#installation)
+* [Usage](#usage)
+* [Tasks](#tasks)
+* [Versioning](#versioning)
+* [Bug Tracker](#bugtracker)
+* [Author](#author)
+* [License](#license)
+
+## What is grunt-hustler?
+
 A collection of [grunt](https://github.com/cowboy/grunt) tasks.
 
 * [coffee](#coffee) - Compile [CoffeeScript](http://coffeescript.org/) (.coffee) to JavaScript (.js)
