@@ -1,7 +1,7 @@
 {
 	"name": "grunt-hustler",
 	"description": "A collection of grunt tasks",
-	"version": "0.4.7",
+	"version": "0.4.8",
 	"fixtures": "./test/fixtures/",
 	"temp": "./temp/",
 	"homepage": "https://github.com/CaryLandholt/grunt-hustler",
@@ -31,7 +31,6 @@
 	"dependencies": {
 		"coffee-script": "~1.3.3",
 		"coffeelint": "~0.4.0",
-		"express": "~3.0.0",
 		"grunt": "~0.3.12",
 		"node-js-beautify": "~0.1.0",
 		"nodemon": "~0.6.23",
