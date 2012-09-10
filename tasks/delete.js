@@ -3,36 +3,20 @@
 */
 
 module.exports = function(grunt) {
-  var deleteFileObjects, fs, rimraf, _;
+  var deleteDirectory, deleteFile, deleteFileObject, fs, rimraf;
   fs = require('fs');
   rimraf = require('rimraf');
-  _ = grunt.utils._;
-  deleteFileObjects = function(command, fileObjects) {
-    return fileObjects.forEach(function(fileObject) {
-      command(fileObject);
-      return grunt.log.ok(fileObject);
-    });
+  deleteFileObject = function(command, fileObject) {
+    command(fileObject);
+    return grunt.log.ok(fileObject);
+  };
+  deleteFile = function(file) {
+    return deleteFileObject(fs.unlinkSync, file);
+  };
+  deleteDirectory = function(directory) {
+    return deleteFileObject(rimraf.sync, directory);
   };
   return grunt.registerMultiTask('delete', 'Deletes files and directories', function() {
-    var isArray, sources, src;
-    src = this.file.src;
-    sources = src;
-    isArray = _.isArray(src);
-    if (!isArray) {
-      sources = [];
-      sources.push(src);
-    }
-    return sources.forEach(function(source) {
-      var directories, exists, files;
-      exists = fs.existsSync(source);
-      console.log('source', exists);
-      if (!exists) {
-        return;
-      }
-      files = grunt.file.expandFiles(source);
-      directories = grunt.file.expandDirs(source);
-      deleteFileObjects(fs.unlinkSync, files);
-      return deleteFileObjects(rimraf.sync, directories);
-    });
+    return grunt.helper('processSources', this.file.src, this.file.dest, this.data, deleteFile, deleteDirectory);
   });
 };

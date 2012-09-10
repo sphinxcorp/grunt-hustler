@@ -3,7 +3,7 @@
 */
 
 module.exports = function(grunt) {
-  var copyDirectories, copyFiles, fs, notify, path, wrench, _;
+  var copyDirectory, copyFile, fs, notify, path, wrench, _;
   fs = require('fs');
   path = require('path');
   wrench = require('wrench');
@@ -11,58 +11,34 @@ module.exports = function(grunt) {
   notify = function(from, to) {
     return grunt.log.ok("" + from + " -> " + to);
   };
-  copyDirectories = function(directories, dest, merge) {
-    return directories.forEach(function(directory) {
-      var destDirectory, relativeDestination;
-      destDirectory = path.dirname(dest);
-      wrench.mkdirSyncRecursive(destDirectory, 0x1ff);
-      wrench.copyDirSyncRecursive(directory, dest, {
-        preserve: merge
-      });
-      relativeDestination = path.relative('./', dest);
-      return notify(directory, relativeDestination);
-    });
+  copyFile = function(file, source, config, dest) {
+    var contents, destExt, destination, isDestAFile, relative, relativeDestination, sourceDirectory;
+    contents = grunt.file.read(file);
+    destExt = path.extname(dest);
+    isDestAFile = destExt.length > 0;
+    if (isDestAFile) {
+      grunt.file.write(dest, contents);
+      return notify(file, dest);
+    }
+    sourceDirectory = path.dirname(source.replace('**', ''));
+    relative = path.relative(sourceDirectory, file);
+    destination = path.resolve(dest, relative);
+    grunt.file.write(destination, contents);
+    relativeDestination = path.relative('./', destination);
+    return notify(file, relativeDestination);
   };
-  copyFiles = function(files, dest, source) {
-    return files.forEach(function(file) {
-      var contents, destExt, destination, isDestAFile, relative, relativeDestination, sourceDirectory;
-      contents = grunt.file.read(file);
-      destExt = path.extname(dest);
-      isDestAFile = destExt.length > 0;
-      if (isDestAFile) {
-        grunt.file.write(dest, contents);
-        return notify(file, dest);
-      }
-      sourceDirectory = path.dirname(source.replace('**', ''));
-      relative = path.relative(sourceDirectory, file);
-      destination = path.resolve(dest, relative);
-      grunt.file.write(destination, contents);
-      relativeDestination = path.relative('./', destination);
-      return notify(file, relativeDestination);
+  copyDirectory = function(directory, source, config, dest) {
+    var destDirectory, merge, relativeDestination, _ref;
+    merge = (_ref = config.merge) != null ? _ref : true;
+    destDirectory = path.dirname(dest);
+    wrench.mkdirSyncRecursive(destDirectory, 0x1ff);
+    wrench.copyDirSyncRecursive(directory, dest, {
+      preserve: merge
     });
+    relativeDestination = path.relative('./', dest);
+    return notify(directory, relativeDestination);
   };
   return grunt.registerMultiTask('copy', 'Copies files and directories', function() {
-    var config, dest, isArray, merge, sources, src, _ref;
-    src = this.file.src;
-    dest = this.file.dest;
-    config = this.data;
-    merge = (_ref = config.merge) != null ? _ref : true;
-    sources = src;
-    isArray = _.isArray(src);
-    if (!isArray) {
-      sources = [];
-      sources.push(src);
-    }
-    return sources.forEach(function(source) {
-      var directories, files, sourceExists;
-      sourceExists = fs.existsSync(source);
-      if (!sourceExists) {
-        return;
-      }
-      directories = grunt.file.expandDirs(source);
-      files = grunt.file.expandFiles(source);
-      copyDirectories(directories, dest, merge);
-      return copyFiles(files, dest, source);
-    });
+    return grunt.helper('processSources', this.file.src, this.file.dest, this.data, copyFile, copyDirectory);
   });
 };

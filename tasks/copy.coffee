@@ -14,7 +14,7 @@
 # 		dest: './dest/'
 # 	},
 # 	file_match_to_directory: {
-# 		src: './src/*.ext',
+# 		src: './src/**/*.ext',
 # 		dest: './dest/'
 # 	},
 # 	file_to_directory: {
@@ -35,56 +35,40 @@ module.exports = (grunt) ->
 	notify = (from, to) ->
 		grunt.log.ok "#{from} -> #{to}"
 
-	copyDirectories = (directories, dest, merge) ->
-		directories.forEach (directory) ->
-			destDirectory = path.dirname dest
+	copyFile = (file, source, config, dest) ->
+		contents = grunt.file.read file
+		destExt = path.extname dest
+		isDestAFile = destExt.length > 0
 
-			wrench.mkdirSyncRecursive destDirectory, 0o0777
-			wrench.copyDirSyncRecursive directory, dest, preserve: merge
+		return if isDestAFile
+			grunt.file.write dest, contents
+			notify file, dest
 
-			relativeDestination = path.relative './', dest
+		sourceDirectory = path.dirname source.replace '**', ''
+		relative = path.relative sourceDirectory, file
+		destination = path.resolve dest, relative
 
-			notify directory, relativeDestination
+		grunt.file.write destination, contents
 
-	copyFiles = (files, dest, source) ->
-		files.forEach (file) ->
-			contents = grunt.file.read file
-			destExt = path.extname dest
-			isDestAFile = destExt.length > 0
+		relativeDestination = path.relative './', destination
 
-			return if isDestAFile
-				grunt.file.write dest, contents
-				notify file, dest
+		notify file, relativeDestination
 
-			sourceDirectory = path.dirname source.replace '**', ''
-			relative = path.relative sourceDirectory, file
-			destination = path.resolve dest, relative
+	copyDirectory = (directory, source, config, dest) ->
+		merge = config.merge ? true
+		destDirectory = path.dirname dest
 
-			grunt.file.write destination, contents
+		wrench.mkdirSyncRecursive destDirectory, 0o0777
+		wrench.copyDirSyncRecursive directory, dest, preserve: merge
 
-			relativeDestination = path.relative './', destination
+		relativeDestination = path.relative './', dest
 
-			notify file, relativeDestination
+		notify directory, relativeDestination
 
 	grunt.registerMultiTask 'copy', 'Copies files and directories', ->
-		src = @file.src
-		dest = @file.dest
-		config = @data
-		merge = config.merge ? true
-		sources = src
-		isArray = _.isArray src
-
-		if not isArray
-			sources = []
-			sources.push src
-
-		sources.forEach (source) ->
-			sourceExists = fs.existsSync source
-
-			return if not sourceExists
-
-			directories = grunt.file.expandDirs source
-			files = grunt.file.expandFiles source
-
-			copyDirectories directories, dest, merge
-			copyFiles files, dest, source
+		grunt.helper 'processSources'
+			, @file.src
+			, @file.dest
+			, @data
+			, copyFile
+			, copyDirectory
