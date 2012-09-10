@@ -1,7 +1,9 @@
 {
 	"name": "grunt-hustler",
 	"description": "A collection of grunt tasks",
-	"version": "0.4.4",
+	"version": "0.4.5",
+	"fixtures": "./test/fixtures/",
+	"temp": "./temp/",
 	"homepage": "https://github.com/CaryLandholt/grunt-hustler",
 	"author": {
 		"name": "Cary Landholt",
@@ -31,13 +33,18 @@
 		"coffeelint": "~0.4.0",
 		"grunt": "~0.3.12",
 		"node-js-beautify": "~0.1.0",
+		"nodeunit": "~0.7.4",
 		"requirejs": "~2.0.6",
 		"rimraf": "~2.0.2",
 		"wrench": "~1.3.9"
 	},
+	"scripts": {
+		"test": "grunt"
+	},
 	"keywords": [
 		"gruntplugin",
 		"grunt.js",
+		"gruntjs",
 		"grunt",
 		"hustler"
 	]
