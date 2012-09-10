@@ -1,31 +1,5 @@
 ###global module, require###
 
-# copy: {
-# 	directory_to_directory: {
-# 		src: './src/',
-# 		dest: './dest/'
-# 	},
-# 	array_of_directories_to_directory: {
-# 		src: ['./src/scripts/', './src/styles/'],
-# 		dest: './dest/'
-# 	},
-# 	array_of_directories_and_files_to_directory: {
-# 		src: ['./src/scripts/', './src/styles/', './src/img/**/*.png'],
-# 		dest: './dest/'
-# 	},
-# 	file_match_to_directory: {
-# 		src: './src/**/*.ext',
-# 		dest: './dest/'
-# 	},
-# 	file_to_directory: {
-# 		src: './src/file.ext',
-# 		dest: './dest/'
-# 	},
-# 	file_to_file: {
-# 		src: './src/file.ext',
-# 		dest: './dest/file.ext'
-# 	}
-# }
 module.exports = (grunt) ->
 	fs = require 'fs'
 	path = require 'path'
@@ -65,10 +39,16 @@ module.exports = (grunt) ->
 
 		notify directory, relativeDestination
 
+	grunt.registerHelper 'hustler copy', (src, dest, config) ->
+		grunt.helper 'hustler processSources'
+			, src
+			, dest
+			, config ? {}
+			, copyFile
+			, copyDirectory
+
 	grunt.registerMultiTask 'copy', 'Copies files and directories', ->
-		grunt.helper 'processSources'
+		grunt.helper 'hustler copy'
 			, @file.src
 			, @file.dest
 			, @data
-			, copyFile
-			, copyDirectory

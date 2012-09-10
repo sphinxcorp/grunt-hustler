@@ -38,7 +38,10 @@ module.exports = function(grunt) {
     relativeDestination = path.relative('./', dest);
     return notify(directory, relativeDestination);
   };
+  grunt.registerHelper('hustler copy', function(src, dest, config) {
+    return grunt.helper('hustler processSources', src, dest, config != null ? config : {}, copyFile, copyDirectory);
+  });
   return grunt.registerMultiTask('copy', 'Copies files and directories', function() {
-    return grunt.helper('processSources', this.file.src, this.file.dest, this.data, copyFile, copyDirectory);
+    return grunt.helper('hustler copy', this.file.src, this.file.dest, this.data);
   });
 };

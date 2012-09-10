@@ -15,7 +15,7 @@ module.exports = (grunt) ->
 		deleteFileObject rimraf.sync, directory
 
 	grunt.registerMultiTask 'delete', 'Deletes files and directories', ->
-		grunt.helper 'processSources'
+		grunt.helper 'hustler processSources'
 			, @file.src
 			, @file.dest
 			, @data
