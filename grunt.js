@@ -35,7 +35,7 @@ module.exports = function (grunt) {
 	grunt.loadTasks('./tasks/');
 
 	grunt.renameTask('test', 'nodeunit');
-	grunt.registerTask('test', 'delete:temp copy nodeunit');
+	grunt.registerTask('test', 'delete:temp copy nodeunit delete:temp');
 
 	grunt.registerTask('default', 'test');
 };
