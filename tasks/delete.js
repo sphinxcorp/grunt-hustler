@@ -16,7 +16,10 @@ module.exports = function(grunt) {
   deleteDirectory = function(directory) {
     return deleteFileObject(rimraf.sync, directory);
   };
+  grunt.registerHelper('hustler delete', function(src, dest, config) {
+    return grunt.helper('hustler processSources', src, dest, config != null ? config : {}, deleteFile, deleteDirectory);
+  });
   return grunt.registerMultiTask('delete', 'Deletes files and directories', function() {
-    return grunt.helper('hustler processSources', this.file.src, this.file.dest, this.data, deleteFile, deleteDirectory);
+    return grunt.helper('hustler delete', this.file.src, this.file.dest, this.data);
   });
 };
