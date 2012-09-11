@@ -2,6 +2,8 @@
 	"name": "grunt-hustler",
 	"description": "A collection of grunt tasks",
 	"version": "0.4.9",
+	"src": "./src/",
+	"dist": "./dist/",
 	"homepage": "https://github.com/CaryLandholt/grunt-hustler",
 	"author": {
 		"name": "Cary Landholt",
@@ -40,7 +42,7 @@
 		"nodeunit": "~0.7.4"
 	},
 	"scripts": {
-		"test": "grunt"
+		"test": "grunt test"
 	},
 	"keywords": [
 		"gruntplugin",

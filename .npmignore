@@ -1,2 +1,6 @@
-*.coffee
+.DS_Store
 .travis.yml
+node_modules/
+src/
+temp/
+test/
