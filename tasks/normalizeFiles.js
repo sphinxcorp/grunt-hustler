@@ -6,44 +6,56 @@ module.exports = function(grunt) {
   var path;
   path = require('path');
   grunt.registerHelper('hustler normalizeFiles', function(config) {
-    var data, dest, destExt, files, groups, isDestADirectory, isSrcAnArray, key, src, value;
+    var data, dest, destExt, files, groups, inDest, inFileDest, inFileSrc, inFiles, inSrc, isDestADirectory, src;
     data = config.data;
-    dest = data.dest;
-    src = data.src;
-    files = data.files;
+    inDest = data.dest;
+    inSrc = data.src;
+    inFiles = data.files;
+    files = {};
     groups = {};
-    if (dest && src) {
-      dest = path.relative('./', dest);
-      isSrcAnArray = Array.isArray(src);
-      if (!isSrcAnArray) {
-        src = [src];
+    if (inFiles) {
+      if (!Array.isArray(inFiles)) {
+        for (inFileDest in inFiles) {
+          inFileSrc = inFiles[inFileDest];
+          inFileDest = path.relative('./', inFileDest);
+          if (!Array.isArray(inFileSrc)) {
+            inFileSrc = [inFileSrc];
+          }
+          files[inFileDest] = inFileSrc;
+        }
       }
-      destExt = path.extname(dest);
-      isDestADirectory = destExt.length === 0;
-      src.forEach(function(source) {
-        var sourceFiles;
-        sourceFiles = grunt.file.expandFiles(source);
-        return sourceFiles.forEach(function(sourceFile) {
-          var absoluteDestination, destination, relative, sourceDirectory;
-          if (isDestADirectory) {
-            sourceDirectory = path.dirname(source.replace('**', ''));
-            relative = path.relative(sourceDirectory, sourceFile);
-            absoluteDestination = path.resolve(dest, relative);
-            destination = path.relative('./', absoluteDestination);
-          } else {
-            destination = dest;
-          }
-          if (!groups[destination]) {
-            groups[destination] = [];
-          }
-          return groups[destination].push(sourceFile);
-        });
-      });
+    }
+    if (inDest && inSrc) {
+      inDest = path.relative('./', inDest);
+      if (!Array.isArray(inSrc)) {
+        inSrc = [inSrc];
+      }
+      files[inDest] = inSrc;
     }
     if (files) {
-      for (key in files) {
-        value = files[key];
-        console.log('dest, src', key, value);
+      for (dest in files) {
+        src = files[dest];
+        destExt = path.extname(dest);
+        isDestADirectory = destExt.length === 0;
+        src.forEach(function(source) {
+          var sourceFiles;
+          sourceFiles = grunt.file.expandFiles(source);
+          return sourceFiles.forEach(function(sourceFile) {
+            var absoluteDestination, destination, relative, sourceDirectory;
+            if (isDestADirectory) {
+              sourceDirectory = path.dirname(source.replace('**', ''));
+              relative = path.relative(sourceDirectory, sourceFile);
+              absoluteDestination = path.resolve(dest, relative);
+              destination = path.relative('./', absoluteDestination);
+            } else {
+              destination = dest;
+            }
+            if (!groups[destination]) {
+              groups[destination] = [];
+            }
+            return groups[destination].push(sourceFile);
+          });
+        });
       }
     }
     return groups;

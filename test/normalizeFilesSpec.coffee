@@ -274,33 +274,57 @@ exports['dest and src where dest is a directory'] =
 		test.deepEqual options, groups
 		test.done()
 
-# exports['files'] =
-# 	setUp: (callback) ->
-# 		deleteDirectory temp
-# 		createFile "#{from}a.coffee", ''
-# 		callback()
-# 	tearDown: (callback) ->
-# 		deleteDirectory temp
-# 		callback()
-# 	main: (test) ->
-# 		test.expect 2
-# 		test.equal true, fs.existsSync "#{from}a.coffee", 'should find a.coffee'
+exports['files'] =
+	setUp: (callback) ->
+		deleteDirectory temp
+		createFile "#{from}a.coffee", ''
+		createFile "#{from}b.coffee", ''
+		createFile "#{from}sub/c.coffee", ''
+		createFile "#{from}sub/d.coffee", ''
+		createFile "#{from}sub2/e.coffee", ''
+		createFile "#{from}sub2/f.coffee", ''
+		callback()
+	tearDown: (callback) ->
+		deleteDirectory temp
+		callback()
+	main: (test) ->
+		test.expect 7
+		test.equal true, fs.existsSync "#{from}a.coffee", 'should find a.coffee'
+		test.equal true, fs.existsSync "#{from}b.coffee", 'should find b.coffee'
+		test.equal true, fs.existsSync "#{from}sub/c.coffee", 'should find c.coffee'
+		test.equal true, fs.existsSync "#{from}sub/d.coffee", 'should find d.coffee'
+		test.equal true, fs.existsSync "#{from}sub2/e.coffee", 'should find e.coffee'
+		test.equal true, fs.existsSync "#{from}sub2/f.coffee", 'should find f.coffee'
 
-# 		data = {
-# 			data: {
-# 				files: {
-# 					'./temp/to/a.js': './temp/from/a.js'
-# 				}
-# 			}
-# 		}
+		data = {
+			data: {
+				files: {
+					'./temp/to/a.js': './temp/from/a.coffee',
+					'./temp/to/b.js': './temp/from/b.coffee',
+					'./temp/to/sub.min.js': './temp/from/sub/**/*.coffee',
+					'./temp/to/sub2.min.js': ['./temp/from/sub2/e.coffee', './temp/from/sub2/f.coffee']
+				}
+			}
+		}
 
-# 		groups = {
-# 			'temp/to/a.js': [
-# 				'temp/from/a.coffee'
-# 			]
-# 		}
+		groups = {
+			'temp/to/a.js': [
+				'temp/from/a.coffee'
+			],
+			'temp/to/b.js': [
+				'temp/from/b.coffee'
+			],
+			'temp/to/sub.min.js': [
+				'temp/from/sub/c.coffee',
+				'temp/from/sub/d.coffee'
+			],
+			'temp/to/sub2.min.js': [
+				'temp/from/sub2/e.coffee',
+				'temp/from/sub2/f.coffee'
+			]
+		}
 
-# 		options = grunt.helper 'hustler normalizeFiles', data
+		options = grunt.helper 'hustler normalizeFiles', data
 
-# 		test.deepEqual options, groups
-# 		test.done()
+		test.deepEqual options, groups
+		test.done()

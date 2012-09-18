@@ -5,36 +5,43 @@ module.exports = (grunt) ->
 
 	grunt.registerHelper 'hustler normalizeFiles', (config) ->
 		data = config.data
-		dest = data.dest
-		src = data.src
-		files = data.files
+		inDest = data.dest
+		inSrc = data.src
+		inFiles = data.files
+		files = {}
 		groups = {}
 
-		if dest and src
-			dest = path.relative './', dest
-			isSrcAnArray = Array.isArray src
-			src = [src] if not isSrcAnArray
-			destExt = path.extname dest
-			isDestADirectory = destExt.length is 0
+		if inFiles
+			if not Array.isArray inFiles
+				for inFileDest, inFileSrc of inFiles
+					inFileDest = path.relative './', inFileDest
+					inFileSrc = [inFileSrc] if not Array.isArray inFileSrc
+					files[inFileDest] = inFileSrc
 
-			src.forEach (source) ->
-				sourceFiles = grunt.file.expandFiles source
-
-				sourceFiles.forEach (sourceFile) ->
-					if isDestADirectory
-						sourceDirectory = path.dirname source.replace '**', ''
-						relative = path.relative sourceDirectory, sourceFile
-						absoluteDestination = path.resolve dest, relative
-						destination = path.relative './', absoluteDestination
-					else
-						destination = dest
-
-					groups[destination] = [] if not groups[destination]
-					groups[destination].push sourceFile
+		if inDest and inSrc
+			inDest = path.relative './', inDest
+			inSrc = [inSrc] if not Array.isArray inSrc
+			files[inDest] = inSrc
 
 		if files
-			for key, value of files
-				console.log 'dest, src', key, value
+			for dest, src of files
+				destExt = path.extname dest
+				isDestADirectory = destExt.length is 0
+
+				src.forEach (source) ->
+					sourceFiles = grunt.file.expandFiles source
+
+					sourceFiles.forEach (sourceFile) ->
+						if isDestADirectory
+							sourceDirectory = path.dirname source.replace '**', ''
+							relative = path.relative sourceDirectory, sourceFile
+							absoluteDestination = path.resolve dest, relative
+							destination = path.relative './', absoluteDestination
+						else
+							destination = dest
+
+						groups[destination] = [] if not groups[destination]
+						groups[destination].push sourceFile
 
 		groups
 
