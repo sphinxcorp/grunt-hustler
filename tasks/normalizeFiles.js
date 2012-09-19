@@ -5,7 +5,7 @@
 module.exports = function(grunt) {
   var path;
   path = require('path');
-  grunt.registerHelper('hustler normalizeFiles', function(config) {
+  return grunt.registerHelper('hustler normalizeFiles', function(config) {
     var data, dest, destExt, files, groups, inDest, inFileDest, inFileSrc, inFiles, inSrc, isDestADirectory, src;
     data = config.data;
     inDest = data.dest;
@@ -38,7 +38,12 @@ module.exports = function(grunt) {
         destExt = path.extname(dest);
         isDestADirectory = destExt.length === 0;
         src.forEach(function(source) {
-          var sourceFiles;
+          var isSourceADirectory, sourceExt, sourceFiles;
+          sourceExt = path.extname(source);
+          isSourceADirectory = sourceExt.length === 0;
+          if (isSourceADirectory) {
+            source = path.join(source, '/**/*.*');
+          }
           sourceFiles = grunt.file.expandFiles(source);
           return sourceFiles.forEach(function(sourceFile) {
             var absoluteDestination, destination, relative, sourceDirectory;
@@ -59,10 +64,5 @@ module.exports = function(grunt) {
       }
     }
     return groups;
-  });
-  return grunt.registerMultiTask('norm', 'Normalize Files', function() {
-    var options;
-    options = grunt.helper('hustler normalizeFiles', this);
-    return console.log(options);
   });
 };

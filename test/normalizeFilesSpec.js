@@ -247,6 +247,37 @@ exports['dest and src where dest is a directory'] = {
   }
 };
 
+exports['dest and src where src is a directory'] = {
+  setUp: function(callback) {
+    deleteDirectory(temp);
+    createFile("" + from + "a.coffee", '');
+    createFile("" + from + "b.coffee", '');
+    return callback();
+  },
+  tearDown: function(callback) {
+    deleteDirectory(temp);
+    return callback();
+  },
+  main: function(test) {
+    var data, groups, options;
+    test.expect(3);
+    test.equal(true, fs.existsSync("" + from + "a.coffee", 'should find a.coffee'));
+    test.equal(true, fs.existsSync("" + from + "b.coffee", 'should find b.coffee'));
+    data = {
+      data: {
+        dest: "" + to + "min.js",
+        src: "" + from
+      }
+    };
+    groups = {
+      'temp/to/min.js': ['temp/from/a.coffee', 'temp/from/b.coffee']
+    };
+    options = grunt.helper('hustler normalizeFiles', data);
+    test.deepEqual(options, groups);
+    return test.done();
+  }
+};
+
 exports['files'] = {
   setUp: function(callback) {
     deleteDirectory(temp);

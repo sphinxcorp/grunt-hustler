@@ -22,7 +22,7 @@ exports['directory to directory'] =
 		test.equal true, fs.existsSync "#{from}a.js", 'should find a.js'
 		test.equal true, fs.existsSync "#{from}b.js", 'should find b.js'
 
-		grunt.helper 'hustler copy', from, to
+		grunt.helper 'hustler copy', data: src: from, dest: to
 
 		test.equal true, fs.existsSync "#{to}a.js", 'should find a.js'
 		test.equal true, fs.existsSync "#{to}b.js", 'should find b.js'
@@ -46,7 +46,7 @@ exports['array of directories to directory'] =
 
 		src = ["#{from}a/", "#{from}b/", "#{from}c/"]
 
-		grunt.helper 'hustler copy', src, to
+		grunt.helper 'hustler copy', data: src: src, dest: to
 
 		test.equal true, fs.existsSync "#{to}a.js", 'should find a.js'
 		test.equal true, fs.existsSync "#{to}b.js", 'should find b.js'
@@ -67,7 +67,7 @@ exports['file to directory'] =
 
 		src = "#{from}a.js"
 
-		grunt.helper 'hustler copy', src, to
+		grunt.helper 'hustler copy', data: src: src, dest: to
 
 		test.equal true, fs.existsSync "#{to}a.js", 'should find a.js'
 		test.done()
@@ -88,7 +88,7 @@ exports['array of files to directory'] =
 
 		src = ["#{from}a.js", "#{from}b.js"]
 
-		grunt.helper 'hustler copy', src, to
+		grunt.helper 'hustler copy', data: src: src, dest: to
 
 		test.equal true, fs.existsSync "#{to}a.js", 'should find a.js'
 		test.equal true, fs.existsSync "#{to}b.js", 'should find b.js'
@@ -112,7 +112,7 @@ exports['file match to directory'] =
 
 		src = "#{from}**/*.js"
 
-		grunt.helper 'hustler copy', src, to
+		grunt.helper 'hustler copy', data: src: src, dest: to
 
 		test.equal true, fs.existsSync "#{to}a.js", 'should find a.js'
 		test.equal true, fs.existsSync "#{to}b.js", 'should find b.js'
@@ -141,7 +141,7 @@ exports['array of file matches to directory'] =
 
 		src = ["#{from}**/*.js", "#{from}**/*.html"]
 
-		grunt.helper 'hustler copy', src, to
+		grunt.helper 'hustler copy', data: src: src, dest: to
 
 		test.equal true, fs.existsSync "#{to}a.js", 'should find a.js'
 		test.equal true, fs.existsSync "#{to}b.js", 'should find b.js'
@@ -149,7 +149,6 @@ exports['array of file matches to directory'] =
 		test.equal true, fs.existsSync "#{to}d.html", 'should find d.html'
 		test.equal false, fs.existsSync "#{to}e.txt", 'should not find e.txt'
 		test.done()
-
 
 exports['array of files, file matches, and directories to directory'] =
 	setUp: (callback) ->
@@ -179,7 +178,7 @@ exports['array of files, file matches, and directories to directory'] =
 
 		src = ["#{from}a.js", "#{from}b.js", "#{from}c/", "#{from}d/", "#{from}e/", "#{from}**/*.html"]
 
-		grunt.helper 'hustler copy', src, to
+		grunt.helper 'hustler copy', data: src: src, dest: to
 
 		test.equal true, fs.existsSync "#{to}a.js", 'should find a.js'
 		test.equal true, fs.existsSync "#{to}b.js", 'should find b.js'
@@ -206,7 +205,7 @@ exports['file to file'] =
 		src = "#{from}a.js"
 		dest = "#{to}b.html"
 
-		grunt.helper 'hustler copy', src, dest
+		grunt.helper 'hustler copy', data: src: src, dest: dest
 
 		test.equal false, fs.existsSync "#{to}a.js", 'should not find a.js'
 		test.equal true, fs.existsSync "#{to}b.html", 'should find b.html'

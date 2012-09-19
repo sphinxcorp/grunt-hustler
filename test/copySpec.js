@@ -32,7 +32,12 @@ exports['directory to directory'] = {
     test.expect(4);
     test.equal(true, fs.existsSync("" + from + "a.js", 'should find a.js'));
     test.equal(true, fs.existsSync("" + from + "b.js", 'should find b.js'));
-    grunt.helper('hustler copy', from, to);
+    grunt.helper('hustler copy', {
+      data: {
+        src: from,
+        dest: to
+      }
+    });
     test.equal(true, fs.existsSync("" + to + "a.js", 'should find a.js'));
     test.equal(true, fs.existsSync("" + to + "b.js", 'should find b.js'));
     return test.done();
@@ -58,7 +63,12 @@ exports['array of directories to directory'] = {
     test.equal(true, fs.existsSync("" + from + "b/b.js", 'should find b.js'));
     test.equal(true, fs.existsSync("" + from + "c/d/d.js", 'should find d.js inside d directory'));
     src = ["" + from + "a/", "" + from + "b/", "" + from + "c/"];
-    grunt.helper('hustler copy', src, to);
+    grunt.helper('hustler copy', {
+      data: {
+        src: src,
+        dest: to
+      }
+    });
     test.equal(true, fs.existsSync("" + to + "a.js", 'should find a.js'));
     test.equal(true, fs.existsSync("" + to + "b.js", 'should find b.js'));
     test.equal(true, fs.existsSync("" + to + "d/d.js", 'should find d.js inside d directory'));
@@ -81,7 +91,12 @@ exports['file to directory'] = {
     test.expect(2);
     test.equal(true, fs.existsSync("" + from + "a.js", 'should find a.js'));
     src = "" + from + "a.js";
-    grunt.helper('hustler copy', src, to);
+    grunt.helper('hustler copy', {
+      data: {
+        src: src,
+        dest: to
+      }
+    });
     test.equal(true, fs.existsSync("" + to + "a.js", 'should find a.js'));
     return test.done();
   }
@@ -104,7 +119,12 @@ exports['array of files to directory'] = {
     test.equal(true, fs.existsSync("" + from + "a.js", 'should find a.js'));
     test.equal(true, fs.existsSync("" + from + "b.js", 'should find b.js'));
     src = ["" + from + "a.js", "" + from + "b.js"];
-    grunt.helper('hustler copy', src, to);
+    grunt.helper('hustler copy', {
+      data: {
+        src: src,
+        dest: to
+      }
+    });
     test.equal(true, fs.existsSync("" + to + "a.js", 'should find a.js'));
     test.equal(true, fs.existsSync("" + to + "b.js", 'should find b.js'));
     return test.done();
@@ -130,7 +150,12 @@ exports['file match to directory'] = {
     test.equal(true, fs.existsSync("" + from + "b.js", 'should find b.js'));
     test.equal(true, fs.existsSync("" + from + "c.html", 'should find c.html'));
     src = "" + from + "**/*.js";
-    grunt.helper('hustler copy', src, to);
+    grunt.helper('hustler copy', {
+      data: {
+        src: src,
+        dest: to
+      }
+    });
     test.equal(true, fs.existsSync("" + to + "a.js", 'should find a.js'));
     test.equal(true, fs.existsSync("" + to + "b.js", 'should find b.js'));
     test.equal(false, fs.existsSync("" + to + "c.html", 'should not find c.html'));
@@ -161,7 +186,12 @@ exports['array of file matches to directory'] = {
     test.equal(true, fs.existsSync("" + from + "d.html", 'should find d.html'));
     test.equal(true, fs.existsSync("" + from + "e.txt", 'should find e.txt'));
     src = ["" + from + "**/*.js", "" + from + "**/*.html"];
-    grunt.helper('hustler copy', src, to);
+    grunt.helper('hustler copy', {
+      data: {
+        src: src,
+        dest: to
+      }
+    });
     test.equal(true, fs.existsSync("" + to + "a.js", 'should find a.js'));
     test.equal(true, fs.existsSync("" + to + "b.js", 'should find b.js'));
     test.equal(true, fs.existsSync("" + to + "c.html", 'should find c.html'));
@@ -200,7 +230,12 @@ exports['array of files, file matches, and directories to directory'] = {
     test.equal(true, fs.existsSync("" + from + "h.html", 'should find h.html'));
     test.equal(true, fs.existsSync("" + from + "i.txt", 'should find i.txt'));
     src = ["" + from + "a.js", "" + from + "b.js", "" + from + "c/", "" + from + "d/", "" + from + "e/", "" + from + "**/*.html"];
-    grunt.helper('hustler copy', src, to);
+    grunt.helper('hustler copy', {
+      data: {
+        src: src,
+        dest: to
+      }
+    });
     test.equal(true, fs.existsSync("" + to + "a.js", 'should find a.js'));
     test.equal(true, fs.existsSync("" + to + "b.js", 'should find b.js'));
     test.equal(true, fs.existsSync("" + to + "c.js", 'should find c.js'));
@@ -229,7 +264,12 @@ exports['file to file'] = {
     test.equal(true, fs.existsSync("" + from + "a.js", 'should find a.js'));
     src = "" + from + "a.js";
     dest = "" + to + "b.html";
-    grunt.helper('hustler copy', src, dest);
+    grunt.helper('hustler copy', {
+      data: {
+        src: src,
+        dest: dest
+      }
+    });
     test.equal(false, fs.existsSync("" + to + "a.js", 'should not find a.js'));
     test.equal(true, fs.existsSync("" + to + "b.html", 'should find b.html'));
     return test.done();

@@ -29,6 +29,9 @@ module.exports = (grunt) ->
 				isDestADirectory = destExt.length is 0
 
 				src.forEach (source) ->
+					sourceExt = path.extname source
+					isSourceADirectory = sourceExt.length is 0
+					source = path.join source, '/**/*.*' if isSourceADirectory
 					sourceFiles = grunt.file.expandFiles source
 
 					sourceFiles.forEach (sourceFile) ->
@@ -44,14 +47,3 @@ module.exports = (grunt) ->
 						groups[destination].push sourceFile
 
 		groups
-
-	grunt.registerMultiTask 'norm', 'Normalize Files', ->
-		options = grunt.helper 'hustler normalizeFiles', @
-
-		#grunt.verbose.writeflags options, 'post options'
-		console.log options
-
-		# grunt.helper 'hustler coffee'
-		# 	, @file.src
-		# 	, @file.dest
-		# 	, @data
