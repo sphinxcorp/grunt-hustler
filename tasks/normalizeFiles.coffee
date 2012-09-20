@@ -10,23 +10,35 @@ module.exports = (grunt) ->
 		inFiles = data.files
 		files = {}
 		groups = {}
+		isIndexed = false
 
 		if inFiles
-			if not Array.isArray inFiles
+			if Array.isArray inFiles
+				isIndexed = true
+				inFiles.forEach (inFileSrc, index) ->
+					inFileSrc = [inFileSrc] if not Array.isArray inFileSrc
+					files[index] = inFileSrc
+			else
 				for inFileDest, inFileSrc of inFiles
 					inFileDest = path.relative './', inFileDest
 					inFileSrc = [inFileSrc] if not Array.isArray inFileSrc
 					files[inFileDest] = inFileSrc
 
+		if inSrc
+			inSrc = [inSrc] if not Array.isArray inSrc
+
 		if inDest and inSrc
 			inDest = path.relative './', inDest
-			inSrc = [inSrc] if not Array.isArray inSrc
 			files[inDest] = inSrc
+
+		if inSrc and not inDest
+			isIndexed = true
+			files[0] = inSrc
 
 		if files
 			for dest, src of files
 				destExt = path.extname dest
-				isDestADirectory = destExt.length is 0
+				isDestADirectory = destExt.length is 0 and not isIndexed
 
 				src.forEach (source) ->
 					sourceExt = path.extname source

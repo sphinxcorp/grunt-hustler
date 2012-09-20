@@ -3,41 +3,34 @@
 */
 
 module.exports = function(grunt) {
-  var coffee, coffeeDirectory, coffeeFile, notify, path;
+  var coffee, path;
   coffee = require('coffee-script');
   path = require('path');
-  grunt.registerHelper('hustler coffee', function(src, dest, config) {
-    return grunt.helper('hustler processSources', src, dest, config != null ? config : {}, coffeeFile, coffeeDirectory);
-  });
-  notify = function(from, to) {
-    return grunt.log.ok("" + from + " -> " + to);
-  };
-  coffeeFile = function(file, source, config, dest) {
-    var bare, compiled, contents, destExt, destination, isDestAFile, relative, relativeDestination, sourceDirectory, _ref;
-    bare = (_ref = config.bare) != null ? _ref : false;
-    contents = grunt.file.read(file);
-    compiled = coffee.compile(contents, {
-      bare: bare
-    });
-    destExt = path.extname(dest);
-    isDestAFile = destExt.length > 0;
-    if (isDestAFile) {
-      grunt.file.write(dest, contents);
-      return notify(file, dest);
+  grunt.registerHelper('hustler coffee', function(config) {
+    var bare, compiled, contents, dest, destination, groups, separator, sourceContents, src, _ref, _results;
+    groups = grunt.helper('hustler normalizeFiles', config);
+    bare = (_ref = config.data.bare) != null ? _ref : false;
+    _results = [];
+    for (dest in groups) {
+      src = groups[dest];
+      sourceContents = [];
+      src.forEach(function(source) {
+        var contents;
+        contents = grunt.file.read(source);
+        return sourceContents.push(contents);
+      });
+      separator = grunt.utils.linefeed;
+      contents = sourceContents.join(grunt.utils.normalizelf(separator));
+      compiled = coffee.compile(contents, {
+        bare: bare
+      });
+      destination = dest.replace('.coffee', '.js');
+      grunt.file.write(destination, compiled);
+      _results.push(grunt.verbose.ok("" + src + " -> " + destination));
     }
-    sourceDirectory = path.dirname(source.replace('**', ''));
-    relative = path.relative(sourceDirectory, file);
-    destination = (path.resolve(dest, relative)).replace('.coffee', '.js');
-    grunt.file.write(destination, compiled);
-    relativeDestination = path.relative('./', destination);
-    return notify(file, relativeDestination);
-  };
-  coffeeDirectory = function(directory, source, config, dest) {
-    var src;
-    src = "" + directory + "**/*.coffee";
-    return grunt.helper('hustler coffee', src, dest, config);
-  };
+    return _results;
+  });
   return grunt.registerMultiTask('coffee', 'Compile CoffeeScript to JavaScript', function() {
-    return grunt.helper('hustler coffee', this.file.src, this.file.dest, this.data);
+    return grunt.helper('hustler coffee', this);
   });
 };

@@ -4,48 +4,25 @@ module.exports = (grunt) ->
 	coffee = require 'coffee-script'
 	path = require 'path'
 
-	grunt.registerHelper 'hustler coffee', (src, dest, config) ->
-		grunt.helper 'hustler processSources'
-			, src
-			, dest
-			, config ? {}
-			, coffeeFile
-			, coffeeDirectory
+	grunt.registerHelper 'hustler coffee', (config) ->
+		groups = grunt.helper 'hustler normalizeFiles', config
+		bare = config.data.bare ? false
 
-	notify = (from, to) ->
-		grunt.log.ok "#{from} -> #{to}"
+		for dest, src of groups
+			sourceContents = []
 
-	coffeeFile = (file, source, config, dest) ->
-		bare = config.bare ? false
-		contents = grunt.file.read file
-		compiled = coffee.compile contents, {bare}
-		destExt = path.extname dest
-		isDestAFile = destExt.length > 0
+			src.forEach (source) ->
+				contents = grunt.file.read source
 
-		return if isDestAFile
-			grunt.file.write dest, contents
-			notify file, dest
+				sourceContents.push contents
 
-		sourceDirectory = path.dirname source.replace '**', ''
-		relative = path.relative sourceDirectory, file
-		destination = (path.resolve dest, relative).replace('.coffee', '.js')
+			separator = grunt.utils.linefeed
+			contents = sourceContents.join grunt.utils.normalizelf separator
+			compiled = coffee.compile contents, {bare}
+			destination = dest.replace '.coffee', '.js'
 
-		grunt.file.write destination, compiled
-
-		relativeDestination = path.relative './', destination
-
-		notify file, relativeDestination
-
-	coffeeDirectory = (directory, source, config, dest) ->
-		src = "#{directory}**/*.coffee"
-
-		grunt.helper 'hustler coffee'
-			, src
-			, dest
-			, config
+			grunt.file.write destination, compiled
+			grunt.verbose.ok "#{src} -> #{destination}"
 
 	grunt.registerMultiTask 'coffee', 'Compile CoffeeScript to JavaScript', ->
-		grunt.helper 'hustler coffee'
-			, @file.src
-			, @file.dest
-			, @data
+		grunt.helper 'hustler coffee', @

@@ -6,15 +6,24 @@ module.exports = function(grunt) {
   var path;
   path = require('path');
   return grunt.registerHelper('hustler normalizeFiles', function(config) {
-    var data, dest, destExt, files, groups, inDest, inFileDest, inFileSrc, inFiles, inSrc, isDestADirectory, src;
+    var data, dest, destExt, files, groups, inDest, inFileDest, inFileSrc, inFiles, inSrc, isDestADirectory, isIndexed, src;
     data = config.data;
     inDest = data.dest;
     inSrc = data.src;
     inFiles = data.files;
     files = {};
     groups = {};
+    isIndexed = false;
     if (inFiles) {
-      if (!Array.isArray(inFiles)) {
+      if (Array.isArray(inFiles)) {
+        isIndexed = true;
+        inFiles.forEach(function(inFileSrc, index) {
+          if (!Array.isArray(inFileSrc)) {
+            inFileSrc = [inFileSrc];
+          }
+          return files[index] = inFileSrc;
+        });
+      } else {
         for (inFileDest in inFiles) {
           inFileSrc = inFiles[inFileDest];
           inFileDest = path.relative('./', inFileDest);
@@ -25,18 +34,24 @@ module.exports = function(grunt) {
         }
       }
     }
-    if (inDest && inSrc) {
-      inDest = path.relative('./', inDest);
+    if (inSrc) {
       if (!Array.isArray(inSrc)) {
         inSrc = [inSrc];
       }
+    }
+    if (inDest && inSrc) {
+      inDest = path.relative('./', inDest);
       files[inDest] = inSrc;
+    }
+    if (inSrc && !inDest) {
+      isIndexed = true;
+      files[0] = inSrc;
     }
     if (files) {
       for (dest in files) {
         src = files[dest];
         destExt = path.extname(dest);
-        isDestADirectory = destExt.length === 0;
+        isDestADirectory = destExt.length === 0 && !isIndexed;
         src.forEach(function(source) {
           var isSourceADirectory, sourceExt, sourceFiles;
           sourceExt = path.extname(source);

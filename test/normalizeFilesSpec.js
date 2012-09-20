@@ -17,6 +17,137 @@ from = "" + temp + "from/";
 
 to = "" + temp + "to/";
 
+exports['src'] = {
+  setUp: function(callback) {
+    deleteDirectory(temp);
+    createFile("" + from + "a.coffee", '');
+    return callback();
+  },
+  tearDown: function(callback) {
+    deleteDirectory(temp);
+    return callback();
+  },
+  main: function(test) {
+    var data, groups, options;
+    test.expect(2);
+    test.equal(true, fs.existsSync("" + from + "a.coffee", 'should find a.coffee'));
+    data = {
+      data: {
+        src: "" + from + "a.coffee"
+      }
+    };
+    groups = {
+      '0': ['temp/from/a.coffee']
+    };
+    options = grunt.helper('hustler normalizeFiles', data);
+    test.deepEqual(options, groups);
+    return test.done();
+  }
+};
+
+exports['src array'] = {
+  setUp: function(callback) {
+    deleteDirectory(temp);
+    createFile("" + from + "a.coffee", '');
+    createFile("" + from + "b.coffee", '');
+    return callback();
+  },
+  tearDown: function(callback) {
+    deleteDirectory(temp);
+    return callback();
+  },
+  main: function(test) {
+    var data, groups, options;
+    test.expect(3);
+    test.equal(true, fs.existsSync("" + from + "a.coffee", 'should find a.coffee'));
+    test.equal(true, fs.existsSync("" + from + "b.coffee", 'should find b.coffee'));
+    data = {
+      data: {
+        src: ["" + from + "a.coffee", "" + from + "b.coffee"]
+      }
+    };
+    groups = {
+      '0': ['temp/from/a.coffee', 'temp/from/b.coffee']
+    };
+    options = grunt.helper('hustler normalizeFiles', data);
+    test.deepEqual(options, groups);
+    return test.done();
+  }
+};
+
+exports['src array with file matches'] = {
+  setUp: function(callback) {
+    deleteDirectory(temp);
+    createFile("" + from + "a.coffee", '');
+    createFile("" + from + "b.coffee", '');
+    createFile("" + from + "c.html", '');
+    createFile("" + from + "d.html", '');
+    createFile("" + from + "e.txt", '');
+    return callback();
+  },
+  tearDown: function(callback) {
+    deleteDirectory(temp);
+    return callback();
+  },
+  main: function(test) {
+    var data, groups, options;
+    test.expect(6);
+    test.equal(true, fs.existsSync("" + from + "a.coffee", 'should find a.coffee'));
+    test.equal(true, fs.existsSync("" + from + "b.coffee", 'should find b.coffee'));
+    test.equal(true, fs.existsSync("" + from + "c.html", 'should find c.html'));
+    test.equal(true, fs.existsSync("" + from + "d.html", 'should find d.html'));
+    test.equal(true, fs.existsSync("" + from + "e.txt", 'should find e.txt'));
+    data = {
+      data: {
+        src: ["" + from + "a.coffee", "" + from + "b.coffee", "" + from + "**/*.html"]
+      }
+    };
+    groups = {
+      '0': ['temp/from/a.coffee', 'temp/from/b.coffee', 'temp/from/c.html', 'temp/from/d.html']
+    };
+    options = grunt.helper('hustler normalizeFiles', data);
+    test.deepEqual(options, groups);
+    return test.done();
+  }
+};
+
+exports['src array with file matches and non-existent src'] = {
+  setUp: function(callback) {
+    deleteDirectory(temp);
+    createFile("" + from + "a.coffee", '');
+    createFile("" + from + "b.coffee", '');
+    createFile("" + from + "c.html", '');
+    createFile("" + from + "d.html", '');
+    createFile("" + from + "e.txt", '');
+    return callback();
+  },
+  tearDown: function(callback) {
+    deleteDirectory(temp);
+    return callback();
+  },
+  main: function(test) {
+    var data, groups, options;
+    test.expect(7);
+    test.equal(true, fs.existsSync("" + from + "a.coffee", 'should find a.coffee'));
+    test.equal(true, fs.existsSync("" + from + "b.coffee", 'should find b.coffee'));
+    test.equal(true, fs.existsSync("" + from + "c.html", 'should find c.html'));
+    test.equal(true, fs.existsSync("" + from + "d.html", 'should find d.html'));
+    test.equal(true, fs.existsSync("" + from + "e.txt", 'should find e.txt'));
+    test.equal(false, fs.existsSync("" + from + "nothere.log", 'should not find nothere.log'));
+    data = {
+      data: {
+        src: ["" + from + "a.coffee", "" + from + "b.coffee", "" + from + "**/*.html", "" + from + "nothere.log"]
+      }
+    };
+    groups = {
+      '0': ['temp/from/a.coffee', 'temp/from/b.coffee', 'temp/from/c.html', 'temp/from/d.html']
+    };
+    options = grunt.helper('hustler normalizeFiles', data);
+    test.deepEqual(options, groups);
+    return test.done();
+  }
+};
+
 exports['dest and src'] = {
   setUp: function(callback) {
     deleteDirectory(temp);
@@ -278,7 +409,37 @@ exports['dest and src where src is a directory'] = {
   }
 };
 
-exports['files'] = {
+exports['src where src is a directory'] = {
+  setUp: function(callback) {
+    deleteDirectory(temp);
+    createFile("" + from + "a.coffee", '');
+    createFile("" + from + "b.coffee", '');
+    return callback();
+  },
+  tearDown: function(callback) {
+    deleteDirectory(temp);
+    return callback();
+  },
+  main: function(test) {
+    var data, groups, options;
+    test.expect(3);
+    test.equal(true, fs.existsSync("" + from + "a.coffee", 'should find a.coffee'));
+    test.equal(true, fs.existsSync("" + from + "b.coffee", 'should find b.coffee'));
+    data = {
+      data: {
+        src: "" + from
+      }
+    };
+    groups = {
+      '0': ['temp/from/a.coffee', 'temp/from/b.coffee']
+    };
+    options = grunt.helper('hustler normalizeFiles', data);
+    test.deepEqual(options, groups);
+    return test.done();
+  }
+};
+
+exports['files with source and destination'] = {
   setUp: function(callback) {
     deleteDirectory(temp);
     createFile("" + from + "a.coffee", '');
@@ -317,6 +478,47 @@ exports['files'] = {
       'temp/to/b.js': ['temp/from/b.coffee'],
       'temp/to/sub.min.js': ['temp/from/sub/c.coffee', 'temp/from/sub/d.coffee'],
       'temp/to/sub2.min.js': ['temp/from/sub2/e.coffee', 'temp/from/sub2/f.coffee']
+    };
+    options = grunt.helper('hustler normalizeFiles', data);
+    test.deepEqual(options, groups);
+    return test.done();
+  }
+};
+
+exports['files with source'] = {
+  setUp: function(callback) {
+    deleteDirectory(temp);
+    createFile("" + from + "a.coffee", '');
+    createFile("" + from + "b.coffee", '');
+    createFile("" + from + "sub/c.coffee", '');
+    createFile("" + from + "sub/d.coffee", '');
+    createFile("" + from + "sub2/e.coffee", '');
+    createFile("" + from + "sub2/f.coffee", '');
+    return callback();
+  },
+  tearDown: function(callback) {
+    deleteDirectory(temp);
+    return callback();
+  },
+  main: function(test) {
+    var data, groups, options;
+    test.expect(7);
+    test.equal(true, fs.existsSync("" + from + "a.coffee", 'should find a.coffee'));
+    test.equal(true, fs.existsSync("" + from + "b.coffee", 'should find b.coffee'));
+    test.equal(true, fs.existsSync("" + from + "sub/c.coffee", 'should find c.coffee'));
+    test.equal(true, fs.existsSync("" + from + "sub/d.coffee", 'should find d.coffee'));
+    test.equal(true, fs.existsSync("" + from + "sub2/e.coffee", 'should find e.coffee'));
+    test.equal(true, fs.existsSync("" + from + "sub2/f.coffee", 'should find f.coffee'));
+    data = {
+      data: {
+        files: ['./temp/from/a.coffee', './temp/from/b.coffee', './temp/from/sub/**/*.coffee', ['./temp/from/sub2/e.coffee', './temp/from/sub2/f.coffee']]
+      }
+    };
+    groups = {
+      '0': ['temp/from/a.coffee'],
+      '1': ['temp/from/b.coffee'],
+      '2': ['temp/from/sub/c.coffee', 'temp/from/sub/d.coffee'],
+      '3': ['temp/from/sub2/e.coffee', 'temp/from/sub2/f.coffee']
     };
     options = grunt.helper('hustler normalizeFiles', data);
     test.deepEqual(options, groups);
