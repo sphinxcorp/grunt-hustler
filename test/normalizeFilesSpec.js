@@ -90,7 +90,7 @@ exports['src array with file matches'] = {
     return callback();
   },
   main: function(test) {
-    var data, groups, normalized;
+    var data, groups, normalized, unSorted;
     test.expect(6);
     test.equal(true, fs.existsSync("" + from + "a.coffee", 'should find a.coffee'));
     test.equal(true, fs.existsSync("" + from + "b.coffee", 'should find b.coffee'));
@@ -106,6 +106,8 @@ exports['src array with file matches'] = {
       '0': ['temp/from/a.coffee', 'temp/from/b.coffee', 'temp/from/c.html', 'temp/from/d.html']
     };
     normalized = grunt.helper('hustler normalizeFiles', data);
+    unSorted = normalized.groups['0'];
+    normalized.groups['0'] = unSorted.sort();
     test.deepEqual(normalized.groups, groups);
     return test.done();
   }
@@ -126,7 +128,7 @@ exports['src array with file matches and non-existent src'] = {
     return callback();
   },
   main: function(test) {
-    var data, groups, normalized;
+    var data, groups, normalized, unSorted;
     test.expect(7);
     test.equal(true, fs.existsSync("" + from + "a.coffee", 'should find a.coffee'));
     test.equal(true, fs.existsSync("" + from + "b.coffee", 'should find b.coffee'));
@@ -143,6 +145,8 @@ exports['src array with file matches and non-existent src'] = {
       '0': ['temp/from/a.coffee', 'temp/from/b.coffee', 'temp/from/c.html', 'temp/from/d.html']
     };
     normalized = grunt.helper('hustler normalizeFiles', data);
+    unSorted = normalized.groups['0'];
+    normalized.groups['0'] = unSorted.sort();
     test.deepEqual(normalized.groups, groups);
     return test.done();
   }
@@ -215,7 +219,7 @@ exports['dest and src with file matches'] = {
     return callback();
   },
   main: function(test) {
-    var data, groups, normalized;
+    var data, groups, normalized, unSorted;
     test.expect(3);
     test.equal(true, fs.existsSync("" + from + "a.coffee", 'should find a.coffee'));
     test.equal(true, fs.existsSync("" + from + "b.coffee", 'should find b.coffee'));
@@ -229,6 +233,8 @@ exports['dest and src with file matches'] = {
       'temp/to/min.js': ['temp/from/a.coffee', 'temp/from/b.coffee']
     };
     normalized = grunt.helper('hustler normalizeFiles', data);
+    unSorted = normalized.groups['temp/to/min.js'];
+    normalized.groups['temp/to/min.js'] = unSorted.sort();
     test.deepEqual(normalized.groups, groups);
     return test.done();
   }
@@ -280,7 +286,7 @@ exports['dest and src array with file matches'] = {
     return callback();
   },
   main: function(test) {
-    var data, groups, normalized;
+    var data, groups, normalized, unSorted;
     test.expect(6);
     test.equal(true, fs.existsSync("" + from + "a.coffee", 'should find a.coffee'));
     test.equal(true, fs.existsSync("" + from + "b.coffee", 'should find b.coffee'));
@@ -297,6 +303,8 @@ exports['dest and src array with file matches'] = {
       'temp/to/min.js': ['temp/from/a.coffee', 'temp/from/b.coffee', 'temp/from/sub/c.coffee', 'temp/from/sub/d.coffee']
     };
     normalized = grunt.helper('hustler normalizeFiles', data);
+    unSorted = normalized.groups['temp/to/min.js'];
+    normalized.groups['temp/to/min.js'] = unSorted.sort();
     test.deepEqual(normalized.groups, groups);
     return test.done();
   }

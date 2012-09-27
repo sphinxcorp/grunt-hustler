@@ -5,10 +5,21 @@
 module.exports = function(grunt) {
   var fs;
   fs = require('fs');
+  grunt.registerHelper('hustler rename', function(data) {
+    var dest, groups, normalized, src, _results;
+    normalized = grunt.helper('hustler normalizeFiles', data);
+    groups = normalized.groups;
+    _results = [];
+    for (dest in groups) {
+      src = groups[dest];
+      _results.push(src.forEach(function(source) {
+        fs.renameSync(source, dest);
+        return grunt.verbose.ok("" + source + " -> " + dest);
+      }));
+    }
+    return _results;
+  });
   return grunt.registerMultiTask('rename', 'Renames files', function() {
-    var dest, src;
-    src = this.file.src;
-    dest = this.file.dest;
-    return fs.renameSync(src, dest);
+    return grunt.helper('hustler rename', this);
   });
 };

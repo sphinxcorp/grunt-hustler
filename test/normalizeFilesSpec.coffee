@@ -112,6 +112,8 @@ exports['src array with file matches'] =
 		}
 
 		normalized = grunt.helper 'hustler normalizeFiles', data
+		unSorted = normalized.groups['0']
+		normalized.groups['0'] = unSorted.sort()
 
 		test.deepEqual normalized.groups, groups
 		test.done()
@@ -158,6 +160,8 @@ exports['src array with file matches and non-existent src'] =
 		}
 
 		normalized = grunt.helper 'hustler normalizeFiles', data
+		unSorted = normalized.groups['0']
+		normalized.groups['0'] = unSorted.sort()
 
 		test.deepEqual normalized.groups, groups
 		test.done()
@@ -245,6 +249,8 @@ exports['dest and src with file matches'] =
 		}
 
 		normalized = grunt.helper 'hustler normalizeFiles', data
+		unSorted = normalized.groups['temp/to/min.js']
+		normalized.groups['temp/to/min.js'] = unSorted.sort()
 
 		test.deepEqual normalized.groups, groups
 		test.done()
@@ -326,6 +332,8 @@ exports['dest and src array with file matches'] =
 		}
 
 		normalized = grunt.helper 'hustler normalizeFiles', data
+		unSorted = normalized.groups['temp/to/min.js']
+		normalized.groups['temp/to/min.js'] = unSorted.sort()
 
 		test.deepEqual normalized.groups, groups
 		test.done()
