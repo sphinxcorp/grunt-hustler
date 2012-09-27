@@ -23,7 +23,7 @@ module.exports = function(grunt) {
     groups = normalized.groups;
     for (dest in dirs) {
       src = dirs[dest];
-      deleteFileObject(deleteDirectory, dest);
+      deleteDirectory(dest);
     }
     _results = [];
     for (dest in groups) {
@@ -32,7 +32,7 @@ module.exports = function(grunt) {
         var exists;
         exists = fs.existsSync(source);
         if (exists) {
-          return deleteFileObject(deleteFile, source);
+          return deleteFile(source);
         }
       }));
     }

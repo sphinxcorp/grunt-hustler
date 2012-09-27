@@ -23,7 +23,8 @@ module.exports = function(grunt) {
       separator = grunt.utils.linefeed;
       contents = sourceContents.join(grunt.utils.normalizelf(separator));
       compiled = coffee.compile(contents, {
-        bare: bare
+        bare: bare,
+        filename: src
       });
       destination = dest.replace('.coffee', '.js');
       grunt.file.write(destination, compiled);

@@ -19,7 +19,7 @@ module.exports = (grunt) ->
 
 			separator = grunt.utils.linefeed
 			contents = sourceContents.join grunt.utils.normalizelf separator
-			compiled = coffee.compile contents, {bare}
+			compiled = coffee.compile contents, {bare, filename: src}
 			destination = dest.replace '.coffee', '.js'
 
 			grunt.file.write destination, compiled
