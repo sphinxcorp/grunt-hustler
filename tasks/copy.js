@@ -4,8 +4,9 @@
 
 module.exports = function(grunt) {
   grunt.registerHelper('hustler copy', function(data) {
-    var contents, dest, groups, src, _results;
-    groups = grunt.helper('hustler normalizeFiles', data);
+    var contents, dest, groups, normalized, src, _results;
+    normalized = grunt.helper('hustler normalizeFiles', data);
+    groups = normalized.groups;
     _results = [];
     for (dest in groups) {
       src = groups[dest];

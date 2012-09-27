@@ -30,7 +30,11 @@ exports['directory'] = {
     test.expect(5);
     test.equal(true, fs.existsSync("" + from + "a.js", 'should find a.js'));
     test.equal(true, fs.existsSync("" + from + "b.js", 'should find b.js'));
-    grunt.helper('hustler delete', from);
+    grunt.helper('hustler delete', {
+      data: {
+        src: from
+      }
+    });
     test.equal(false, fs.existsSync("" + from + "a.js", 'should not find a.js'));
     test.equal(false, fs.existsSync("" + from + "b.js", 'should not find b.js'));
     test.equal(false, fs.existsSync("" + from, 'should not find directory'));
@@ -57,7 +61,11 @@ exports['array of directories'] = {
     test.equal(true, fs.existsSync("" + from + "b/b.js", 'should find b.js'));
     test.equal(true, fs.existsSync("" + from + "c/d/d.js", 'should find d.js inside d directory'));
     src = ["" + from + "a/", "" + from + "b/", "" + from + "c/"];
-    grunt.helper('hustler delete', src);
+    grunt.helper('hustler delete', {
+      data: {
+        src: src
+      }
+    });
     test.equal(false, fs.existsSync("" + from + "a/a.js", 'should not find a.js'));
     test.equal(false, fs.existsSync("" + from + "b/b.js", 'should not find b.js'));
     test.equal(false, fs.existsSync("" + from + "c/d/d.js", 'should not find d.js inside d directory'));
@@ -83,7 +91,11 @@ exports['file'] = {
     test.expect(2);
     test.equal(true, fs.existsSync("" + from + "a.js", 'should find a.js'));
     src = "" + from + "a.js";
-    grunt.helper('hustler delete', src);
+    grunt.helper('hustler delete', {
+      data: {
+        src: src
+      }
+    });
     test.equal(false, fs.existsSync("" + from + "a.js", 'should not find a.js'));
     return test.done();
   }
@@ -106,7 +118,11 @@ exports['array of files'] = {
     test.equal(true, fs.existsSync("" + from + "a.js", 'should find a.js'));
     test.equal(true, fs.existsSync("" + from + "b.js", 'should find b.js'));
     src = ["" + from + "a.js", "" + from + "b.js"];
-    grunt.helper('hustler delete', src);
+    grunt.helper('hustler delete', {
+      data: {
+        src: src
+      }
+    });
     test.equal(false, fs.existsSync("" + from + "a.js", 'should not find a.js'));
     test.equal(false, fs.existsSync("" + from + "b.js", 'should not find b.js'));
     return test.done();
@@ -132,7 +148,11 @@ exports['file match'] = {
     test.equal(true, fs.existsSync("" + from + "b.js", 'should find b.js'));
     test.equal(true, fs.existsSync("" + from + "c.html", 'should find c.html'));
     src = "" + from + "**/*.js";
-    grunt.helper('hustler delete', src);
+    grunt.helper('hustler delete', {
+      data: {
+        src: src
+      }
+    });
     test.equal(false, fs.existsSync("" + from + "a.js", 'should not find a.js'));
     test.equal(false, fs.existsSync("" + from + "b.js", 'should not find b.js'));
     test.equal(true, fs.existsSync("" + from + "c.html", 'should find c.html'));
@@ -163,7 +183,11 @@ exports['array of file matches to directory'] = {
     test.equal(true, fs.existsSync("" + from + "d.html", 'should find d.html'));
     test.equal(true, fs.existsSync("" + from + "e.txt", 'should find e.txt'));
     src = ["" + from + "**/*.js", "" + from + "**/*.html"];
-    grunt.helper('hustler delete', src);
+    grunt.helper('hustler delete', {
+      data: {
+        src: src
+      }
+    });
     test.equal(false, fs.existsSync("" + from + "a.js", 'should not find a.js'));
     test.equal(false, fs.existsSync("" + from + "b.js", 'should not find b.js'));
     test.equal(false, fs.existsSync("" + from + "c.html", 'should not find c.html'));
@@ -202,7 +226,11 @@ exports['array of files, file matches, and directories'] = {
     test.equal(true, fs.existsSync("" + from + "h.html", 'should find h.html'));
     test.equal(true, fs.existsSync("" + from + "i.txt", 'should find i.txt'));
     src = ["" + from + "a.js", "" + from + "b.js", "" + from + "c/", "" + from + "d/", "" + from + "e/", "" + from + "**/*.html"];
-    grunt.helper('hustler delete', src);
+    grunt.helper('hustler delete', {
+      data: {
+        src: src
+      }
+    });
     test.equal(false, fs.existsSync("" + from + "a.js", 'should not find a.js'));
     test.equal(false, fs.existsSync("" + from + "b.js", 'should not find b.js'));
     test.equal(false, fs.existsSync("" + from + "c/c.js", 'should not find c.js'));
@@ -233,7 +261,11 @@ exports['file'] = {
     test.expect(2);
     test.equal(true, fs.existsSync("" + from + "a.js", 'should find a.js'));
     src = "" + from + "a.js";
-    grunt.helper('hustler delete', src);
+    grunt.helper('hustler delete', {
+      data: {
+        src: src
+      }
+    });
     test.equal(false, fs.existsSync("" + from + "a.js", 'should not find a.js'));
     return test.done();
   }

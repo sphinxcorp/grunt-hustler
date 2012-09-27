@@ -32,9 +32,9 @@ exports['src'] =
 			]
 		}
 
-		options = grunt.helper 'hustler normalizeFiles', data
+		normalized = grunt.helper 'hustler normalizeFiles', data
 
-		test.deepEqual options, groups
+		test.deepEqual normalized.groups, groups
 		test.done()
 
 exports['src array'] =
@@ -67,9 +67,9 @@ exports['src array'] =
 			]
 		}
 
-		options = grunt.helper 'hustler normalizeFiles', data
+		normalized = grunt.helper 'hustler normalizeFiles', data
 
-		test.deepEqual options, groups
+		test.deepEqual normalized.groups, groups
 		test.done()
 
 exports['src array with file matches'] =
@@ -111,9 +111,9 @@ exports['src array with file matches'] =
 			]
 		}
 
-		options = grunt.helper 'hustler normalizeFiles', data
+		normalized = grunt.helper 'hustler normalizeFiles', data
 
-		test.deepEqual options, groups
+		test.deepEqual normalized.groups, groups
 		test.done()
 
 exports['src array with file matches and non-existent src'] =
@@ -157,9 +157,9 @@ exports['src array with file matches and non-existent src'] =
 			]
 		}
 
-		options = grunt.helper 'hustler normalizeFiles', data
+		normalized = grunt.helper 'hustler normalizeFiles', data
 
-		test.deepEqual options, groups
+		test.deepEqual normalized.groups, groups
 		test.done()
 
 exports['dest and src'] =
@@ -187,9 +187,9 @@ exports['dest and src'] =
 			]
 		}
 
-		options = grunt.helper 'hustler normalizeFiles', data
+		normalized = grunt.helper 'hustler normalizeFiles', data
 
-		test.deepEqual options, groups
+		test.deepEqual normalized.groups, groups
 		test.done()
 
 exports['dest and src with non-existent src'] =
@@ -211,9 +211,9 @@ exports['dest and src with non-existent src'] =
 		}
 
 		groups = {}
-		options = grunt.helper 'hustler normalizeFiles', data
+		normalized = grunt.helper 'hustler normalizeFiles', data
 
-		test.deepEqual options, groups
+		test.deepEqual normalized.groups, groups
 		test.done()
 
 exports['dest and src with file matches'] =
@@ -244,9 +244,9 @@ exports['dest and src with file matches'] =
 			]
 		}
 
-		options = grunt.helper 'hustler normalizeFiles', data
+		normalized = grunt.helper 'hustler normalizeFiles', data
 
-		test.deepEqual options, groups
+		test.deepEqual normalized.groups, groups
 		test.done()
 
 exports['dest and src array'] =
@@ -280,9 +280,9 @@ exports['dest and src array'] =
 			]
 		}
 
-		options = grunt.helper 'hustler normalizeFiles', data
+		normalized = grunt.helper 'hustler normalizeFiles', data
 
-		test.deepEqual options, groups
+		test.deepEqual normalized.groups, groups
 		test.done()
 
 exports['dest and src array with file matches'] =
@@ -325,9 +325,9 @@ exports['dest and src array with file matches'] =
 			]
 		}
 
-		options = grunt.helper 'hustler normalizeFiles', data
+		normalized = grunt.helper 'hustler normalizeFiles', data
 
-		test.deepEqual options, groups
+		test.deepEqual normalized.groups, groups
 		test.done()
 
 exports['dest and src array with non-existent src'] =
@@ -363,9 +363,9 @@ exports['dest and src array with non-existent src'] =
 			]
 		}
 
-		options = grunt.helper 'hustler normalizeFiles', data
+		normalized = grunt.helper 'hustler normalizeFiles', data
 
-		test.deepEqual options, groups
+		test.deepEqual normalized.groups, groups
 		test.done()
 
 exports['dest and src where dest is a directory'] =
@@ -423,9 +423,9 @@ exports['dest and src where dest is a directory'] =
 			]
 		}
 
-		options = grunt.helper 'hustler normalizeFiles', data
+		normalized = grunt.helper 'hustler normalizeFiles', data
 
-		test.deepEqual options, groups
+		test.deepEqual normalized.groups, groups
 		test.done()
 
 exports['dest and src where src is a directory'] =
@@ -456,9 +456,9 @@ exports['dest and src where src is a directory'] =
 			]
 		}
 
-		options = grunt.helper 'hustler normalizeFiles', data
+		normalized = grunt.helper 'hustler normalizeFiles', data
 
-		test.deepEqual options, groups
+		test.deepEqual normalized.groups, groups
 		test.done()
 
 exports['src where src is a directory'] =
@@ -471,7 +471,7 @@ exports['src where src is a directory'] =
 		deleteDirectory temp
 		callback()
 	main: (test) ->
-		test.expect 3
+		test.expect 4
 		test.equal true, fs.existsSync "#{from}a.coffee", 'should find a.coffee'
 		test.equal true, fs.existsSync "#{from}b.coffee", 'should find b.coffee'
 
@@ -481,6 +481,13 @@ exports['src where src is a directory'] =
 			}
 		}
 
+		dirs = {
+			'temp/from/': [
+				'temp/from/a.coffee',
+				'temp/from/b.coffee'
+			]
+		}
+
 		groups = {
 			'0': [
 				'temp/from/a.coffee',
@@ -488,9 +495,10 @@ exports['src where src is a directory'] =
 			]
 		}
 
-		options = grunt.helper 'hustler normalizeFiles', data
+		normalized = grunt.helper 'hustler normalizeFiles', data
 
-		test.deepEqual options, groups
+		test.deepEqual normalized.dirs, dirs
+		test.deepEqual normalized.groups, groups
 		test.done()
 
 exports['files with source and destination'] =
@@ -543,9 +551,9 @@ exports['files with source and destination'] =
 			]
 		}
 
-		options = grunt.helper 'hustler normalizeFiles', data
+		normalized = grunt.helper 'hustler normalizeFiles', data
 
-		test.deepEqual options, groups
+		test.deepEqual normalized.groups, groups
 		test.done()
 
 exports['files with source'] =
@@ -598,7 +606,7 @@ exports['files with source'] =
 			]
 		}
 
-		options = grunt.helper 'hustler normalizeFiles', data
+		normalized = grunt.helper 'hustler normalizeFiles', data
 
-		test.deepEqual options, groups
+		test.deepEqual normalized.groups, groups
 		test.done()

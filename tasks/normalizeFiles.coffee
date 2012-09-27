@@ -9,6 +9,7 @@ module.exports = (grunt) ->
 		inSrc = data.src
 		inFiles = data.files
 		files = {}
+		dirs = {}
 		groups = {}
 		isIndexed = false
 
@@ -55,7 +56,12 @@ module.exports = (grunt) ->
 						else
 							destination = dest
 
+						if isSourceADirectory
+							cleanSource = source.replace '/**/*.*', '/'
+							dirs[cleanSource] = [] if not dirs[cleanSource]
+							dirs[cleanSource].push sourceFile
+
 						groups[destination] = [] if not groups[destination]
 						groups[destination].push sourceFile
 
-		groups
+		{dirs, groups}

@@ -5,7 +5,8 @@ module.exports = (grunt) ->
 	path = require 'path'
 
 	grunt.registerHelper 'hustler coffee', (config) ->
-		groups = grunt.helper 'hustler normalizeFiles', config
+		normalized = grunt.helper 'hustler normalizeFiles', config
+		groups = normalized.groups
 		bare = config.data.bare ? false
 
 		for dest, src of groups

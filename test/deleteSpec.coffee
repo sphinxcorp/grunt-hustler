@@ -21,7 +21,7 @@ exports['directory'] =
 		test.equal true, fs.existsSync "#{from}a.js", 'should find a.js'
 		test.equal true, fs.existsSync "#{from}b.js", 'should find b.js'
 
-		grunt.helper 'hustler delete', from
+		grunt.helper 'hustler delete', data: src: from
 
 		test.equal false, fs.existsSync "#{from}a.js", 'should not find a.js'
 		test.equal false, fs.existsSync "#{from}b.js", 'should not find b.js'
@@ -46,7 +46,7 @@ exports['array of directories'] =
 
 		src = ["#{from}a/", "#{from}b/", "#{from}c/"]
 
-		grunt.helper 'hustler delete', src
+		grunt.helper 'hustler delete', data: src: src
 
 		test.equal false, fs.existsSync "#{from}a/a.js", 'should not find a.js'
 		test.equal false, fs.existsSync "#{from}b/b.js", 'should not find b.js'
@@ -70,7 +70,7 @@ exports['file'] =
 
 		src = "#{from}a.js"
 
-		grunt.helper 'hustler delete', src
+		grunt.helper 'hustler delete', data: src: src
 
 		test.equal false, fs.existsSync "#{from}a.js", 'should not find a.js'
 		test.done()
@@ -91,7 +91,7 @@ exports['array of files'] =
 
 		src = ["#{from}a.js", "#{from}b.js"]
 
-		grunt.helper 'hustler delete', src
+		grunt.helper 'hustler delete', data: src: src
 
 		test.equal false, fs.existsSync "#{from}a.js", 'should not find a.js'
 		test.equal false, fs.existsSync "#{from}b.js", 'should not find b.js'
@@ -115,7 +115,7 @@ exports['file match'] =
 
 		src = "#{from}**/*.js"
 
-		grunt.helper 'hustler delete', src
+		grunt.helper 'hustler delete', data: src: src
 
 		test.equal false, fs.existsSync "#{from}a.js", 'should not find a.js'
 		test.equal false, fs.existsSync "#{from}b.js", 'should not find b.js'
@@ -144,7 +144,7 @@ exports['array of file matches to directory'] =
 
 		src = ["#{from}**/*.js", "#{from}**/*.html"]
 
-		grunt.helper 'hustler delete', src
+		grunt.helper 'hustler delete', data: src: src
 
 		test.equal false, fs.existsSync "#{from}a.js", 'should not find a.js'
 		test.equal false, fs.existsSync "#{from}b.js", 'should not find b.js'
@@ -181,7 +181,7 @@ exports['array of files, file matches, and directories'] =
 
 		src = ["#{from}a.js", "#{from}b.js", "#{from}c/", "#{from}d/", "#{from}e/", "#{from}**/*.html"]
 
-		grunt.helper 'hustler delete', src
+		grunt.helper 'hustler delete', data: src: src
 
 		test.equal false, fs.existsSync "#{from}a.js", 'should not find a.js'
 		test.equal false, fs.existsSync "#{from}b.js", 'should not find b.js'
@@ -210,7 +210,7 @@ exports['file'] =
 
 		src = "#{from}a.js"
 
-		grunt.helper 'hustler delete', src
+		grunt.helper 'hustler delete', data: src: src
 
 		test.equal false, fs.existsSync "#{from}a.js", 'should not find a.js'
 		test.done()

@@ -7,8 +7,9 @@ module.exports = function(grunt) {
   coffee = require('coffee-script');
   path = require('path');
   grunt.registerHelper('hustler coffee', function(config) {
-    var bare, compiled, contents, dest, destination, groups, separator, sourceContents, src, _ref, _results;
-    groups = grunt.helper('hustler normalizeFiles', config);
+    var bare, compiled, contents, dest, destination, groups, normalized, separator, sourceContents, src, _ref, _results;
+    normalized = grunt.helper('hustler normalizeFiles', config);
+    groups = normalized.groups;
     bare = (_ref = config.data.bare) != null ? _ref : false;
     _results = [];
     for (dest in groups) {

@@ -2,7 +2,8 @@
 
 module.exports = (grunt) ->
 	grunt.registerHelper 'hustler copy', (data) ->
-		groups = grunt.helper 'hustler normalizeFiles', data
+		normalized = grunt.helper 'hustler normalizeFiles', data
+		groups = normalized.groups
 
 		for dest, src of groups
 			contents = grunt.helper 'concat', src

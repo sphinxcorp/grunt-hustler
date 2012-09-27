@@ -6,12 +6,13 @@ module.exports = function(grunt) {
   var path;
   path = require('path');
   return grunt.registerHelper('hustler normalizeFiles', function(config) {
-    var data, dest, destExt, files, groups, inDest, inFileDest, inFileSrc, inFiles, inSrc, isDestADirectory, isIndexed, src;
+    var data, dest, destExt, dirs, files, groups, inDest, inFileDest, inFileSrc, inFiles, inSrc, isDestADirectory, isIndexed, src;
     data = config.data;
     inDest = data.dest;
     inSrc = data.src;
     inFiles = data.files;
     files = {};
+    dirs = {};
     groups = {};
     isIndexed = false;
     if (inFiles) {
@@ -61,7 +62,7 @@ module.exports = function(grunt) {
           }
           sourceFiles = grunt.file.expandFiles(source);
           return sourceFiles.forEach(function(sourceFile) {
-            var absoluteDestination, destination, relative, sourceDirectory;
+            var absoluteDestination, cleanSource, destination, relative, sourceDirectory;
             if (isDestADirectory) {
               sourceDirectory = path.dirname(source.replace('**', ''));
               relative = path.relative(sourceDirectory, sourceFile);
@@ -69,6 +70,13 @@ module.exports = function(grunt) {
               destination = path.relative('./', absoluteDestination);
             } else {
               destination = dest;
+            }
+            if (isSourceADirectory) {
+              cleanSource = source.replace('/**/*.*', '/');
+              if (!dirs[cleanSource]) {
+                dirs[cleanSource] = [];
+              }
+              dirs[cleanSource].push(sourceFile);
             }
             if (!groups[destination]) {
               groups[destination] = [];
@@ -78,6 +86,9 @@ module.exports = function(grunt) {
         });
       }
     }
-    return groups;
+    return {
+      dirs: dirs,
+      groups: groups
+    };
   });
 };
