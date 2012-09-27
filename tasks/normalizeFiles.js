@@ -7,6 +7,12 @@ module.exports = function(grunt) {
   path = require('path');
   return grunt.registerHelper('hustler normalizeFiles', function(config) {
     var data, dest, destExt, dirs, files, groups, inDest, inFileDest, inFileSrc, inFiles, inSrc, isDestADirectory, isIndexed, src;
+    config = grunt.utils.recurse(config, function(prop) {
+      if (typeof prop !== 'string') {
+        return prop;
+      }
+      return grunt.template.process(prop);
+    });
     data = config.data;
     inDest = data.dest;
     inSrc = data.src;

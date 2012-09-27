@@ -4,6 +4,11 @@ module.exports = (grunt) ->
 	path = require 'path'
 
 	grunt.registerHelper 'hustler normalizeFiles', (config) ->
+		config = grunt.utils.recurse config, (prop) ->
+			return prop if typeof prop isnt 'string'
+
+			grunt.template.process prop
+
 		data = config.data
 		inDest = data.dest
 		inSrc = data.src
