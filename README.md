@@ -1,4 +1,3 @@
-[![build status](https://secure.travis-ci.org/CaryLandholt/grunt-hustler.png)](http://travis-ci.org/CaryLandholt/grunt-hustler)
 # grunt-hustler
 
 ## Contents
