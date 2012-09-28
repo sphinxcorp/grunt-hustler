@@ -1,20 +1,18 @@
 grunt = require 'grunt'
-rimraf = require 'rimraf'
 fs = require 'fs'
 createFile = grunt.file.write
-deleteDirectory = rimraf.sync
 
 temp = './temp/'
 from = "#{temp}from/"
 
 exports['directory'] =
 	setUp: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.js", ''
 		createFile "#{from}b.js", ''
 		callback()
 	tearDown: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		callback()
 	main: (test) ->
 		test.expect 5
@@ -30,13 +28,13 @@ exports['directory'] =
 
 exports['array of directories'] =
 	setUp: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a/a.js", ''
 		createFile "#{from}b/b.js", ''
 		createFile "#{from}c/d/d.js", ''
 		callback()
 	tearDown: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		callback()
 	main: (test) ->
 		test.expect 9
@@ -58,11 +56,11 @@ exports['array of directories'] =
 
 exports['file'] =
 	setUp: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.js", ''
 		callback()
 	tearDown: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		callback()
 	main: (test) ->
 		test.expect 2
@@ -77,12 +75,12 @@ exports['file'] =
 
 exports['array of files'] =
 	setUp: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.js", ''
 		createFile "#{from}b.js", ''
 		callback()
 	tearDown: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		callback()
 	main: (test) ->
 		test.expect 4
@@ -99,13 +97,13 @@ exports['array of files'] =
 
 exports['file match'] =
 	setUp: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.js", ''
 		createFile "#{from}b.js", ''
 		createFile "#{from}c.html", ''
 		callback()
 	tearDown: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		callback()
 	main: (test) ->
 		test.expect 6
@@ -124,7 +122,7 @@ exports['file match'] =
 
 exports['array of file matches to directory'] =
 	setUp: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.js", ''
 		createFile "#{from}b.js", ''
 		createFile "#{from}c.html", ''
@@ -132,7 +130,7 @@ exports['array of file matches to directory'] =
 		createFile "#{from}e.txt", ''
 		callback()
 	tearDown: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		callback()
 	main: (test) ->
 		test.expect 10
@@ -155,7 +153,7 @@ exports['array of file matches to directory'] =
 
 exports['array of files, file matches, and directories'] =
 	setUp: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.js", ''
 		createFile "#{from}b.js", ''
 		createFile "#{from}c/c.js", ''
@@ -166,7 +164,7 @@ exports['array of files, file matches, and directories'] =
 		createFile "#{from}i.txt", ''
 		callback()
 	tearDown: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		callback()
 	main: (test) ->
 		test.expect 19
@@ -198,11 +196,11 @@ exports['array of files, file matches, and directories'] =
 
 exports['file'] =
 	setUp: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.js", ''
 		callback()
 	tearDown: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		callback()
 	main: (test) ->
 		test.expect 2

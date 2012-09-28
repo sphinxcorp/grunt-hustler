@@ -1,9 +1,7 @@
 grunt = require 'grunt'
-rimraf = require 'rimraf'
 fs = require 'fs'
 createFile = grunt.file.write
 readFile = grunt.file.read
-deleteDirectory = rimraf.sync
 
 temp = './temp/'
 from = "#{temp}from/"
@@ -11,11 +9,11 @@ to = "#{temp}to/"
 
 exports['file'] =
 	setUp: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", 'a = 1'
 		callback()
 	tearDown: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		callback()
 	main: (test) ->
 		test.expect 4
@@ -36,12 +34,12 @@ exports['file'] =
 
 exports['files'] =
 	setUp: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", 'a = 1'
 		createFile "#{from}b.coffee", 'b = 2'
 		callback()
 	tearDown: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		callback()
 	main: (test) ->
 		test.expect 8

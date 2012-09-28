@@ -78,7 +78,7 @@ module.exports = function(grunt) {
               destination = dest;
             }
             if (isSourceADirectory) {
-              cleanSource = source.replace('/**/*.*', '/');
+              cleanSource = source.replace('/**/*.*', '/').replace('\\**\\*.*', '\\');
               if (!dirs[cleanSource]) {
                 dirs[cleanSource] = [];
               }

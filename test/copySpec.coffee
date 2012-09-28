@@ -1,9 +1,7 @@
 grunt = require 'grunt'
-rimraf = require 'rimraf'
 fs = require 'fs'
 createFile = grunt.file.write
 readFile = grunt.file.read
-deleteDirectory = rimraf.sync
 
 temp = './temp/'
 from = "#{temp}from/"
@@ -11,12 +9,12 @@ to = "#{temp}to/"
 
 exports['files'] =
 	setUp: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", 'a = 1'
 		createFile "#{from}b.coffee", 'b = 2'
 		callback()
 	tearDown: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		callback()
 	main: (test) ->
 		test.expect 6
@@ -38,12 +36,12 @@ exports['files'] =
 
 exports['files concatenated'] =
 	setUp: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", 'a = 1'
 		createFile "#{from}b.coffee", 'b = 2'
 		callback()
 	tearDown: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		callback()
 	main: (test) ->
 		test.expect 5
@@ -54,7 +52,7 @@ exports['files concatenated'] =
 
 		grunt.helper 'hustler copy', data: src: from, dest: dest, bare: true
 
-		expect = 'a = 1\nb = 2'
+		expect = "a = 1#{grunt.utils.linefeed}b = 2"
 		contents = readFile dest
 
 		test.equal false, fs.existsSync "#{to}a.coffee", 'should not find a.coffee'
@@ -64,12 +62,12 @@ exports['files concatenated'] =
 
 exports['directory to directory'] =
 	setUp: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", 'a = 1'
 		createFile "#{from}b.coffee", 'b = 2'
 		callback()
 	tearDown: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		callback()
 	main: (test) ->
 		test.expect 6

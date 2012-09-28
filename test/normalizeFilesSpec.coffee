@@ -1,8 +1,6 @@
 grunt = require 'grunt'
-rimraf = require 'rimraf'
 fs = require 'fs'
 createFile = grunt.file.write
-deleteDirectory = rimraf.sync
 
 temp = './temp/'
 from = "#{temp}from/"
@@ -10,11 +8,11 @@ to = "#{temp}to/"
 
 exports['src'] =
 	setUp: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", ''
 		callback()
 	tearDown: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		callback()
 	main: (test) ->
 		test.expect 2
@@ -26,25 +24,25 @@ exports['src'] =
 			}
 		}
 
+		normalized = grunt.helper 'hustler normalizeFiles', data
+
 		groups = {
 			'0': [
 				'temp/from/a.coffee'
 			]
 		}
 
-		normalized = grunt.helper 'hustler normalizeFiles', data
-
 		test.deepEqual normalized.groups, groups
 		test.done()
 
 exports['src array'] =
 	setUp: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", ''
 		createFile "#{from}b.coffee", ''
 		callback()
 	tearDown: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		callback()
 	main: (test) ->
 		test.expect 3
@@ -60,6 +58,8 @@ exports['src array'] =
 			}
 		}
 
+		normalized = grunt.helper 'hustler normalizeFiles', data
+
 		groups = {
 			'0': [
 				'temp/from/a.coffee',
@@ -67,14 +67,12 @@ exports['src array'] =
 			]
 		}
 
-		normalized = grunt.helper 'hustler normalizeFiles', data
-
 		test.deepEqual normalized.groups, groups
 		test.done()
 
 exports['src array with file matches'] =
 	setUp: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", ''
 		createFile "#{from}b.coffee", ''
 		createFile "#{from}c.html", ''
@@ -82,7 +80,7 @@ exports['src array with file matches'] =
 		createFile "#{from}e.txt", ''
 		callback()
 	tearDown: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		callback()
 	main: (test) ->
 		test.expect 6
@@ -102,6 +100,8 @@ exports['src array with file matches'] =
 			}
 		}
 
+		normalized = grunt.helper 'hustler normalizeFiles', data
+
 		groups = {
 			'0': [
 				'temp/from/a.coffee',
@@ -111,16 +111,12 @@ exports['src array with file matches'] =
 			]
 		}
 
-		normalized = grunt.helper 'hustler normalizeFiles', data
-		unSorted = normalized.groups['0']
-		normalized.groups['0'] = unSorted.sort()
-
 		test.deepEqual normalized.groups, groups
 		test.done()
 
 exports['src array with file matches and non-existent src'] =
 	setUp: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", ''
 		createFile "#{from}b.coffee", ''
 		createFile "#{from}c.html", ''
@@ -128,7 +124,7 @@ exports['src array with file matches and non-existent src'] =
 		createFile "#{from}e.txt", ''
 		callback()
 	tearDown: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		callback()
 	main: (test) ->
 		test.expect 7
@@ -150,6 +146,8 @@ exports['src array with file matches and non-existent src'] =
 			}
 		}
 
+		normalized = grunt.helper 'hustler normalizeFiles', data
+
 		groups = {
 			'0': [
 				'temp/from/a.coffee',
@@ -159,20 +157,16 @@ exports['src array with file matches and non-existent src'] =
 			]
 		}
 
-		normalized = grunt.helper 'hustler normalizeFiles', data
-		unSorted = normalized.groups['0']
-		normalized.groups['0'] = unSorted.sort()
-
 		test.deepEqual normalized.groups, groups
 		test.done()
 
 exports['dest and src'] =
 	setUp: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", ''
 		callback()
 	tearDown: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		callback()
 	main: (test) ->
 		test.expect 2
@@ -185,23 +179,30 @@ exports['dest and src'] =
 			}
 		}
 
-		groups = {
-			'temp/to/a.js': [
-				'temp/from/a.coffee'
-			]
-		}
-
 		normalized = grunt.helper 'hustler normalizeFiles', data
+
+		if normalized.groups['temp\\to\\a.js']
+			groups = {
+				'temp\\to\\a.js': [
+					'temp/from/a.coffee'
+				]
+			}
+		else
+			groups = {
+				'temp/to/a.js': [
+					'temp/from/a.coffee'
+				]
+			}
 
 		test.deepEqual normalized.groups, groups
 		test.done()
 
 exports['dest and src with non-existent src'] =
 	setUp: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		callback()
 	tearDown: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		callback()
 	main: (test) ->
 		test.expect 2
@@ -222,12 +223,12 @@ exports['dest and src with non-existent src'] =
 
 exports['dest and src with file matches'] =
 	setUp: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", ''
 		createFile "#{from}b.coffee", ''
 		callback()
 	tearDown: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		callback()
 	main: (test) ->
 		test.expect 3
@@ -241,28 +242,35 @@ exports['dest and src with file matches'] =
 			}
 		}
 
-		groups = {
-			'temp/to/min.js': [
-				'temp/from/a.coffee',
-				'temp/from/b.coffee'
-			]
-		}
 
 		normalized = grunt.helper 'hustler normalizeFiles', data
-		unSorted = normalized.groups['temp/to/min.js']
-		normalized.groups['temp/to/min.js'] = unSorted.sort()
+
+		if normalized.groups['temp\\to\\min.js']
+			groups = {
+				'temp\\to\\min.js': [
+					'temp/from/a.coffee',
+					'temp/from/b.coffee'
+				]
+			}
+		else
+			groups = {
+				'temp/to/min.js': [
+					'temp/from/a.coffee',
+					'temp/from/b.coffee'
+				]
+			}
 
 		test.deepEqual normalized.groups, groups
 		test.done()
 
 exports['dest and src array'] =
 	setUp: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", ''
 		createFile "#{from}b.coffee", ''
 		callback()
 	tearDown: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		callback()
 	main: (test) ->
 		test.expect 3
@@ -279,21 +287,29 @@ exports['dest and src array'] =
 			}
 		}
 
-		groups = {
-			'temp/to/min.js': [
-				'temp/from/a.coffee',
-				'temp/from/b.coffee'
-			]
-		}
-
 		normalized = grunt.helper 'hustler normalizeFiles', data
+
+		if normalized.groups['temp\\to\\min.js']
+			groups = {
+				'temp\\to\\min.js': [
+					'temp/from/a.coffee',
+					'temp/from/b.coffee'
+				]
+			}
+		else
+			groups = {
+				'temp/to/min.js': [
+					'temp/from/a.coffee',
+					'temp/from/b.coffee'
+				]
+			}
 
 		test.deepEqual normalized.groups, groups
 		test.done()
 
 exports['dest and src array with file matches'] =
 	setUp: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", ''
 		createFile "#{from}b.coffee", ''
 		createFile "#{from}sub/c.coffee", ''
@@ -301,7 +317,7 @@ exports['dest and src array with file matches'] =
 		createFile "#{from}sub/e.html", ''
 		callback()
 	tearDown: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		callback()
 	main: (test) ->
 		test.expect 6
@@ -322,30 +338,38 @@ exports['dest and src array with file matches'] =
 			}
 		}
 
-		groups = {
-			'temp/to/min.js': [
-				'temp/from/a.coffee',
-				'temp/from/b.coffee',
-				'temp/from/sub/c.coffee'
-				'temp/from/sub/d.coffee'
-			]
-		}
-
 		normalized = grunt.helper 'hustler normalizeFiles', data
-		unSorted = normalized.groups['temp/to/min.js']
-		normalized.groups['temp/to/min.js'] = unSorted.sort()
+
+		if normalized.groups['temp\\to\\min.js']
+			groups = {
+				'temp\\to\\min.js': [
+					'temp/from/a.coffee',
+					'temp/from/b.coffee',
+					'temp/from/sub/c.coffee'
+					'temp/from/sub/d.coffee'
+				]
+			}
+		else
+			groups = {
+				'temp/to/min.js': [
+					'temp/from/a.coffee',
+					'temp/from/b.coffee',
+					'temp/from/sub/c.coffee'
+					'temp/from/sub/d.coffee'
+				]
+			}
 
 		test.deepEqual normalized.groups, groups
 		test.done()
 
 exports['dest and src array with non-existent src'] =
 	setUp: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", ''
 		createFile "#{from}b.coffee", ''
 		callback()
 	tearDown: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		callback()
 	main: (test) ->
 		test.expect 4
@@ -364,21 +388,29 @@ exports['dest and src array with non-existent src'] =
 			}
 		}
 
-		groups = {
-			'temp/to/min.js': [
-				'temp/from/a.coffee',
-				'temp/from/b.coffee'
-			]
-		}
-
 		normalized = grunt.helper 'hustler normalizeFiles', data
+
+		if normalized.groups['temp\\to\\min.js']
+			groups = {
+				'temp\\to\\min.js': [
+					'temp/from/a.coffee',
+					'temp/from/b.coffee'
+				]
+			}
+		else
+			groups = {
+				'temp/to/min.js': [
+					'temp/from/a.coffee',
+					'temp/from/b.coffee'
+				]
+			}
 
 		test.deepEqual normalized.groups, groups
 		test.done()
 
 exports['dest and src where dest is a directory'] =
 	setUp: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", ''
 		createFile "#{from}b/b.coffee", ''
 		createFile "#{from}sub/c/c.coffee", ''
@@ -387,7 +419,7 @@ exports['dest and src where dest is a directory'] =
 		createFile "#{from}html/b.html", ''
 		callback()
 	tearDown: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		callback()
 	main: (test) ->
 		test.expect 7
@@ -410,40 +442,62 @@ exports['dest and src where dest is a directory'] =
 			}
 		}
 
-		groups = {
-			'temp/to/a.coffee': [
-				'temp/from/a.coffee'
-			],
-			'temp/to/b.coffee': [
-				'temp/from/b/b.coffee'
-			],
-			'temp/to/c/c.coffee': [
-				'temp/from/sub/c/c.coffee'
-			],
-			'temp/to/d/d.coffee': [
-				'temp/from/sub/d/d.coffee'
-			],
-			'temp/to/html/a.html': [
-				'temp/from/html/a.html'
-			],
-			'temp/to/html/b.html': [
-				'temp/from/html/b.html'
-			]
-		}
-
 		normalized = grunt.helper 'hustler normalizeFiles', data
+
+		if normalized.groups['temp\\to\\a.coffee']
+			groups = {
+				'temp\\to\\a.coffee': [
+					'temp/from/a.coffee'
+				],
+				'temp\\to\\b.coffee': [
+					'temp/from/b/b.coffee'
+				],
+				'temp\\to\\c\\c.coffee': [
+					'temp/from/sub/c/c.coffee'
+				],
+				'temp\\to\\d\\d.coffee': [
+					'temp/from/sub/d/d.coffee'
+				],
+				'temp\\to\\html\\a.html': [
+					'temp/from/html/a.html'
+				],
+				'temp\\to\\html\\b.html': [
+					'temp/from/html/b.html'
+				]
+			}
+		else
+			groups = {
+				'temp/to/a.coffee': [
+					'temp/from/a.coffee'
+				],
+				'temp/to/b.coffee': [
+					'temp/from/b/b.coffee'
+				],
+				'temp/to/c/c.coffee': [
+					'temp/from/sub/c/c.coffee'
+				],
+				'temp/to/d/d.coffee': [
+					'temp/from/sub/d/d.coffee'
+				],
+				'temp/to/html/a.html': [
+					'temp/from/html/a.html'
+				],
+				'temp/to/html/b.html': [
+					'temp/from/html/b.html'
+				]
+			}
 
 		test.deepEqual normalized.groups, groups
 		test.done()
 
 exports['dest and src where src is a directory'] =
 	setUp: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", ''
 		createFile "#{from}b.coffee", ''
 		callback()
 	tearDown: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		callback()
 	main: (test) ->
 		test.expect 3
@@ -457,26 +511,34 @@ exports['dest and src where src is a directory'] =
 			}
 		}
 
-		groups = {
-			'temp/to/min.js': [
-				'temp/from/a.coffee',
-				'temp/from/b.coffee'
-			]
-		}
-
 		normalized = grunt.helper 'hustler normalizeFiles', data
+
+		if normalized.groups['temp\\to\\min.js']
+			groups = {
+				'temp\\to\\min.js': [
+					'temp/from/a.coffee',
+					'temp/from/b.coffee'
+				]
+			}
+		else
+			groups = {
+				'temp/to/min.js': [
+					'temp/from/a.coffee',
+					'temp/from/b.coffee'
+				]
+			}
 
 		test.deepEqual normalized.groups, groups
 		test.done()
 
 exports['src where src is a directory'] =
 	setUp: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", ''
 		createFile "#{from}b.coffee", ''
 		callback()
 	tearDown: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		callback()
 	main: (test) ->
 		test.expect 4
@@ -489,12 +551,22 @@ exports['src where src is a directory'] =
 			}
 		}
 
-		dirs = {
-			'temp/from/': [
-				'temp/from/a.coffee',
-				'temp/from/b.coffee'
-			]
-		}
+		normalized = grunt.helper 'hustler normalizeFiles', data
+
+		if normalized.dirs['temp\\from\\']
+			dirs = {
+				'temp\\from\\': [
+					'temp/from/a.coffee',
+					'temp/from/b.coffee'
+				]
+			}
+		else
+			dirs = {
+				'temp/from/': [
+					'temp/from/a.coffee',
+					'temp/from/b.coffee'
+				]
+			}
 
 		groups = {
 			'0': [
@@ -503,15 +575,13 @@ exports['src where src is a directory'] =
 			]
 		}
 
-		normalized = grunt.helper 'hustler normalizeFiles', data
-
 		test.deepEqual normalized.dirs, dirs
 		test.deepEqual normalized.groups, groups
 		test.done()
 
 exports['files with source and destination'] =
 	setUp: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", ''
 		createFile "#{from}b.coffee", ''
 		createFile "#{from}sub/c.coffee", ''
@@ -520,7 +590,7 @@ exports['files with source and destination'] =
 		createFile "#{from}sub2/f.coffee", ''
 		callback()
 	tearDown: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		callback()
 	main: (test) ->
 		test.expect 7
@@ -542,31 +612,49 @@ exports['files with source and destination'] =
 			}
 		}
 
-		groups = {
-			'temp/to/a.js': [
-				'temp/from/a.coffee'
-			],
-			'temp/to/b.js': [
-				'temp/from/b.coffee'
-			],
-			'temp/to/sub.min.js': [
-				'temp/from/sub/c.coffee',
-				'temp/from/sub/d.coffee'
-			],
-			'temp/to/sub2.min.js': [
-				'temp/from/sub2/e.coffee',
-				'temp/from/sub2/f.coffee'
-			]
-		}
-
 		normalized = grunt.helper 'hustler normalizeFiles', data
+
+		if normalized.groups['temp\\to\\a.js']
+			groups = {
+				'temp\\to\\a.js': [
+					'temp/from/a.coffee'
+				],
+				'temp\\to\\b.js': [
+					'temp/from/b.coffee'
+				],
+				'temp\\to\\sub.min.js': [
+					'temp/from/sub/c.coffee',
+					'temp/from/sub/d.coffee'
+				],
+				'temp\\to\\sub2.min.js': [
+					'temp/from/sub2/e.coffee',
+					'temp/from/sub2/f.coffee'
+				]
+			}
+		else
+			groups = {
+				'temp/to/a.js': [
+					'temp/from/a.coffee'
+				],
+				'temp/to/b.js': [
+					'temp/from/b.coffee'
+				],
+				'temp/to/sub.min.js': [
+					'temp/from/sub/c.coffee',
+					'temp/from/sub/d.coffee'
+				],
+				'temp/to/sub2.min.js': [
+					'temp/from/sub2/e.coffee',
+					'temp/from/sub2/f.coffee'
+				]
+			}
 
 		test.deepEqual normalized.groups, groups
 		test.done()
 
 exports['files with source'] =
 	setUp: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", ''
 		createFile "#{from}b.coffee", ''
 		createFile "#{from}sub/c.coffee", ''
@@ -575,7 +663,7 @@ exports['files with source'] =
 		createFile "#{from}sub2/f.coffee", ''
 		callback()
 	tearDown: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		callback()
 	main: (test) ->
 		test.expect 7
@@ -597,6 +685,8 @@ exports['files with source'] =
 			}
 		}
 
+		normalized = grunt.helper 'hustler normalizeFiles', data
+
 		groups = {
 			'0': [
 				'temp/from/a.coffee'
@@ -613,8 +703,6 @@ exports['files with source'] =
 				'temp/from/sub2/f.coffee'
 			]
 		}
-
-		normalized = grunt.helper 'hustler normalizeFiles', data
 
 		test.deepEqual normalized.groups, groups
 		test.done()

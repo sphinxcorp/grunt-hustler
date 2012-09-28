@@ -1,9 +1,7 @@
 grunt = require 'grunt'
-rimraf = require 'rimraf'
 fs = require 'fs'
 createFile = grunt.file.write
 readFile = grunt.file.read
-deleteDirectory = rimraf.sync
 
 temp = './temp/'
 from = "#{temp}from/"
@@ -11,12 +9,12 @@ to = "#{temp}to/"
 
 exports['coffee to js'] =
 	setUp: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", 'a = 1'
 		createFile "#{from}b.coffee", 'b = 2'
 		callback()
 	tearDown: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		callback()
 	main: (test) ->
 		test.expect 6
@@ -38,12 +36,12 @@ exports['coffee to js'] =
 
 exports['coffee to js with bare'] =
 	setUp: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", 'a = 1'
 		createFile "#{from}b.coffee", 'b = 2'
 		callback()
 	tearDown: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		callback()
 	main: (test) ->
 		test.expect 6
@@ -65,12 +63,12 @@ exports['coffee to js with bare'] =
 
 exports['coffee to js concatenated'] =
 	setUp: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", 'a = 1'
 		createFile "#{from}b.coffee", 'b = 2'
 		callback()
 	tearDown: (callback) ->
-		deleteDirectory temp
+		grunt.helper 'hustler delete', data: src: temp
 		callback()
 	main: (test) ->
 		test.expect 5

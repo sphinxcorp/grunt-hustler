@@ -62,7 +62,7 @@ module.exports = (grunt) ->
 							destination = dest
 
 						if isSourceADirectory
-							cleanSource = source.replace '/**/*.*', '/'
+							cleanSource = source.replace('/**/*.*', '/').replace('\\**\\*.*', '\\')
 							dirs[cleanSource] = [] if not dirs[cleanSource]
 							dirs[cleanSource].push sourceFile
 
