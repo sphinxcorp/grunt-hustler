@@ -21,20 +21,16 @@ module.exports = function(grunt) {
     normalized = grunt.helper('hustler normalizeFiles', data);
     dirs = normalized.dirs;
     groups = normalized.groups;
-    for (dest in dirs) {
-      src = dirs[dest];
-      deleteDirectory(dest);
-    }
-    _results = [];
     for (dest in groups) {
       src = groups[dest];
-      _results.push(src.forEach(function(source) {
-        var exists;
-        exists = fs.existsSync(source);
-        if (exists) {
-          return deleteFile(source);
-        }
-      }));
+      src.forEach(function(source) {
+        return deleteFile(source);
+      });
+    }
+    _results = [];
+    for (dest in dirs) {
+      src = dirs[dest];
+      _results.push(deleteDirectory(dest));
     }
     return _results;
   });

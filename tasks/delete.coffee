@@ -19,13 +19,12 @@ module.exports = (grunt) ->
 		dirs = normalized.dirs
 		groups = normalized.groups
 
-		for dest, src of dirs
-			deleteDirectory dest
-
 		for dest, src of groups
 			src.forEach (source) ->
-				exists = fs.existsSync source
-				deleteFile source if exists
+				deleteFile source
+
+		for dest, src of dirs
+			deleteDirectory dest
 
 	grunt.registerMultiTask 'delete', 'Deletes files and directories', ->
 		grunt.helper 'hustler delete', @
