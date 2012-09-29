@@ -157,7 +157,7 @@ module.exports = {
     return test.done();
   },
   'dest and src with file matches': function(test) {
-    var data, groups, normalized;
+    var data, group, groups, normalized, unsorted;
     test.expect(3);
     createFile("" + from + "a.coffee", '');
     createFile("" + from + "b.coffee", '');
@@ -174,6 +174,9 @@ module.exports = {
       groups = {
         'temp\\to\\min.js': ['temp/from/a.coffee', 'temp/from/b.coffee']
       };
+      group = 'temp\\to\\min.js';
+      unsorted = normalized.groups[group];
+      normalized.groups[group] = unsorted.sort();
     } else {
       groups = {
         'temp/to/min.js': ['temp/from/a.coffee', 'temp/from/b.coffee']
@@ -209,7 +212,7 @@ module.exports = {
     return test.done();
   },
   'dest and src array with file matches': function(test) {
-    var data, groups, normalized;
+    var data, group, groups, normalized, unsorted;
     test.expect(6);
     createFile("" + from + "a.coffee", '');
     createFile("" + from + "b.coffee", '');
@@ -232,6 +235,9 @@ module.exports = {
       groups = {
         'temp\\to\\min.js': ['temp/from/a.coffee', 'temp/from/b.coffee', 'temp/from/sub/c.coffee', 'temp/from/sub/d.coffee']
       };
+      group = 'temp\\to\\min.js';
+      unsorted = normalized.groups[group];
+      normalized.groups[group] = unsorted.sort();
     } else {
       groups = {
         'temp/to/min.js': ['temp/from/a.coffee', 'temp/from/b.coffee', 'temp/from/sub/c.coffee', 'temp/from/sub/d.coffee']
@@ -312,7 +318,7 @@ module.exports = {
     return test.done();
   },
   'dest and src where src is a directory': function(test) {
-    var data, groups, normalized;
+    var data, group, groups, normalized, unsorted;
     test.expect(3);
     createFile("" + from + "a.coffee", '');
     createFile("" + from + "b.coffee", '');
@@ -329,6 +335,9 @@ module.exports = {
       groups = {
         'temp\\to\\min.js': ['temp/from/a.coffee', 'temp/from/b.coffee']
       };
+      group = 'temp\\to\\min.js';
+      unsorted = normalized.groups[group];
+      normalized.groups[group] = unsorted.sort();
     } else {
       groups = {
         'temp/to/min.js': ['temp/from/a.coffee', 'temp/from/b.coffee']
@@ -338,7 +347,7 @@ module.exports = {
     return test.done();
   },
   'src where src is a directory': function(test) {
-    var data, dirs, groups, normalized;
+    var data, dir, dirs, group, groups, normalized, unsorted;
     test.expect(4);
     createFile("" + from + "a.coffee", '');
     createFile("" + from + "b.coffee", '');
@@ -354,6 +363,9 @@ module.exports = {
       dirs = {
         'temp\\from\\': ['temp/from/a.coffee', 'temp/from/b.coffee']
       };
+      dir = 'temp\\to\\min.js';
+      unsorted = normalized.dirs[dir];
+      normalized.dirs[dir] = unsorted.sort();
     } else {
       dirs = {
         'temp/from/': ['temp/from/a.coffee', 'temp/from/b.coffee']
@@ -362,12 +374,15 @@ module.exports = {
     groups = {
       '0': ['temp/from/a.coffee', 'temp/from/b.coffee']
     };
+    group = '0';
+    unsorted = normalized.groups[group];
+    normalized.groups[group] = unsorted.sort();
     test.deepEqual(normalized.dirs, dirs);
     test.deepEqual(normalized.groups, groups);
     return test.done();
   },
   'files with source and destination': function(test) {
-    var data, groups, normalized;
+    var data, group, groups, normalized, unsorted;
     test.expect(7);
     createFile("" + from + "a.coffee", '');
     createFile("" + from + "b.coffee", '');
@@ -399,6 +414,12 @@ module.exports = {
         'temp\\to\\sub.min.js': ['temp/from/sub/c.coffee', 'temp/from/sub/d.coffee'],
         'temp\\to\\sub2.min.js': ['temp/from/sub2/e.coffee', 'temp/from/sub2/f.coffee']
       };
+      group = 'temp\\to\\sub.min.js';
+      unsorted = normalized.groups[group];
+      normalized.groups[group] = unsorted.sort();
+      group = 'temp\\to\\sub2.min.js';
+      unsorted = normalized.groups[group];
+      normalized.groups[group] = unsorted.sort();
     } else {
       groups = {
         'temp/to/a.js': ['temp/from/a.coffee'],
@@ -411,7 +432,7 @@ module.exports = {
     return test.done();
   },
   'files with source': function(test) {
-    var data, groups, normalized;
+    var data, group, groups, normalized, unsorted;
     test.expect(7);
     createFile("" + from + "a.coffee", '');
     createFile("" + from + "b.coffee", '');
@@ -437,6 +458,12 @@ module.exports = {
       '2': ['temp/from/sub/c.coffee', 'temp/from/sub/d.coffee'],
       '3': ['temp/from/sub2/e.coffee', 'temp/from/sub2/f.coffee']
     };
+    group = '2';
+    unsorted = normalized.groups[group];
+    normalized.groups[group] = unsorted.sort();
+    group = '3';
+    unsorted = normalized.groups[group];
+    normalized.groups[group] = unsorted.sort();
     test.deepEqual(normalized.groups, groups);
     return test.done();
   }

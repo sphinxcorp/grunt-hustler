@@ -44,9 +44,10 @@ module.exports =
 		test.equal true, fs.existsSync "#{from}a.coffee", 'should find a.coffee'
 		test.equal true, fs.existsSync "#{from}b.coffee", 'should find b.coffee'
 
+		src = ["#{from}a.coffee", "#{from}b.coffee"]
 		dest = "#{to}concatenated.coffee"
 
-		grunt.helper 'hustler copy', data: src: from, dest: dest, bare: true
+		grunt.helper 'hustler copy', data: src: src, dest: dest, bare: true
 
 		expect = "a = 1#{grunt.utils.linefeed}b = 2"
 		contents = readFile dest

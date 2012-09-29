@@ -215,6 +215,11 @@ module.exports =
 					'temp/from/b.coffee'
 				]
 			}
+
+			# Windows doesn't reliably collect files in alphabetical order
+			group = 'temp\\to\\min.js'
+			unsorted = normalized.groups[group]
+			normalized.groups[group] = unsorted.sort()
 		else
 			groups = {
 				'temp/to/min.js': [
@@ -300,6 +305,11 @@ module.exports =
 					'temp/from/sub/d.coffee'
 				]
 			}
+
+			# Windows doesn't reliably collect files in alphabetical order
+			group = 'temp\\to\\min.js'
+			unsorted = normalized.groups[group]
+			normalized.groups[group] = unsorted.sort()
 		else
 			groups = {
 				'temp/to/min.js': [
@@ -453,6 +463,11 @@ module.exports =
 					'temp/from/b.coffee'
 				]
 			}
+
+			# Windows doesn't reliably collect files in alphabetical order
+			group = 'temp\\to\\min.js'
+			unsorted = normalized.groups[group]
+			normalized.groups[group] = unsorted.sort()
 		else
 			groups = {
 				'temp/to/min.js': [
@@ -487,6 +502,11 @@ module.exports =
 					'temp/from/b.coffee'
 				]
 			}
+
+			# Windows doesn't reliably collect files in alphabetical order
+			dir = 'temp\\to\\min.js'
+			unsorted = normalized.dirs[dir]
+			normalized.dirs[dir] = unsorted.sort()
 		else
 			dirs = {
 				'temp/from/': [
@@ -501,6 +521,11 @@ module.exports =
 				'temp/from/b.coffee'
 			]
 		}
+
+		# Windows doesn't reliably collect files in alphabetical order
+		group = '0'
+		unsorted = normalized.groups[group]
+		normalized.groups[group] = unsorted.sort()
 
 		test.deepEqual normalized.dirs, dirs
 		test.deepEqual normalized.groups, groups
@@ -552,6 +577,14 @@ module.exports =
 					'temp/from/sub2/f.coffee'
 				]
 			}
+
+			# Windows doesn't reliably collect files in alphabetical order
+			group = 'temp\\to\\sub.min.js'
+			unsorted = normalized.groups[group]
+			normalized.groups[group] = unsorted.sort()
+			group = 'temp\\to\\sub2.min.js'
+			unsorted = normalized.groups[group]
+			normalized.groups[group] = unsorted.sort()
 		else
 			groups = {
 				'temp/to/a.js': [
@@ -618,6 +651,14 @@ module.exports =
 				'temp/from/sub2/f.coffee'
 			]
 		}
+
+		# Windows doesn't reliably collect files in alphabetical order
+		group = '2'
+		unsorted = normalized.groups[group]
+		normalized.groups[group] = unsorted.sort()
+		group = '3'
+		unsorted = normalized.groups[group]
+		normalized.groups[group] = unsorted.sort()
 
 		test.deepEqual normalized.groups, groups
 		test.done()

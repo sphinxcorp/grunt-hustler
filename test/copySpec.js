@@ -56,16 +56,17 @@ module.exports = {
     return test.done();
   },
   'files concatenated': function(test) {
-    var contents, dest, expect;
+    var contents, dest, expect, src;
     test.expect(5);
     createFile("" + from + "a.coffee", 'a = 1');
     createFile("" + from + "b.coffee", 'b = 2');
     test.equal(true, fs.existsSync("" + from + "a.coffee", 'should find a.coffee'));
     test.equal(true, fs.existsSync("" + from + "b.coffee", 'should find b.coffee'));
+    src = ["" + from + "a.coffee", "" + from + "b.coffee"];
     dest = "" + to + "concatenated.coffee";
     grunt.helper('hustler copy', {
       data: {
-        src: from,
+        src: src,
         dest: dest,
         bare: true
       }

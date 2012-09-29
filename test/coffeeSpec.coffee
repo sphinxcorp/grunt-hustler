@@ -65,9 +65,10 @@ module.exports =
 		test.equal true, fs.existsSync "#{from}a.coffee", 'should find a.coffee'
 		test.equal true, fs.existsSync "#{from}b.coffee", 'should find b.coffee'
 
+		src = ["#{from}a.coffee", "#{from}b.coffee"]
 		dest = "#{to}min.js"
 
-		grunt.helper 'hustler coffee', data: src: from, dest: dest, bare: true
+		grunt.helper 'hustler coffee', data: src: src, dest: dest, bare: true
 
 		expect = 'var a, b;\n\na = 1;\n\nb = 2;\n'
 		contents = readFile dest
