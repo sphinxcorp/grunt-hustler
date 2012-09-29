@@ -15,15 +15,13 @@ from = "" + temp + "from/";
 
 to = "" + temp + "to/";
 
-exports['coffee to js'] = {
+module.exports = {
   setUp: function(callback) {
     grunt.helper('hustler delete', {
       data: {
         src: temp
       }
     });
-    createFile("" + from + "a.coffee", 'a = 1');
-    createFile("" + from + "b.coffee", 'b = 2');
     return callback();
   },
   tearDown: function(callback) {
@@ -34,9 +32,11 @@ exports['coffee to js'] = {
     });
     return callback();
   },
-  main: function(test) {
+  'coffee to js': function(test) {
     var aContents, aExpect, bContents, bExpect;
     test.expect(6);
+    createFile("" + from + "a.coffee", 'a = 1');
+    createFile("" + from + "b.coffee", 'b = 2');
     test.equal(true, fs.existsSync("" + from + "a.coffee", 'should find a.coffee'));
     test.equal(true, fs.existsSync("" + from + "b.coffee", 'should find b.coffee'));
     grunt.helper('hustler coffee', {
@@ -54,31 +54,12 @@ exports['coffee to js'] = {
     test.equal(aExpect, aContents, 'a.js should be compiled coffee');
     test.equal(bExpect, bContents, 'b.js should be compiled coffee');
     return test.done();
-  }
-};
-
-exports['coffee to js with bare'] = {
-  setUp: function(callback) {
-    grunt.helper('hustler delete', {
-      data: {
-        src: temp
-      }
-    });
-    createFile("" + from + "a.coffee", 'a = 1');
-    createFile("" + from + "b.coffee", 'b = 2');
-    return callback();
   },
-  tearDown: function(callback) {
-    grunt.helper('hustler delete', {
-      data: {
-        src: temp
-      }
-    });
-    return callback();
-  },
-  main: function(test) {
+  'coffee to js with bare': function(test) {
     var aContents, aExpect, bContents, bExpect;
     test.expect(6);
+    createFile("" + from + "a.coffee", 'a = 1');
+    createFile("" + from + "b.coffee", 'b = 2');
     test.equal(true, fs.existsSync("" + from + "a.coffee", 'should find a.coffee'));
     test.equal(true, fs.existsSync("" + from + "b.coffee", 'should find b.coffee'));
     grunt.helper('hustler coffee', {
@@ -97,31 +78,12 @@ exports['coffee to js with bare'] = {
     test.equal(aExpect, aContents, 'a.js should be compiled coffee');
     test.equal(bExpect, bContents, 'b.js should be compiled coffee');
     return test.done();
-  }
-};
-
-exports['coffee to js concatenated'] = {
-  setUp: function(callback) {
-    grunt.helper('hustler delete', {
-      data: {
-        src: temp
-      }
-    });
-    createFile("" + from + "a.coffee", 'a = 1');
-    createFile("" + from + "b.coffee", 'b = 2');
-    return callback();
   },
-  tearDown: function(callback) {
-    grunt.helper('hustler delete', {
-      data: {
-        src: temp
-      }
-    });
-    return callback();
-  },
-  main: function(test) {
+  'coffee to js concatenated': function(test) {
     var contents, dest, expect;
     test.expect(5);
+    createFile("" + from + "a.coffee", 'a = 1');
+    createFile("" + from + "b.coffee", 'b = 2');
     test.equal(true, fs.existsSync("" + from + "a.coffee", 'should find a.coffee'));
     test.equal(true, fs.existsSync("" + from + "b.coffee", 'should find b.coffee'));
     dest = "" + to + "min.js";

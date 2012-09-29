@@ -11,15 +11,13 @@ temp = './temp/';
 
 from = "" + temp + "from/";
 
-exports['directory'] = {
+module.exports = {
   setUp: function(callback) {
     grunt.helper('hustler delete', {
       data: {
         src: temp
       }
     });
-    createFile("" + from + "a.js", '');
-    createFile("" + from + "b.js", '');
     return callback();
   },
   tearDown: function(callback) {
@@ -30,9 +28,10 @@ exports['directory'] = {
     });
     return callback();
   },
-  main: function(test) {
+  'directory': function(test) {
     test.expect(5);
-    test.equal(true, fs.existsSync("" + from + "a.js", 'should find a.js'));
+    createFile("" + from + "a.js", '');
+    createFile("" + from + "b.js", test.equal(true, fs.existsSync("" + from + "a.js", 'should find a.js')));
     test.equal(true, fs.existsSync("" + from + "b.js", 'should find b.js'));
     grunt.helper('hustler delete', {
       data: {
@@ -43,32 +42,13 @@ exports['directory'] = {
     test.equal(false, fs.existsSync("" + from + "b.js", 'should not find b.js'));
     test.equal(false, fs.existsSync("" + from, 'should not find directory'));
     return test.done();
-  }
-};
-
-exports['array of directories'] = {
-  setUp: function(callback) {
-    grunt.helper('hustler delete', {
-      data: {
-        src: temp
-      }
-    });
+  },
+  'array of directories': function(test) {
+    var src;
+    test.expect(9);
     createFile("" + from + "a/a.js", '');
     createFile("" + from + "b/b.js", '');
     createFile("" + from + "c/d/d.js", '');
-    return callback();
-  },
-  tearDown: function(callback) {
-    grunt.helper('hustler delete', {
-      data: {
-        src: temp
-      }
-    });
-    return callback();
-  },
-  main: function(test) {
-    var src;
-    test.expect(9);
     test.equal(true, fs.existsSync("" + from + "a/a.js", 'should find a.js'));
     test.equal(true, fs.existsSync("" + from + "b/b.js", 'should find b.js'));
     test.equal(true, fs.existsSync("" + from + "c/d/d.js", 'should find d.js inside d directory'));
@@ -85,30 +65,11 @@ exports['array of directories'] = {
     test.equal(false, fs.existsSync("" + from + "b/", 'should not find b directory'));
     test.equal(false, fs.existsSync("" + from + "c/", 'should not find c directory'));
     return test.done();
-  }
-};
-
-exports['file'] = {
-  setUp: function(callback) {
-    grunt.helper('hustler delete', {
-      data: {
-        src: temp
-      }
-    });
-    createFile("" + from + "a.js", '');
-    return callback();
   },
-  tearDown: function(callback) {
-    grunt.helper('hustler delete', {
-      data: {
-        src: temp
-      }
-    });
-    return callback();
-  },
-  main: function(test) {
+  'file': function(test) {
     var src;
     test.expect(2);
+    createFile("" + from + "a.js", '');
     test.equal(true, fs.existsSync("" + from + "a.js", 'should find a.js'));
     src = "" + from + "a.js";
     grunt.helper('hustler delete', {
@@ -118,31 +79,12 @@ exports['file'] = {
     });
     test.equal(false, fs.existsSync("" + from + "a.js", 'should not find a.js'));
     return test.done();
-  }
-};
-
-exports['array of files'] = {
-  setUp: function(callback) {
-    grunt.helper('hustler delete', {
-      data: {
-        src: temp
-      }
-    });
-    createFile("" + from + "a.js", '');
-    createFile("" + from + "b.js", '');
-    return callback();
   },
-  tearDown: function(callback) {
-    grunt.helper('hustler delete', {
-      data: {
-        src: temp
-      }
-    });
-    return callback();
-  },
-  main: function(test) {
+  'array of files': function(test) {
     var src;
     test.expect(4);
+    createFile("" + from + "a.js", '');
+    createFile("" + from + "b.js", '');
     test.equal(true, fs.existsSync("" + from + "a.js", 'should find a.js'));
     test.equal(true, fs.existsSync("" + from + "b.js", 'should find b.js'));
     src = ["" + from + "a.js", "" + from + "b.js"];
@@ -154,32 +96,13 @@ exports['array of files'] = {
     test.equal(false, fs.existsSync("" + from + "a.js", 'should not find a.js'));
     test.equal(false, fs.existsSync("" + from + "b.js", 'should not find b.js'));
     return test.done();
-  }
-};
-
-exports['file match'] = {
-  setUp: function(callback) {
-    grunt.helper('hustler delete', {
-      data: {
-        src: temp
-      }
-    });
+  },
+  'file match': function(test) {
+    var src;
+    test.expect(6);
     createFile("" + from + "a.js", '');
     createFile("" + from + "b.js", '');
     createFile("" + from + "c.html", '');
-    return callback();
-  },
-  tearDown: function(callback) {
-    grunt.helper('hustler delete', {
-      data: {
-        src: temp
-      }
-    });
-    return callback();
-  },
-  main: function(test) {
-    var src;
-    test.expect(6);
     test.equal(true, fs.existsSync("" + from + "a.js", 'should find a.js'));
     test.equal(true, fs.existsSync("" + from + "b.js", 'should find b.js'));
     test.equal(true, fs.existsSync("" + from + "c.html", 'should find c.html'));
@@ -193,34 +116,15 @@ exports['file match'] = {
     test.equal(false, fs.existsSync("" + from + "b.js", 'should not find b.js'));
     test.equal(true, fs.existsSync("" + from + "c.html", 'should find c.html'));
     return test.done();
-  }
-};
-
-exports['array of file matches to directory'] = {
-  setUp: function(callback) {
-    grunt.helper('hustler delete', {
-      data: {
-        src: temp
-      }
-    });
+  },
+  'array of file matches to directory': function(test) {
+    var src;
+    test.expect(10);
     createFile("" + from + "a.js", '');
     createFile("" + from + "b.js", '');
     createFile("" + from + "c.html", '');
     createFile("" + from + "d.html", '');
     createFile("" + from + "e.txt", '');
-    return callback();
-  },
-  tearDown: function(callback) {
-    grunt.helper('hustler delete', {
-      data: {
-        src: temp
-      }
-    });
-    return callback();
-  },
-  main: function(test) {
-    var src;
-    test.expect(10);
     test.equal(true, fs.existsSync("" + from + "a.js", 'should find a.js'));
     test.equal(true, fs.existsSync("" + from + "b.js", 'should find b.js'));
     test.equal(true, fs.existsSync("" + from + "c.html", 'should find c.html'));
@@ -238,16 +142,10 @@ exports['array of file matches to directory'] = {
     test.equal(false, fs.existsSync("" + from + "d.html", 'should not find d.html'));
     test.equal(true, fs.existsSync("" + from + "e.txt", 'should find e.txt'));
     return test.done();
-  }
-};
-
-exports['array of files, file matches, and directories'] = {
-  setUp: function(callback) {
-    grunt.helper('hustler delete', {
-      data: {
-        src: temp
-      }
-    });
+  },
+  'array of files, file matches, and directories': function(test) {
+    var src;
+    test.expect(19);
     createFile("" + from + "a.js", '');
     createFile("" + from + "b.js", '');
     createFile("" + from + "c/c.js", '');
@@ -256,19 +154,6 @@ exports['array of files, file matches, and directories'] = {
     createFile("" + from + "g.html", '');
     createFile("" + from + "h.html", '');
     createFile("" + from + "i.txt", '');
-    return callback();
-  },
-  tearDown: function(callback) {
-    grunt.helper('hustler delete', {
-      data: {
-        src: temp
-      }
-    });
-    return callback();
-  },
-  main: function(test) {
-    var src;
-    test.expect(19);
     test.equal(true, fs.existsSync("" + from + "a.js", 'should find a.js'));
     test.equal(true, fs.existsSync("" + from + "b.js", 'should find b.js'));
     test.equal(true, fs.existsSync("" + from + "c/c.js", 'should find c.js'));
@@ -294,39 +179,6 @@ exports['array of files, file matches, and directories'] = {
     test.equal(false, fs.existsSync("" + from + "c/", 'should not c directory'));
     test.equal(false, fs.existsSync("" + from + "d/", 'should not d directory'));
     test.equal(false, fs.existsSync("" + from + "e/", 'should not e directory'));
-    return test.done();
-  }
-};
-
-exports['file'] = {
-  setUp: function(callback) {
-    grunt.helper('hustler delete', {
-      data: {
-        src: temp
-      }
-    });
-    createFile("" + from + "a.js", '');
-    return callback();
-  },
-  tearDown: function(callback) {
-    grunt.helper('hustler delete', {
-      data: {
-        src: temp
-      }
-    });
-    return callback();
-  },
-  main: function(test) {
-    var src;
-    test.expect(2);
-    test.equal(true, fs.existsSync("" + from + "a.js", 'should find a.js'));
-    src = "" + from + "a.js";
-    grunt.helper('hustler delete', {
-      data: {
-        src: src
-      }
-    });
-    test.equal(false, fs.existsSync("" + from + "a.js", 'should not find a.js'));
     return test.done();
   }
 };

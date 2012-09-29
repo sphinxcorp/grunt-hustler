@@ -15,14 +15,13 @@ from = "" + temp + "from/";
 
 to = "" + temp + "to/";
 
-exports['file'] = {
+module.exports = {
   setUp: function(callback) {
     grunt.helper('hustler delete', {
       data: {
         src: temp
       }
     });
-    createFile("" + from + "a.coffee", 'a = 1');
     return callback();
   },
   tearDown: function(callback) {
@@ -33,9 +32,10 @@ exports['file'] = {
     });
     return callback();
   },
-  main: function(test) {
+  'file': function(test) {
     var contents, dest, expect, src;
     test.expect(4);
+    createFile("" + from + "a.coffee", 'a = 1');
     test.equal(true, fs.existsSync("" + from + "a.coffee", 'should find a.coffee'));
     src = "" + from + "a.coffee";
     dest = "" + from + "renamed.coffee";
@@ -51,31 +51,12 @@ exports['file'] = {
     test.equal(true, fs.existsSync(dest, 'should find renamed.coffee'));
     test.equal(expect, contents, 'renamed.coffee contents should be same as original');
     return test.done();
-  }
-};
-
-exports['files'] = {
-  setUp: function(callback) {
-    grunt.helper('hustler delete', {
-      data: {
-        src: temp
-      }
-    });
-    createFile("" + from + "a.coffee", 'a = 1');
-    createFile("" + from + "b.coffee", 'b = 2');
-    return callback();
   },
-  tearDown: function(callback) {
-    grunt.helper('hustler delete', {
-      data: {
-        src: temp
-      }
-    });
-    return callback();
-  },
-  main: function(test) {
+  'files': function(test) {
     var aContents, aExpect, bContents, bExpect, files;
     test.expect(8);
+    createFile("" + from + "a.coffee", 'a = 1');
+    createFile("" + from + "b.coffee", 'b = 2');
     test.equal(true, fs.existsSync("" + from + "a.coffee", 'should find a.coffee'));
     test.equal(true, fs.existsSync("" + from + "b.coffee", 'should find b.coffee'));
     files = {

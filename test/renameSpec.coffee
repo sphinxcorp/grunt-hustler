@@ -7,16 +7,18 @@ temp = './temp/'
 from = "#{temp}from/"
 to = "#{temp}to/"
 
-exports['file'] =
+module.exports =
 	setUp: (callback) ->
 		grunt.helper 'hustler delete', data: src: temp
-		createFile "#{from}a.coffee", 'a = 1'
 		callback()
 	tearDown: (callback) ->
 		grunt.helper 'hustler delete', data: src: temp
 		callback()
-	main: (test) ->
+	'file': (test) ->
 		test.expect 4
+
+		createFile "#{from}a.coffee", 'a = 1'
+
 		test.equal true, fs.existsSync "#{from}a.coffee", 'should find a.coffee'
 
 		src = "#{from}a.coffee"
@@ -31,18 +33,12 @@ exports['file'] =
 		test.equal true, fs.existsSync dest, 'should find renamed.coffee'
 		test.equal expect, contents, 'renamed.coffee contents should be same as original'
 		test.done()
+	'files': (test) ->
+		test.expect 8
 
-exports['files'] =
-	setUp: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", 'a = 1'
 		createFile "#{from}b.coffee", 'b = 2'
-		callback()
-	tearDown: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
-		callback()
-	main: (test) ->
-		test.expect 8
+
 		test.equal true, fs.existsSync "#{from}a.coffee", 'should find a.coffee'
 		test.equal true, fs.existsSync "#{from}b.coffee", 'should find b.coffee'
 

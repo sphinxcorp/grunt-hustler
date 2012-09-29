@@ -15,15 +15,13 @@ from = "" + temp + "from/";
 
 to = "" + temp + "to/";
 
-exports['files'] = {
+module.exports = {
   setUp: function(callback) {
     grunt.helper('hustler delete', {
       data: {
         src: temp
       }
     });
-    createFile("" + from + "a.coffee", 'a = 1');
-    createFile("" + from + "b.coffee", 'b = 2');
     return callback();
   },
   tearDown: function(callback) {
@@ -34,9 +32,11 @@ exports['files'] = {
     });
     return callback();
   },
-  main: function(test) {
+  'files': function(test) {
     var aContents, aExpect, bContents, bExpect;
     test.expect(6);
+    createFile("" + from + "a.coffee", 'a = 1');
+    createFile("" + from + "b.coffee", 'b = 2');
     test.equal(true, fs.existsSync("" + from + "a.coffee", 'should find a.coffee'));
     test.equal(true, fs.existsSync("" + from + "b.coffee", 'should find b.coffee'));
     grunt.helper('hustler copy', {
@@ -54,31 +54,12 @@ exports['files'] = {
     test.equal(aExpect, aContents, 'a.coffee contents should be same as original');
     test.equal(bExpect, bContents, 'b.coffee contents should be same as original');
     return test.done();
-  }
-};
-
-exports['files concatenated'] = {
-  setUp: function(callback) {
-    grunt.helper('hustler delete', {
-      data: {
-        src: temp
-      }
-    });
-    createFile("" + from + "a.coffee", 'a = 1');
-    createFile("" + from + "b.coffee", 'b = 2');
-    return callback();
   },
-  tearDown: function(callback) {
-    grunt.helper('hustler delete', {
-      data: {
-        src: temp
-      }
-    });
-    return callback();
-  },
-  main: function(test) {
+  'files concatenated': function(test) {
     var contents, dest, expect;
     test.expect(5);
+    createFile("" + from + "a.coffee", 'a = 1');
+    createFile("" + from + "b.coffee", 'b = 2');
     test.equal(true, fs.existsSync("" + from + "a.coffee", 'should find a.coffee'));
     test.equal(true, fs.existsSync("" + from + "b.coffee", 'should find b.coffee'));
     dest = "" + to + "concatenated.coffee";
@@ -95,31 +76,12 @@ exports['files concatenated'] = {
     test.equal(false, fs.existsSync("" + to + "b.coffee", 'should not find b.coffee'));
     test.equal(expect, contents, 'concatenated.coffee should be concatenated content of a.coffee and b.coffee');
     return test.done();
-  }
-};
-
-exports['directory to directory'] = {
-  setUp: function(callback) {
-    grunt.helper('hustler delete', {
-      data: {
-        src: temp
-      }
-    });
-    createFile("" + from + "a.coffee", 'a = 1');
-    createFile("" + from + "b.coffee", 'b = 2');
-    return callback();
   },
-  tearDown: function(callback) {
-    grunt.helper('hustler delete', {
-      data: {
-        src: temp
-      }
-    });
-    return callback();
-  },
-  main: function(test) {
+  'directory to directory': function(test) {
     var aContents, aExpect, bContents, bExpect;
     test.expect(6);
+    createFile("" + from + "a.coffee", 'a = 1');
+    createFile("" + from + "b.coffee", 'b = 2');
     test.equal(true, fs.existsSync("" + from + "a.coffee", 'should find a.coffee'));
     test.equal(true, fs.existsSync("" + from + "b.coffee", 'should find b.coffee'));
     grunt.helper('hustler copy', {

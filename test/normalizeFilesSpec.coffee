@@ -6,16 +6,18 @@ temp = './temp/'
 from = "#{temp}from/"
 to = "#{temp}to/"
 
-exports['src'] =
+module.exports =
 	setUp: (callback) ->
 		grunt.helper 'hustler delete', data: src: temp
-		createFile "#{from}a.coffee", ''
 		callback()
 	tearDown: (callback) ->
 		grunt.helper 'hustler delete', data: src: temp
 		callback()
-	main: (test) ->
+	'src': (test) ->
 		test.expect 2
+
+		createFile "#{from}a.coffee", ''
+
 		test.equal true, fs.existsSync "#{from}a.coffee", 'should find a.coffee'
 
 		data = {
@@ -34,18 +36,12 @@ exports['src'] =
 
 		test.deepEqual normalized.groups, groups
 		test.done()
+	'src array': (test) ->
+		test.expect 3
 
-exports['src array'] =
-	setUp: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", ''
 		createFile "#{from}b.coffee", ''
-		callback()
-	tearDown: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
-		callback()
-	main: (test) ->
-		test.expect 3
+
 		test.equal true, fs.existsSync "#{from}a.coffee", 'should find a.coffee'
 		test.equal true, fs.existsSync "#{from}b.coffee", 'should find b.coffee'
 
@@ -69,21 +65,15 @@ exports['src array'] =
 
 		test.deepEqual normalized.groups, groups
 		test.done()
+	'src array with file matches': (test) ->
+		test.expect 6
 
-exports['src array with file matches'] =
-	setUp: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", ''
 		createFile "#{from}b.coffee", ''
 		createFile "#{from}c.html", ''
 		createFile "#{from}d.html", ''
 		createFile "#{from}e.txt", ''
-		callback()
-	tearDown: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
-		callback()
-	main: (test) ->
-		test.expect 6
+
 		test.equal true, fs.existsSync "#{from}a.coffee", 'should find a.coffee'
 		test.equal true, fs.existsSync "#{from}b.coffee", 'should find b.coffee'
 		test.equal true, fs.existsSync "#{from}c.html", 'should find c.html'
@@ -113,21 +103,15 @@ exports['src array with file matches'] =
 
 		test.deepEqual normalized.groups, groups
 		test.done()
+	'src array with file matches and non-existent src': (test) ->
+		test.expect 7
 
-exports['src array with file matches and non-existent src'] =
-	setUp: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", ''
 		createFile "#{from}b.coffee", ''
 		createFile "#{from}c.html", ''
 		createFile "#{from}d.html", ''
 		createFile "#{from}e.txt", ''
-		callback()
-	tearDown: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
-		callback()
-	main: (test) ->
-		test.expect 7
+
 		test.equal true, fs.existsSync "#{from}a.coffee", 'should find a.coffee'
 		test.equal true, fs.existsSync "#{from}b.coffee", 'should find b.coffee'
 		test.equal true, fs.existsSync "#{from}c.html", 'should find c.html'
@@ -159,17 +143,11 @@ exports['src array with file matches and non-existent src'] =
 
 		test.deepEqual normalized.groups, groups
 		test.done()
-
-exports['dest and src'] =
-	setUp: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
-		createFile "#{from}a.coffee", ''
-		callback()
-	tearDown: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
-		callback()
-	main: (test) ->
+	'dest and src': (test) ->
 		test.expect 2
+
+		createFile "#{from}a.coffee", ''
+
 		test.equal true, fs.existsSync "#{from}a.coffee", 'should find a.coffee'
 
 		data = {
@@ -196,15 +174,7 @@ exports['dest and src'] =
 
 		test.deepEqual normalized.groups, groups
 		test.done()
-
-exports['dest and src with non-existent src'] =
-	setUp: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
-		callback()
-	tearDown: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
-		callback()
-	main: (test) ->
+	'dest and src with non-existent src': (test) ->
 		test.expect 2
 		test.equal false, fs.existsSync "#{from}a.coffee", 'should not find a.coffee'
 
@@ -220,18 +190,12 @@ exports['dest and src with non-existent src'] =
 
 		test.deepEqual normalized.groups, groups
 		test.done()
+	'dest and src with file matches': (test) ->
+		test.expect 3
 
-exports['dest and src with file matches'] =
-	setUp: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", ''
 		createFile "#{from}b.coffee", ''
-		callback()
-	tearDown: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
-		callback()
-	main: (test) ->
-		test.expect 3
+
 		test.equal true, fs.existsSync "#{from}a.coffee", 'should find a.coffee'
 		test.equal true, fs.existsSync "#{from}b.coffee", 'should find b.coffee'
 
@@ -241,7 +205,6 @@ exports['dest and src with file matches'] =
 				src: "#{from}**/*.coffee"
 			}
 		}
-
 
 		normalized = grunt.helper 'hustler normalizeFiles', data
 
@@ -262,18 +225,12 @@ exports['dest and src with file matches'] =
 
 		test.deepEqual normalized.groups, groups
 		test.done()
+	'dest and src array': (test) ->
+		test.expect 3
 
-exports['dest and src array'] =
-	setUp: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", ''
 		createFile "#{from}b.coffee", ''
-		callback()
-	tearDown: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
-		callback()
-	main: (test) ->
-		test.expect 3
+
 		test.equal true, fs.existsSync "#{from}a.coffee", 'should find a.coffee'
 		test.equal true, fs.existsSync "#{from}b.coffee", 'should find b.coffee'
 
@@ -306,21 +263,15 @@ exports['dest and src array'] =
 
 		test.deepEqual normalized.groups, groups
 		test.done()
+	'dest and src array with file matches': (test) ->
+		test.expect 6
 
-exports['dest and src array with file matches'] =
-	setUp: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", ''
 		createFile "#{from}b.coffee", ''
 		createFile "#{from}sub/c.coffee", ''
 		createFile "#{from}sub/d.coffee", ''
 		createFile "#{from}sub/e.html", ''
-		callback()
-	tearDown: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
-		callback()
-	main: (test) ->
-		test.expect 6
+
 		test.equal true, fs.existsSync "#{from}a.coffee", 'should find a.coffee'
 		test.equal true, fs.existsSync "#{from}b.coffee", 'should find b.coffee'
 		test.equal true, fs.existsSync "#{from}sub/c.coffee", 'should find sub/c.coffee'
@@ -361,18 +312,12 @@ exports['dest and src array with file matches'] =
 
 		test.deepEqual normalized.groups, groups
 		test.done()
+	'dest and src array with non-existent src': (test) ->
+		test.expect 4
 
-exports['dest and src array with non-existent src'] =
-	setUp: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", ''
 		createFile "#{from}b.coffee", ''
-		callback()
-	tearDown: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
-		callback()
-	main: (test) ->
-		test.expect 4
+
 		test.equal true, fs.existsSync "#{from}a.coffee", 'should find a.coffee'
 		test.equal true, fs.existsSync "#{from}b.coffee", 'should find b.coffee'
 		test.equal false, fs.existsSync "#{from}c.coffee", 'should not find c.coffee'
@@ -407,22 +352,16 @@ exports['dest and src array with non-existent src'] =
 
 		test.deepEqual normalized.groups, groups
 		test.done()
+	'dest and src where dest is a directory': (test) ->
+		test.expect 7
 
-exports['dest and src where dest is a directory'] =
-	setUp: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", ''
 		createFile "#{from}b/b.coffee", ''
 		createFile "#{from}sub/c/c.coffee", ''
 		createFile "#{from}sub/d/d.coffee", ''
 		createFile "#{from}html/a.html", ''
 		createFile "#{from}html/b.html", ''
-		callback()
-	tearDown: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
-		callback()
-	main: (test) ->
-		test.expect 7
+
 		test.equal true, fs.existsSync "#{from}a.coffee", 'should find a.coffee'
 		test.equal true, fs.existsSync "#{from}b/b.coffee", 'should find b.coffee'
 		test.equal true, fs.existsSync "#{from}sub/c/c.coffee", 'should find c.coffee'
@@ -489,18 +428,12 @@ exports['dest and src where dest is a directory'] =
 
 		test.deepEqual normalized.groups, groups
 		test.done()
+	'dest and src where src is a directory': (test) ->
+		test.expect 3
 
-exports['dest and src where src is a directory'] =
-	setUp: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", ''
 		createFile "#{from}b.coffee", ''
-		callback()
-	tearDown: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
-		callback()
-	main: (test) ->
-		test.expect 3
+
 		test.equal true, fs.existsSync "#{from}a.coffee", 'should find a.coffee'
 		test.equal true, fs.existsSync "#{from}b.coffee", 'should find b.coffee'
 
@@ -530,18 +463,12 @@ exports['dest and src where src is a directory'] =
 
 		test.deepEqual normalized.groups, groups
 		test.done()
+	'src where src is a directory': (test) ->
+		test.expect 4
 
-exports['src where src is a directory'] =
-	setUp: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", ''
 		createFile "#{from}b.coffee", ''
-		callback()
-	tearDown: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
-		callback()
-	main: (test) ->
-		test.expect 4
+
 		test.equal true, fs.existsSync "#{from}a.coffee", 'should find a.coffee'
 		test.equal true, fs.existsSync "#{from}b.coffee", 'should find b.coffee'
 
@@ -578,22 +505,16 @@ exports['src where src is a directory'] =
 		test.deepEqual normalized.dirs, dirs
 		test.deepEqual normalized.groups, groups
 		test.done()
+	'files with source and destination': (test) ->
+		test.expect 7
 
-exports['files with source and destination'] =
-	setUp: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", ''
 		createFile "#{from}b.coffee", ''
 		createFile "#{from}sub/c.coffee", ''
 		createFile "#{from}sub/d.coffee", ''
 		createFile "#{from}sub2/e.coffee", ''
 		createFile "#{from}sub2/f.coffee", ''
-		callback()
-	tearDown: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
-		callback()
-	main: (test) ->
-		test.expect 7
+
 		test.equal true, fs.existsSync "#{from}a.coffee", 'should find a.coffee'
 		test.equal true, fs.existsSync "#{from}b.coffee", 'should find b.coffee'
 		test.equal true, fs.existsSync "#{from}sub/c.coffee", 'should find c.coffee'
@@ -651,22 +572,16 @@ exports['files with source and destination'] =
 
 		test.deepEqual normalized.groups, groups
 		test.done()
+	'files with source': (test) ->
+		test.expect 7
 
-exports['files with source'] =
-	setUp: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", ''
 		createFile "#{from}b.coffee", ''
 		createFile "#{from}sub/c.coffee", ''
 		createFile "#{from}sub/d.coffee", ''
 		createFile "#{from}sub2/e.coffee", ''
 		createFile "#{from}sub2/f.coffee", ''
-		callback()
-	tearDown: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
-		callback()
-	main: (test) ->
-		test.expect 7
+
 		test.equal true, fs.existsSync "#{from}a.coffee", 'should find a.coffee'
 		test.equal true, fs.existsSync "#{from}b.coffee", 'should find b.coffee'
 		test.equal true, fs.existsSync "#{from}sub/c.coffee", 'should find c.coffee'

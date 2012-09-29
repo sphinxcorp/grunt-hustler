@@ -7,17 +7,19 @@ temp = './temp/'
 from = "#{temp}from/"
 to = "#{temp}to/"
 
-exports['coffee to js'] =
+module.exports =
 	setUp: (callback) ->
 		grunt.helper 'hustler delete', data: src: temp
-		createFile "#{from}a.coffee", 'a = 1'
-		createFile "#{from}b.coffee", 'b = 2'
 		callback()
 	tearDown: (callback) ->
 		grunt.helper 'hustler delete', data: src: temp
 		callback()
-	main: (test) ->
+	'coffee to js': (test) ->
 		test.expect 6
+
+		createFile "#{from}a.coffee", 'a = 1'
+		createFile "#{from}b.coffee", 'b = 2'
+
 		test.equal true, fs.existsSync "#{from}a.coffee", 'should find a.coffee'
 		test.equal true, fs.existsSync "#{from}b.coffee", 'should find b.coffee'
 
@@ -33,18 +35,12 @@ exports['coffee to js'] =
 		test.equal aExpect, aContents, 'a.js should be compiled coffee'
 		test.equal bExpect, bContents, 'b.js should be compiled coffee'
 		test.done()
+	'coffee to js with bare': (test) ->
+		test.expect 6
 
-exports['coffee to js with bare'] =
-	setUp: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", 'a = 1'
 		createFile "#{from}b.coffee", 'b = 2'
-		callback()
-	tearDown: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
-		callback()
-	main: (test) ->
-		test.expect 6
+
 		test.equal true, fs.existsSync "#{from}a.coffee", 'should find a.coffee'
 		test.equal true, fs.existsSync "#{from}b.coffee", 'should find b.coffee'
 
@@ -60,18 +56,12 @@ exports['coffee to js with bare'] =
 		test.equal aExpect, aContents, 'a.js should be compiled coffee'
 		test.equal bExpect, bContents, 'b.js should be compiled coffee'
 		test.done()
+	'coffee to js concatenated': (test) ->
+		test.expect 5
 
-exports['coffee to js concatenated'] =
-	setUp: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.coffee", 'a = 1'
 		createFile "#{from}b.coffee", 'b = 2'
-		callback()
-	tearDown: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
-		callback()
-	main: (test) ->
-		test.expect 5
+
 		test.equal true, fs.existsSync "#{from}a.coffee", 'should find a.coffee'
 		test.equal true, fs.existsSync "#{from}b.coffee", 'should find b.coffee'
 

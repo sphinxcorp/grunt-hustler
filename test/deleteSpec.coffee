@@ -5,17 +5,19 @@ createFile = grunt.file.write
 temp = './temp/'
 from = "#{temp}from/"
 
-exports['directory'] =
+module.exports =
 	setUp: (callback) ->
 		grunt.helper 'hustler delete', data: src: temp
-		createFile "#{from}a.js", ''
-		createFile "#{from}b.js", ''
 		callback()
 	tearDown: (callback) ->
 		grunt.helper 'hustler delete', data: src: temp
 		callback()
-	main: (test) ->
+	'directory': (test) ->
 		test.expect 5
+
+		createFile "#{from}a.js", ''
+		createFile "#{from}b.js",
+
 		test.equal true, fs.existsSync "#{from}a.js", 'should find a.js'
 		test.equal true, fs.existsSync "#{from}b.js", 'should find b.js'
 
@@ -25,19 +27,13 @@ exports['directory'] =
 		test.equal false, fs.existsSync "#{from}b.js", 'should not find b.js'
 		test.equal false, fs.existsSync "#{from}", 'should not find directory'
 		test.done()
+	'array of directories': (test) ->
+		test.expect 9
 
-exports['array of directories'] =
-	setUp: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a/a.js", ''
 		createFile "#{from}b/b.js", ''
 		createFile "#{from}c/d/d.js", ''
-		callback()
-	tearDown: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
-		callback()
-	main: (test) ->
-		test.expect 9
+
 		test.equal true, fs.existsSync "#{from}a/a.js", 'should find a.js'
 		test.equal true, fs.existsSync "#{from}b/b.js", 'should find b.js'
 		test.equal true, fs.existsSync "#{from}c/d/d.js", 'should find d.js inside d directory'
@@ -53,17 +49,11 @@ exports['array of directories'] =
 		test.equal false, fs.existsSync "#{from}b/", 'should not find b directory'
 		test.equal false, fs.existsSync "#{from}c/", 'should not find c directory'
 		test.done()
-
-exports['file'] =
-	setUp: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
-		createFile "#{from}a.js", ''
-		callback()
-	tearDown: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
-		callback()
-	main: (test) ->
+	'file': (test) ->
 		test.expect 2
+
+		createFile "#{from}a.js", ''
+
 		test.equal true, fs.existsSync "#{from}a.js", 'should find a.js'
 
 		src = "#{from}a.js"
@@ -72,18 +62,12 @@ exports['file'] =
 
 		test.equal false, fs.existsSync "#{from}a.js", 'should not find a.js'
 		test.done()
+	'array of files': (test) ->
+		test.expect 4
 
-exports['array of files'] =
-	setUp: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.js", ''
 		createFile "#{from}b.js", ''
-		callback()
-	tearDown: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
-		callback()
-	main: (test) ->
-		test.expect 4
+
 		test.equal true, fs.existsSync "#{from}a.js", 'should find a.js'
 		test.equal true, fs.existsSync "#{from}b.js", 'should find b.js'
 
@@ -94,19 +78,13 @@ exports['array of files'] =
 		test.equal false, fs.existsSync "#{from}a.js", 'should not find a.js'
 		test.equal false, fs.existsSync "#{from}b.js", 'should not find b.js'
 		test.done()
+	'file match': (test) ->
+		test.expect 6
 
-exports['file match'] =
-	setUp: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.js", ''
 		createFile "#{from}b.js", ''
 		createFile "#{from}c.html", ''
-		callback()
-	tearDown: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
-		callback()
-	main: (test) ->
-		test.expect 6
+
 		test.equal true, fs.existsSync "#{from}a.js", 'should find a.js'
 		test.equal true, fs.existsSync "#{from}b.js", 'should find b.js'
 		test.equal true, fs.existsSync "#{from}c.html", 'should find c.html'
@@ -119,21 +97,15 @@ exports['file match'] =
 		test.equal false, fs.existsSync "#{from}b.js", 'should not find b.js'
 		test.equal true, fs.existsSync "#{from}c.html", 'should find c.html'
 		test.done()
+	'array of file matches to directory': (test) ->
+		test.expect 10
 
-exports['array of file matches to directory'] =
-	setUp: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.js", ''
 		createFile "#{from}b.js", ''
 		createFile "#{from}c.html", ''
 		createFile "#{from}d.html", ''
 		createFile "#{from}e.txt", ''
-		callback()
-	tearDown: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
-		callback()
-	main: (test) ->
-		test.expect 10
+
 		test.equal true, fs.existsSync "#{from}a.js", 'should find a.js'
 		test.equal true, fs.existsSync "#{from}b.js", 'should find b.js'
 		test.equal true, fs.existsSync "#{from}c.html", 'should find c.html'
@@ -150,10 +122,9 @@ exports['array of file matches to directory'] =
 		test.equal false, fs.existsSync "#{from}d.html", 'should not find d.html'
 		test.equal true, fs.existsSync "#{from}e.txt", 'should find e.txt'
 		test.done()
+	'array of files, file matches, and directories': (test) ->
+		test.expect 19
 
-exports['array of files, file matches, and directories'] =
-	setUp: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
 		createFile "#{from}a.js", ''
 		createFile "#{from}b.js", ''
 		createFile "#{from}c/c.js", ''
@@ -162,12 +133,7 @@ exports['array of files, file matches, and directories'] =
 		createFile "#{from}g.html", ''
 		createFile "#{from}h.html", ''
 		createFile "#{from}i.txt", ''
-		callback()
-	tearDown: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
-		callback()
-	main: (test) ->
-		test.expect 19
+
 		test.equal true, fs.existsSync "#{from}a.js", 'should find a.js'
 		test.equal true, fs.existsSync "#{from}b.js", 'should find b.js'
 		test.equal true, fs.existsSync "#{from}c/c.js", 'should find c.js'
@@ -192,23 +158,4 @@ exports['array of files, file matches, and directories'] =
 		test.equal false, fs.existsSync "#{from}c/", 'should not c directory'
 		test.equal false, fs.existsSync "#{from}d/", 'should not d directory'
 		test.equal false, fs.existsSync "#{from}e/", 'should not e directory'
-		test.done()
-
-exports['file'] =
-	setUp: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
-		createFile "#{from}a.js", ''
-		callback()
-	tearDown: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
-		callback()
-	main: (test) ->
-		test.expect 2
-		test.equal true, fs.existsSync "#{from}a.js", 'should find a.js'
-
-		src = "#{from}a.js"
-
-		grunt.helper 'hustler delete', data: src: src
-
-		test.equal false, fs.existsSync "#{from}a.js", 'should not find a.js'
 		test.done()
