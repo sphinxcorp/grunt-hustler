@@ -1,18 +1,24 @@
 grunt = require 'grunt'
 fs = require 'fs'
+path = require 'path'
 createFile = grunt.file.write
 readFile = grunt.file.read
 
 temp = './temp/'
+id = path.basename module.id, '.js'
+spec = -1
 from = "#{temp}from/"
 to = "#{temp}to/"
 
+updatePath = ->
+	spec += 1
+	base = "#{temp}#{id}/spec#{spec}/"
+	from = "#{base}from/"
+	to = "#{base}to/"
+
 module.exports =
 	setUp: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
-		callback()
-	tearDown: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
+		updatePath()
 		callback()
 	'coffee to js': (test) ->
 		test.expect 6

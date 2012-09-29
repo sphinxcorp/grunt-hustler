@@ -1,27 +1,39 @@
 grunt = require 'grunt'
 fs = require 'fs'
+path = require 'path'
 createFile = grunt.file.write
 
 temp = './temp/'
+id = path.basename module.id, '.js'
+spec = -1
 from = "#{temp}from/"
+
+updatePath = ->
+	spec += 1
+	base = "#{temp}#{id}/spec#{spec}/"
+	from = "#{base}from/"
 
 module.exports =
 	setUp: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
+		updatePath()
 		callback()
 	tearDown: (callback) ->
-		grunt.helper 'hustler delete', data: src: temp
-		callback()
+		# WINDOWS!
+		# looks like Windows is not releasing the directory lock after writing a file
+		# cannot delete it right away
+		setTimeout ->
+			callback()
+		, 100
 	'directory': (test) ->
 		test.expect 5
 
 		createFile "#{from}a.js", ''
-		createFile "#{from}b.js",
+		createFile "#{from}b.js", ''
 
 		test.equal true, fs.existsSync "#{from}a.js", 'should find a.js'
 		test.equal true, fs.existsSync "#{from}b.js", 'should find b.js'
 
-		grunt.helper 'hustler delete', data: src: from
+		grunt.helper 'hustler delete', data: src: "#{from}"
 
 		test.equal false, fs.existsSync "#{from}a.js", 'should not find a.js'
 		test.equal false, fs.existsSync "#{from}b.js", 'should not find b.js'
