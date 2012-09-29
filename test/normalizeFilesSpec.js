@@ -165,7 +165,7 @@ module.exports = {
     return test.done();
   },
   'dest and src with file matches': function(test) {
-    var data, groups, normalized;
+    var data, group, groups, normalized, unsorted;
     test.expect(3);
     createFile("" + from + "a.coffee", '');
     createFile("" + from + "b.coffee", '');
@@ -179,7 +179,10 @@ module.exports = {
     };
     normalized = grunt.helper('hustler normalizeFiles', data);
     groups = {};
-    groups[norm("" + to + "min.js", false)] = [norm("" + from + "a.coffee"), norm("" + from + "b.coffee")];
+    group = norm("" + to + "min.js", false);
+    groups[group] = [norm("" + from + "a.coffee"), norm("" + from + "b.coffee")];
+    unsorted = normalized.groups[group];
+    normalized.groups[group] = unsorted.sort();
     test.deepEqual(normalized.groups, groups);
     return test.done();
   },
@@ -203,7 +206,7 @@ module.exports = {
     return test.done();
   },
   'dest and src array with file matches': function(test) {
-    var data, groups, normalized;
+    var data, group, groups, normalized, unsorted;
     test.expect(6);
     createFile("" + from + "a.coffee", '');
     createFile("" + from + "b.coffee", '');
@@ -223,7 +226,10 @@ module.exports = {
     };
     normalized = grunt.helper('hustler normalizeFiles', data);
     groups = {};
-    groups[norm("" + to + "min.js", false)] = [norm("" + from + "a.coffee"), norm("" + from + "b.coffee"), norm("" + from + "sub/c.coffee"), norm("" + from + "sub/d.coffee")];
+    group = norm("" + to + "min.js", false);
+    groups[group] = [norm("" + from + "a.coffee"), norm("" + from + "b.coffee"), norm("" + from + "sub/c.coffee"), norm("" + from + "sub/d.coffee")];
+    unsorted = normalized.groups[group];
+    normalized.groups[group] = unsorted.sort();
     test.deepEqual(normalized.groups, groups);
     return test.done();
   },
@@ -280,7 +286,7 @@ module.exports = {
     return test.done();
   },
   'dest and src where src is a directory': function(test) {
-    var data, groups, normalized;
+    var data, group, groups, normalized, unsorted;
     test.expect(3);
     createFile("" + from + "a.coffee", '');
     createFile("" + from + "b.coffee", '');
@@ -294,12 +300,15 @@ module.exports = {
     };
     normalized = grunt.helper('hustler normalizeFiles', data);
     groups = {};
-    groups[norm("" + to + "min.js", false)] = [norm("" + from + "a.coffee"), norm("" + from + "b.coffee")];
+    group = norm("" + to + "min.js", false);
+    groups[group] = [norm("" + from + "a.coffee"), norm("" + from + "b.coffee")];
+    unsorted = normalized.groups[group];
+    normalized.groups[group] = unsorted.sort();
     test.deepEqual(normalized.groups, groups);
     return test.done();
   },
   'src where src is a directory': function(test) {
-    var data, dirs, groups, normalized;
+    var data, dir, dirs, group, groups, normalized, unsorted;
     test.expect(4);
     createFile("" + from + "a.coffee", '');
     createFile("" + from + "b.coffee", '');
@@ -312,16 +321,21 @@ module.exports = {
     };
     normalized = grunt.helper('hustler normalizeFiles', data);
     dirs = {};
-    dirs[norm("" + from, false)] = [norm("" + from + "a.coffee"), norm("" + from + "b.coffee")];
-    groups = {
-      '0': [norm("" + from + "a.coffee"), norm("" + from + "b.coffee")]
-    };
+    dir = norm("" + from, false);
+    dirs[dir] = [norm("" + from + "a.coffee"), norm("" + from + "b.coffee")];
+    unsorted = normalized.dirs[dir];
+    normalized.dirs[dir] = unsorted.sort();
+    groups = {};
+    group = '0';
+    groups[group] = [norm("" + from + "a.coffee"), norm("" + from + "b.coffee")];
+    unsorted = normalized.groups[group];
+    normalized.groups[group] = unsorted.sort();
     test.deepEqual(normalized.dirs, dirs);
     test.deepEqual(normalized.groups, groups);
     return test.done();
   },
   'files with source and destination': function(test) {
-    var data, files, groups, normalized;
+    var data, files, group, groups, normalized, unsorted;
     test.expect(7);
     createFile("" + from + "a.coffee", '');
     createFile("" + from + "b.coffee", '');
@@ -349,13 +363,19 @@ module.exports = {
     groups = {};
     groups[norm("" + to + "a.js", false)] = [norm("" + from + "a.coffee")];
     groups[norm("" + to + "b.js", false)] = [norm("" + from + "b.coffee")];
-    groups[norm("" + to + "sub.min.js", false)] = [norm("" + from + "sub/c.coffee"), norm("" + from + "sub/d.coffee")];
-    groups[norm("" + to + "sub2.min.js", false)] = [norm("" + from + "sub2/e.coffee"), norm("" + from + "sub2/f.coffee")];
+    group = norm("" + to + "sub.min.js", false);
+    groups[group] = [norm("" + from + "sub/c.coffee"), norm("" + from + "sub/d.coffee")];
+    unsorted = normalized.groups[group];
+    normalized.groups[group] = unsorted.sort();
+    group = norm("" + to + "sub2.min.js", false);
+    groups[group] = [norm("" + from + "sub2/e.coffee"), norm("" + from + "sub2/f.coffee")];
+    unsorted = normalized.groups[group];
+    normalized.groups[group] = unsorted.sort();
     test.deepEqual(normalized.groups, groups);
     return test.done();
   },
   'files with source': function(test) {
-    var data, groups, normalized;
+    var data, group, groups, normalized, unsorted;
     test.expect(7);
     createFile("" + from + "a.coffee", '');
     createFile("" + from + "b.coffee", '');
@@ -381,6 +401,12 @@ module.exports = {
       '2': [norm("" + from + "sub/c.coffee"), norm("" + from + "sub/d.coffee")],
       '3': [norm("" + from + "sub2/e.coffee"), norm("" + from + "sub2/f.coffee")]
     };
+    group = '2';
+    unsorted = normalized.groups[group];
+    normalized.groups[group] = unsorted.sort();
+    group = '3';
+    unsorted = normalized.groups[group];
+    normalized.groups[group] = unsorted.sort();
     test.deepEqual(normalized.groups, groups);
     return test.done();
   }

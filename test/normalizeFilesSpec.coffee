@@ -175,7 +175,7 @@ module.exports =
 		groups = {}
 
 		groups[norm("#{to}a.js", false)] = [
-			norm("#{from}a.coffee")
+			norm "#{from}a.coffee"
 		]
 
 		test.deepEqual normalized.groups, groups
@@ -214,31 +214,15 @@ module.exports =
 
 		normalized = grunt.helper 'hustler normalizeFiles', data
 		groups = {}
+		group = norm "#{to}min.js", false
 
-		groups[norm("#{to}min.js", false)] = [
+		groups[group] = [
 			norm "#{from}a.coffee"
 			norm "#{from}b.coffee"
 		]
 
-		# if normalized.groups['temp\\to\\min.js']
-		# 	groups = {
-		# 		'temp\\to\\min.js': [
-		# 			'temp/from/a.coffee',
-		# 			'temp/from/b.coffee'
-		# 		]
-		# 	}
-
-		# 	# Windows doesn't reliably collect files in alphabetical order
-		# 	group = 'temp\\to\\min.js'
-		# 	unsorted = normalized.groups[group]
-		# 	normalized.groups[group] = unsorted.sort()
-		# else
-		# 	groups = {
-		# 		'temp/to/min.js': [
-		# 			'temp/from/a.coffee',
-		# 			'temp/from/b.coffee'
-		# 		]
-		# 	}
+		unsorted = normalized.groups[group]
+		normalized.groups[group] = unsorted.sort()
 
 		test.deepEqual normalized.groups, groups
 		test.done()
@@ -268,21 +252,6 @@ module.exports =
 			norm "#{from}a.coffee"
 			norm "#{from}b.coffee"
 		]
-
-		# if normalized.groups['temp\\to\\min.js']
-		# 	groups = {
-		# 		'temp\\to\\min.js': [
-		# 			'temp/from/a.coffee',
-		# 			'temp/from/b.coffee'
-		# 		]
-		# 	}
-		# else
-		# 	groups = {
-		# 		'temp/to/min.js': [
-		# 			'temp/from/a.coffee',
-		# 			'temp/from/b.coffee'
-		# 		]
-		# 	}
 
 		test.deepEqual normalized.groups, groups
 		test.done()
@@ -314,37 +283,17 @@ module.exports =
 
 		normalized = grunt.helper 'hustler normalizeFiles', data
 		groups = {}
+		group = norm "#{to}min.js", false
 
-		groups[norm("#{to}min.js", false)] = [
+		groups[group] = [
 			norm "#{from}a.coffee"
 			norm "#{from}b.coffee"
 			norm "#{from}sub/c.coffee"
 			norm "#{from}sub/d.coffee"
 		]
 
-		# if normalized.groups['temp\\to\\min.js']
-		# 	groups = {
-		# 		'temp\\to\\min.js': [
-		# 			'temp/from/a.coffee',
-		# 			'temp/from/b.coffee',
-		# 			'temp/from/sub/c.coffee'
-		# 			'temp/from/sub/d.coffee'
-		# 		]
-		# 	}
-
-		# 	# Windows doesn't reliably collect files in alphabetical order
-		# 	group = 'temp\\to\\min.js'
-		# 	unsorted = normalized.groups[group]
-		# 	normalized.groups[group] = unsorted.sort()
-		# else
-		# 	groups = {
-		# 		'temp/to/min.js': [
-		# 			'temp/from/a.coffee',
-		# 			'temp/from/b.coffee',
-		# 			'temp/from/sub/c.coffee'
-		# 			'temp/from/sub/d.coffee'
-		# 		]
-		# 	}
+		unsorted = normalized.groups[group]
+		normalized.groups[group] = unsorted.sort()
 
 		test.deepEqual normalized.groups, groups
 		test.done()
@@ -376,21 +325,6 @@ module.exports =
 			norm "#{from}a.coffee"
 			norm "#{from}b.coffee"
 		]
-
-		# if normalized.groups['temp\\to\\min.js']
-		# 	groups = {
-		# 		'temp\\to\\min.js': [
-		# 			'temp/from/a.coffee',
-		# 			'temp/from/b.coffee'
-		# 		]
-		# 	}
-		# else
-		# 	groups = {
-		# 		'temp/to/min.js': [
-		# 			'temp/from/a.coffee',
-		# 			'temp/from/b.coffee'
-		# 		]
-		# 	}
 
 		test.deepEqual normalized.groups, groups
 		test.done()
@@ -450,49 +384,6 @@ module.exports =
 			norm "#{from}html/b.html"
 		]
 
-		# if normalized.groups['temp\\to\\a.coffee']
-		# 	groups = {
-		# 		'temp\\to\\a.coffee': [
-		# 			'temp/from/a.coffee'
-		# 		],
-		# 		'temp\\to\\b.coffee': [
-		# 			'temp/from/b/b.coffee'
-		# 		],
-		# 		'temp\\to\\c\\c.coffee': [
-		# 			'temp/from/sub/c/c.coffee'
-		# 		],
-		# 		'temp\\to\\d\\d.coffee': [
-		# 			'temp/from/sub/d/d.coffee'
-		# 		],
-		# 		'temp\\to\\html\\a.html': [
-		# 			'temp/from/html/a.html'
-		# 		],
-		# 		'temp\\to\\html\\b.html': [
-		# 			'temp/from/html/b.html'
-		# 		]
-		# 	}
-		# else
-		# 	groups = {
-		# 		'temp/to/a.coffee': [
-		# 			'temp/from/a.coffee'
-		# 		],
-		# 		'temp/to/b.coffee': [
-		# 			'temp/from/b/b.coffee'
-		# 		],
-		# 		'temp/to/c/c.coffee': [
-		# 			'temp/from/sub/c/c.coffee'
-		# 		],
-		# 		'temp/to/d/d.coffee': [
-		# 			'temp/from/sub/d/d.coffee'
-		# 		],
-		# 		'temp/to/html/a.html': [
-		# 			'temp/from/html/a.html'
-		# 		],
-		# 		'temp/to/html/b.html': [
-		# 			'temp/from/html/b.html'
-		# 		]
-		# 	}
-
 		test.deepEqual normalized.groups, groups
 		test.done()
 	'dest and src where src is a directory': (test) ->
@@ -513,31 +404,15 @@ module.exports =
 
 		normalized = grunt.helper 'hustler normalizeFiles', data
 		groups = {}
+		group = norm "#{to}min.js", false
 
-		groups[norm("#{to}min.js", false)] = [
+		groups[group] = [
 			norm "#{from}a.coffee"
 			norm "#{from}b.coffee"
 		]
 
-		# if normalized.groups['temp\\to\\min.js']
-		# 	groups = {
-		# 		'temp\\to\\min.js': [
-		# 			'temp/from/a.coffee',
-		# 			'temp/from/b.coffee'
-		# 		]
-		# 	}
-
-		# 	# Windows doesn't reliably collect files in alphabetical order
-		# 	group = 'temp\\to\\min.js'
-		# 	unsorted = normalized.groups[group]
-		# 	normalized.groups[group] = unsorted.sort()
-		# else
-		# 	groups = {
-		# 		'temp/to/min.js': [
-		# 			'temp/from/a.coffee',
-		# 			'temp/from/b.coffee'
-		# 		]
-		# 	}
+		unsorted = normalized.groups[group]
+		normalized.groups[group] = unsorted.sort()
 
 		test.deepEqual normalized.groups, groups
 		test.done()
@@ -558,43 +433,26 @@ module.exports =
 
 		normalized = grunt.helper 'hustler normalizeFiles', data
 		dirs = {}
+		dir = norm "#{from}", false
 
-		dirs[norm("#{from}", false)] = [
+		dirs[dir] = [
 			norm "#{from}a.coffee"
 			norm "#{from}b.coffee"
 		]
 
-		# if normalized.dirs['temp\\from\\']
-		# 	dirs = {
-		# 		'temp\\from\\': [
-		# 			'temp/from/a.coffee',
-		# 			'temp/from/b.coffee'
-		# 		]
-		# 	}
+		unsorted = normalized.dirs[dir]
+		normalized.dirs[dir] = unsorted.sort()
 
-		# 	# Windows doesn't reliably collect files in alphabetical order
-		# 	dir = 'temp\\to\\min.js'
-		# 	unsorted = normalized.dirs[dir]
-		# 	normalized.dirs[dir] = unsorted.sort()
-		# else
-		# 	dirs = {
-		# 		'temp/from/': [
-		# 			'temp/from/a.coffee',
-		# 			'temp/from/b.coffee'
-		# 		]
-		# 	}
+		groups = {}
+		group = '0'
 
-		groups = {
-			'0': [
-				norm "#{from}a.coffee"
-				norm "#{from}b.coffee"
-			]
-		}
+		groups[group] = [
+			norm "#{from}a.coffee"
+			norm "#{from}b.coffee"
+		]
 
-		# Windows doesn't reliably collect files in alphabetical order
-		# group = '0'
-		# unsorted = normalized.groups[group]
-		# normalized.groups[group] = unsorted.sort()
+		unsorted = normalized.groups[group]
+		normalized.groups[group] = unsorted.sort()
 
 		test.deepEqual normalized.dirs, dirs
 		test.deepEqual normalized.groups, groups
@@ -643,58 +501,25 @@ module.exports =
 			norm "#{from}b.coffee"
 		]
 
-		groups[norm("#{to}sub.min.js", false)] = [
+		group = norm("#{to}sub.min.js", false)
+
+		groups[group] = [
 			norm "#{from}sub/c.coffee"
 			norm "#{from}sub/d.coffee"
 		]
 
-		groups[norm("#{to}sub2.min.js", false)] = [
+		unsorted = normalized.groups[group]
+		normalized.groups[group] = unsorted.sort()
+
+		group = norm "#{to}sub2.min.js", false
+
+		groups[group] = [
 			norm "#{from}sub2/e.coffee"
 			norm "#{from}sub2/f.coffee"
 		]
 
-		# if normalized.groups['temp\\to\\a.js']
-		# 	groups = {
-		# 		'temp\\to\\a.js': [
-		# 			'temp/from/a.coffee'
-		# 		],
-		# 		'temp\\to\\b.js': [
-		# 			'temp/from/b.coffee'
-		# 		],
-		# 		'temp\\to\\sub.min.js': [
-		# 			'temp/from/sub/c.coffee',
-		# 			'temp/from/sub/d.coffee'
-		# 		],
-		# 		'temp\\to\\sub2.min.js': [
-		# 			'temp/from/sub2/e.coffee',
-		# 			'temp/from/sub2/f.coffee'
-		# 		]
-		# 	}
-
-		# 	# Windows doesn't reliably collect files in alphabetical order
-		# 	group = 'temp\\to\\sub.min.js'
-		# 	unsorted = normalized.groups[group]
-		# 	normalized.groups[group] = unsorted.sort()
-		# 	group = 'temp\\to\\sub2.min.js'
-		# 	unsorted = normalized.groups[group]
-		# 	normalized.groups[group] = unsorted.sort()
-		# else
-		# 	groups = {
-		# 		'temp/to/a.js': [
-		# 			'temp/from/a.coffee'
-		# 		],
-		# 		'temp/to/b.js': [
-		# 			'temp/from/b.coffee'
-		# 		],
-		# 		'temp/to/sub.min.js': [
-		# 			'temp/from/sub/c.coffee',
-		# 			'temp/from/sub/d.coffee'
-		# 		],
-		# 		'temp/to/sub2.min.js': [
-		# 			'temp/from/sub2/e.coffee',
-		# 			'temp/from/sub2/f.coffee'
-		# 		]
-		# 	}
+		unsorted = normalized.groups[group]
+		normalized.groups[group] = unsorted.sort()
 
 		test.deepEqual normalized.groups, groups
 		test.done()
@@ -734,27 +559,27 @@ module.exports =
 		groups = {
 			'0': [
 				norm "#{from}a.coffee"
-			],
+			]
 			'1': [
 				norm "#{from}b.coffee"
-			],
+			]
 			'2': [
 				norm "#{from}sub/c.coffee"
 				norm "#{from}sub/d.coffee"
-			],
+			]
 			'3': [
 				norm "#{from}sub2/e.coffee"
 				norm "#{from}sub2/f.coffee"
 			]
 		}
 
-		# # Windows doesn't reliably collect files in alphabetical order
-		# group = '2'
-		# unsorted = normalized.groups[group]
-		# normalized.groups[group] = unsorted.sort()
-		# group = '3'
-		# unsorted = normalized.groups[group]
-		# normalized.groups[group] = unsorted.sort()
+		group = '2'
+		unsorted = normalized.groups[group]
+		normalized.groups[group] = unsorted.sort()
+
+		group = '3'
+		unsorted = normalized.groups[group]
+		normalized.groups[group] = unsorted.sort()
 
 		test.deepEqual normalized.groups, groups
 		test.done()
