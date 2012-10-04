@@ -37,7 +37,7 @@ module.exports = (grunt) ->
 			inDest = path.relative './', inDest
 			files[inDest] = inSrc
 
-		if inSrc and not inDest
+		if inSrc and not inDest?
 			isIndexed = true
 			files[0] = inSrc
 

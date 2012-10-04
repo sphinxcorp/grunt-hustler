@@ -50,7 +50,7 @@ module.exports = function(grunt) {
       inDest = path.relative('./', inDest);
       files[inDest] = inSrc;
     }
-    if (inSrc && !inDest) {
+    if (inSrc && !(inDest != null)) {
       isIndexed = true;
       files[0] = inSrc;
     }
