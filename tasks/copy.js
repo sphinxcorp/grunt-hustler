@@ -3,14 +3,21 @@
 */
 
 module.exports = function(grunt) {
+  var fs;
+  fs = require('fs');
   grunt.registerHelper('hustler copy', function(data) {
-    var contents, dest, groups, normalized, src, _results;
+    var contents, dest, groups, normalized, src, srcCount, _results;
     normalized = grunt.helper('hustler normalizeFiles', data);
     groups = normalized.groups;
     _results = [];
     for (dest in groups) {
       src = groups[dest];
-      contents = grunt.helper('concat', src);
+      srcCount = src.length;
+      if (srcCount > 1) {
+        contents = grunt.helper('concat', src);
+      } else {
+        contents = fs.readFileSync(src[0]);
+      }
       grunt.file.write(dest, contents);
       _results.push(grunt.verbose.ok("" + src + " -> " + dest));
     }
