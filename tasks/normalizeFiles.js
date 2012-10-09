@@ -71,7 +71,11 @@ module.exports = function(grunt) {
             var absoluteDestination, cleanSource, destination, relative, sourceDirectory;
             if (isDestADirectory) {
               sourceDirectory = path.dirname(source.replace('**', ''));
-              relative = path.relative(sourceDirectory, sourceFile);
+              if (sourceFile.indexOf('//') === 0) {
+                relative = sourceFile.substr(sourceDirectory.length);
+              } else {
+                relative = path.relative(sourceDirectory, sourceFile);
+              }
               absoluteDestination = path.resolve(dest, relative);
               destination = path.relative('./', absoluteDestination);
             } else {
