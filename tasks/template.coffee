@@ -1,37 +1,31 @@
 ###global module, require###
 
 module.exports = (grunt) ->
-	Beautifier = require 'node-js-beautify'
-	fs = require 'fs'
-	path = require 'path'
+	grunt.registerHelper 'hustler template', (config) ->
+		normalized = grunt.helper 'hustler normalizeFiles', config
+		groups = normalized.groups
+		config.data.include = grunt.file.read
 
-	removeNonPrintableCharacters = (content) ->
-		# tabs and newlines
-		pattern = /(\t|\r\n|\n|\r)/gm
+		config.data.uniqueVersion = ->
+			uniqueVersion = (new Date()).getTime()
 
-		content.replace pattern, ''
+			uniqueVersion
 
-	grunt.registerMultiTask 'template', 'Compiles a template', ->
-		src = @file.src
-		dest = @file.dest
-		files = grunt.file.expandFiles src
-		srcDir = path.dirname src.replace '**', ''
-		config = @data
-		ext = config.ext ? '.html'
-		minify = config.minify ? false
-		beautifier = new Beautifier()
-		config.include = grunt.file.read
+		for dest, src of groups
+			sourceContents = []
 
-		files.forEach (file) ->
-			source = grunt.file.read file
-			fileExt = path.extname file
-			relative = path.relative srcDir, file
-			destPath = path.resolve(dest, relative).replace fileExt, ext
-			compiled = grunt.template.process source, config: config
+			src.forEach (source) ->
+				contents = grunt.file.read source
 
-			if minify
-				compiled = removeNonPrintableCharacters compiled
-			else
-				compiled = beautifier.beautify_html compiled, config
+				sourceContents.push contents
 
-			grunt.file.write destPath, compiled
+			separator = grunt.utils.linefeed
+			contents = sourceContents.join grunt.utils.normalizelf separator
+			compiled = grunt.template.process contents, config: config.data
+			destination = dest.replace '.template', '.html'
+
+			grunt.file.write destination, compiled
+			grunt.verbose.ok "#{src} -> #{destination}"
+
+	grunt.registerMultiTask 'template', 'Compiles templates', ->
+		grunt.helper 'hustler template', @

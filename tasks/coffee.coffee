@@ -2,7 +2,6 @@
 
 module.exports = (grunt) ->
 	coffee = require 'coffee-script'
-	path = require 'path'
 
 	grunt.registerHelper 'hustler coffee', (config) ->
 		normalized = grunt.helper 'hustler normalizeFiles', config

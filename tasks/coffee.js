@@ -3,9 +3,8 @@
 */
 
 module.exports = function(grunt) {
-  var coffee, path;
+  var coffee;
   coffee = require('coffee-script');
-  path = require('path');
   grunt.registerHelper('hustler coffee', function(config) {
     var bare, compiled, contents, dest, destination, groups, normalized, separator, sourceContents, src, _ref, _results;
     normalized = grunt.helper('hustler normalizeFiles', config);

@@ -3,41 +3,37 @@
 */
 
 module.exports = function(grunt) {
-  var Beautifier, fs, path, removeNonPrintableCharacters;
-  Beautifier = require('node-js-beautify');
-  fs = require('fs');
-  path = require('path');
-  removeNonPrintableCharacters = function(content) {
-    var pattern;
-    pattern = /(\t|\r\n|\n|\r)/gm;
-    return content.replace(pattern, '');
-  };
-  return grunt.registerMultiTask('template', 'Compiles a template', function() {
-    var beautifier, config, dest, ext, files, minify, src, srcDir, _ref, _ref1;
-    src = this.file.src;
-    dest = this.file.dest;
-    files = grunt.file.expandFiles(src);
-    srcDir = path.dirname(src.replace('**', ''));
-    config = this.data;
-    ext = (_ref = config.ext) != null ? _ref : '.html';
-    minify = (_ref1 = config.minify) != null ? _ref1 : false;
-    beautifier = new Beautifier();
-    config.include = grunt.file.read;
-    return files.forEach(function(file) {
-      var compiled, destPath, fileExt, relative, source;
-      source = grunt.file.read(file);
-      fileExt = path.extname(file);
-      relative = path.relative(srcDir, file);
-      destPath = path.resolve(dest, relative).replace(fileExt, ext);
-      compiled = grunt.template.process(source, {
-        config: config
+  grunt.registerHelper('hustler template', function(config) {
+    var compiled, contents, dest, destination, groups, normalized, separator, sourceContents, src, _results;
+    normalized = grunt.helper('hustler normalizeFiles', config);
+    groups = normalized.groups;
+    config.data.include = grunt.file.read;
+    config.data.uniqueVersion = function() {
+      var uniqueVersion;
+      uniqueVersion = (new Date()).getTime();
+      return uniqueVersion;
+    };
+    _results = [];
+    for (dest in groups) {
+      src = groups[dest];
+      sourceContents = [];
+      src.forEach(function(source) {
+        var contents;
+        contents = grunt.file.read(source);
+        return sourceContents.push(contents);
       });
-      if (minify) {
-        compiled = removeNonPrintableCharacters(compiled);
-      } else {
-        compiled = beautifier.beautify_html(compiled, config);
-      }
-      return grunt.file.write(destPath, compiled);
-    });
+      separator = grunt.utils.linefeed;
+      contents = sourceContents.join(grunt.utils.normalizelf(separator));
+      compiled = grunt.template.process(contents, {
+        config: config.data
+      });
+      destination = dest.replace('.template', '.html');
+      grunt.file.write(destination, compiled);
+      _results.push(grunt.verbose.ok("" + src + " -> " + destination));
+    }
+    return _results;
+  });
+  return grunt.registerMultiTask('template', 'Compiles templates', function() {
+    return grunt.helper('hustler template', this);
   });
 };
