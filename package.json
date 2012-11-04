@@ -1,7 +1,7 @@
 {
 	"name": "grunt-hustler",
 	"description": "A collection of grunt tasks",
-	"version": "0.6.9",
+	"version": "0.7.0",
 	"homepage": "https://github.com/CaryLandholt/grunt-hustler",
 	"author": {
 		"name": "Cary Landholt",
@@ -27,13 +27,13 @@
 		"node": ">= 0.8.1"
 	},
 	"dependencies": {
-		"coffee-script": "~1.3.3",
+		"coffee-script": "~1.4.0",
 		"coffeelint": "~0.5.2",
-		"grunt": "~0.3.15",
-		"less": "~1.3.0",
+		"grunt": "~0.3.17",
+		"less": "~1.3.1",
 		"nodemon": "~0.6.23",
-		"prettydiff": "~0.0.76",
-		"requirejs": "~2.0.6",
+		"prettydiff": "~0.0.80",
+		"requirejs": "~2.1.1",
 		"rimraf": "~2.0.2"
 	},
 	"devDependencies": {
