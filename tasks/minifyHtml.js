@@ -6,9 +6,11 @@ module.exports = function(grunt) {
   var prettyDiff;
   prettyDiff = require('prettydiff');
   grunt.registerHelper('hustler minifyHtml', function(config) {
-    var compiled, contents, dest, destination, groups, normalized, options, separator, sourceContents, src, _results;
+    var compiled, conditional, contents, data, dest, groups, normalized, options, separator, sourceContents, src, _ref, _results;
     normalized = grunt.helper('hustler normalizeFiles', config);
     groups = normalized.groups;
+    data = config.data;
+    conditional = (_ref = data.conditional) != null ? _ref : true;
     _results = [];
     for (dest in groups) {
       src = groups[dest];
@@ -23,12 +25,11 @@ module.exports = function(grunt) {
       options = {
         source: contents,
         mode: 'minify',
-        diff: ''
+        conditional: conditional
       };
       compiled = prettyDiff.api(options)[0];
-      destination = dest.replace('.html', '.min.html');
-      grunt.file.write(destination, compiled);
-      _results.push(grunt.verbose.ok("" + src + " -> " + destination));
+      grunt.file.write(dest, compiled);
+      _results.push(grunt.verbose.ok("" + src + " -> " + dest));
     }
     return _results;
   });
