@@ -26,7 +26,6 @@ module.exports = (grunt) ->
 				conditional: conditional
 
 			compiled = prettyDiff.api(options)[0]
-			#destination = dest.replace '.html', '.min.html'
 
 			grunt.file.write dest, compiled
 			grunt.verbose.ok "#{src} -> #{dest}"
