@@ -25,7 +25,8 @@ module.exports = function(grunt) {
       options = {
         source: contents,
         mode: 'minify',
-        conditional: conditional
+        conditional: conditional,
+        html: 'html-yes'
       };
       compiled = prettyDiff.api(options)[0];
       grunt.file.write(dest, compiled);

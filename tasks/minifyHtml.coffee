@@ -24,6 +24,7 @@ module.exports = (grunt) ->
 				source: contents
 				mode: 'minify'
 				conditional: conditional
+				html: 'html-yes'
 
 			compiled = prettyDiff.api(options)[0]
 
