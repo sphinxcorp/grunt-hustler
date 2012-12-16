@@ -6,10 +6,12 @@ module.exports = function(grunt) {
   var requirejs;
   requirejs = require('requirejs');
   return grunt.registerMultiTask('requirejs', 'Runs the RequireJS Optimizer', function() {
-    var config;
+    var config, done;
+    done = this.async();
     config = this.data;
     return requirejs.optimize(config, function(buildResponse) {
-      return grunt.verbose.writeln(buildResponse);
+      grunt.verbose.writeln(buildResponse);
+      return done();
     });
   });
 };
