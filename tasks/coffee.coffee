@@ -18,11 +18,14 @@ module.exports = (grunt) ->
 
 			separator = grunt.utils.linefeed
 			contents = sourceContents.join grunt.utils.normalizelf separator
-			compiled = coffee.compile contents, {bare, filename: src}
 			destination = dest.replace '.coffee', '.js'
 
-			grunt.file.write destination, compiled
-			grunt.verbose.ok "#{src} -> #{destination}"
+			try
+				compiled = coffee.compile contents, {bare, filename: src}
+				grunt.file.write destination, compiled
+				grunt.verbose.ok "#{src} -> #{destination}"
+			catch e
+				grunt.fail.warn "#{src} -> #{destination}"
 
 	grunt.registerMultiTask 'coffee', 'Compile CoffeeScript to JavaScript', ->
 		grunt.helper 'hustler coffee', @
