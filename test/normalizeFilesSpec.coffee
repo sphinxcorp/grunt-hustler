@@ -1,6 +1,7 @@
 grunt = require 'grunt'
 fs = require 'fs'
 path = require 'path'
+{equalArrayItems, equalGroups} = require './helper/equals'
 createFile = grunt.file.write
 
 temp = './temp/'
@@ -48,7 +49,7 @@ module.exports =
 			]
 		}
 
-		test.deepEqual normalized.groups, groups
+		test.ok equalGroups normalized.groups, groups
 		test.done()
 	'src array': (test) ->
 		test.expect 3
@@ -77,7 +78,7 @@ module.exports =
 			]
 		}
 
-		test.deepEqual normalized.groups, groups
+		test.ok equalGroups normalized.groups, groups
 		test.done()
 	'src array with file matches': (test) ->
 		test.expect 6
@@ -115,7 +116,7 @@ module.exports =
 			]
 		}
 
-		test.deepEqual normalized.groups, groups
+		test.ok equalGroups normalized.groups, groups
 		test.done()
 	'src array with file matches and non-existent src': (test) ->
 		test.expect 7
@@ -155,7 +156,7 @@ module.exports =
 			]
 		}
 
-		test.deepEqual normalized.groups, groups
+		test.ok equalGroups normalized.groups, groups
 		test.done()
 	'dest and src': (test) ->
 		test.expect 2
@@ -178,7 +179,7 @@ module.exports =
 			norm "#{from}a.coffee"
 		]
 
-		test.deepEqual normalized.groups, groups
+		test.ok equalGroups normalized.groups, groups
 		test.done()
 	'dest and src with non-existent src': (test) ->
 		test.expect 2
@@ -194,7 +195,7 @@ module.exports =
 		groups = {}
 		normalized = grunt.helper 'hustler normalizeFiles', data
 
-		test.deepEqual normalized.groups, groups
+		test.ok equalGroups normalized.groups, groups
 		test.done()
 	'dest and src with file matches': (test) ->
 		test.expect 3
@@ -224,7 +225,7 @@ module.exports =
 		unsorted = normalized.groups[group]
 		normalized.groups[group] = unsorted.sort()
 
-		test.deepEqual normalized.groups, groups
+		test.ok equalGroups normalized.groups, groups
 		test.done()
 	'dest and src array': (test) ->
 		test.expect 3
@@ -253,7 +254,7 @@ module.exports =
 			norm "#{from}b.coffee"
 		]
 
-		test.deepEqual normalized.groups, groups
+		test.ok equalGroups normalized.groups, groups
 		test.done()
 	'dest and src array with file matches': (test) ->
 		test.expect 6
@@ -295,7 +296,7 @@ module.exports =
 		unsorted = normalized.groups[group]
 		normalized.groups[group] = unsorted.sort()
 
-		test.deepEqual normalized.groups, groups
+		test.ok equalGroups normalized.groups, groups
 		test.done()
 	'dest and src array with non-existent src': (test) ->
 		test.expect 4
@@ -326,7 +327,7 @@ module.exports =
 			norm "#{from}b.coffee"
 		]
 
-		test.deepEqual normalized.groups, groups
+		test.ok equalGroups normalized.groups, groups
 		test.done()
 	'dest and src where dest is a directory': (test) ->
 		test.expect 7
@@ -384,7 +385,7 @@ module.exports =
 			norm "#{from}html/b.html"
 		]
 
-		test.deepEqual normalized.groups, groups
+		test.ok equalGroups normalized.groups, groups
 		test.done()
 	'dest and src where src is a directory': (test) ->
 		test.expect 3
@@ -414,7 +415,7 @@ module.exports =
 		unsorted = normalized.groups[group]
 		normalized.groups[group] = unsorted.sort()
 
-		test.deepEqual normalized.groups, groups
+		test.ok equalGroups normalized.groups, groups
 		test.done()
 	'src where src is a directory': (test) ->
 		test.expect 4
@@ -455,7 +456,7 @@ module.exports =
 		normalized.groups[group] = unsorted.sort()
 
 		test.deepEqual normalized.dirs, dirs
-		test.deepEqual normalized.groups, groups
+		test.ok equalGroups normalized.groups, groups
 		test.done()
 	'files with source and destination': (test) ->
 		test.expect 7
@@ -521,7 +522,7 @@ module.exports =
 		unsorted = normalized.groups[group]
 		normalized.groups[group] = unsorted.sort()
 
-		test.deepEqual normalized.groups, groups
+		test.ok equalGroups normalized.groups, groups
 		test.done()
 	'files with source': (test) ->
 		test.expect 7
@@ -581,5 +582,5 @@ module.exports =
 		unsorted = normalized.groups[group]
 		normalized.groups[group] = unsorted.sort()
 
-		test.deepEqual normalized.groups, groups
+		test.ok equalGroups normalized.groups, groups
 		test.done()
