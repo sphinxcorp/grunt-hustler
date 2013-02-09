@@ -1,15 +1,17 @@
-###global module, require###
-
 module.exports = (grunt) ->
+	crypto = require 'crypto'
+
 	grunt.registerHelper 'hustler template', (config) ->
 		normalized = grunt.helper 'hustler normalizeFiles', config
 		groups = normalized.groups
 		config.data.include = grunt.file.read
 
+		config.data.hash = (filePath) ->
+			contents = grunt.file.read filePath
+			hash = crypto.createHash('sha1').update(contents).digest('hex').substr(0, 10)
+
 		config.data.uniqueVersion = ->
 			uniqueVersion = (new Date()).getTime()
-
-			uniqueVersion
 
 		for dest, src of groups
 			sourceContents = []
