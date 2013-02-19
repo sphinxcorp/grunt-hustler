@@ -26,6 +26,41 @@ module.exports = function (grunt) {
 			}
 		},
 
+		coffeeLint: {
+			src: {
+				src: './tasks/coffee.coffee',
+				// Use one tab for indentation.
+				indentation: {
+					value: 1,
+					level: 'error'
+				},
+				// No maximum line length.
+				max_line_length: {
+					level: 'ignore'
+				},
+				// Using tabs should not result in an error.
+				no_tabs: {
+					level: 'ignore'
+				}
+			},
+			test: {
+				src: './test/coffeeSpec.coffee',
+				// Use one tab for indentation.
+				indentation: {
+					value: 1,
+					level: 'error'
+				},
+				// No maximum line length.
+				max_line_length: {
+					level: 'ignore'
+				},
+				// Using tabs should not result in an error.
+				no_tabs: {
+					level: 'ignore'
+				}
+			}
+		},
+
 		watch: {
 			src: {
 				files: './tasks/**/*.coffee',
