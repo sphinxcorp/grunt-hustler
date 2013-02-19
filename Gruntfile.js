@@ -7,28 +7,22 @@ module.exports = function (grunt) {
 			]
 		},
 
-		delete: {
-			temp: {
-				src: './temp/'
-			}
-		},
-
 		coffee: {
 			src: {
-				src: './tasks/coffee.coffee',
-				dest: './tasks/',
+				src: './tasks/*.coffee',
+				dest: './temp/tasks/',
 				bare: true
 			},
 			test: {
-				src: './test/coffeeSpec.coffee',
-				dest: './test/',
+				src: './test/*.coffee',
+				dest: './temp/test/',
 				bare: true
 			}
 		},
 
 		coffeeLint: {
 			src: {
-				src: './tasks/coffee.coffee',
+				src: './tasks/*.coffee',
 				// Use one tab for indentation.
 				indentation: {
 					value: 1,
@@ -44,7 +38,7 @@ module.exports = function (grunt) {
 				}
 			},
 			test: {
-				src: './test/coffeeSpec.coffee',
+				src: './test/*.coffee',
 				// Use one tab for indentation.
 				indentation: {
 					value: 1,
@@ -58,6 +52,23 @@ module.exports = function (grunt) {
 				no_tabs: {
 					level: 'ignore'
 				}
+			}
+		},
+
+		copy: {
+			src: {
+				src: './tasks/*.coffee',
+				dest: './temp/tasks/'
+			},
+			test: {
+				src: './test/*.coffee',
+				dest: './temp/test/'
+			}
+		},
+
+		delete: {
+			temp: {
+				src: './temp/'
 			}
 		},
 
