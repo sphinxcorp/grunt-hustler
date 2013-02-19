@@ -1,6 +1,7 @@
 grunt = require 'grunt'
 fs = require 'fs'
 path = require 'path'
+helpers = require('grunt-lib-legacyhelpers').init(grunt)
 createFile = grunt.file.write
 readFile = grunt.file.read
 
@@ -29,7 +30,7 @@ module.exports =
 		test.equal true, fs.existsSync "#{from}a.coffee", 'should find a.coffee'
 		test.equal true, fs.existsSync "#{from}b.coffee", 'should find b.coffee'
 
-		grunt.helper 'hustler coffee', data: src: from, dest: to
+		helpers['hustler coffee'] data: src: from, dest: to
 
 		aExpect = '(function() {\n  var a;\n\n  a = 1;\n\n}).call(this);\n'
 		aContents = readFile "#{to}a.js"
@@ -50,7 +51,7 @@ module.exports =
 		test.equal true, fs.existsSync "#{from}a.coffee", 'should find a.coffee'
 		test.equal true, fs.existsSync "#{from}b.coffee", 'should find b.coffee'
 
-		grunt.helper 'hustler coffee', data: src: from, dest: to, bare: true
+		helpers['hustler coffee'] data: src: from, dest: to, bare: true
 
 		aExpect = 'var a;\n\na = 1;\n'
 		aContents = readFile "#{to}a.js"
@@ -74,7 +75,7 @@ module.exports =
 		src = ["#{from}a.coffee", "#{from}b.coffee"]
 		dest = "#{to}min.js"
 
-		grunt.helper 'hustler coffee', data: src: src, dest: dest, bare: true
+		helpers['hustler coffee'] data: src: src, dest: dest, bare: true
 
 		expect = 'var a, b;\n\na = 1;\n\nb = 2;\n'
 		contents = readFile dest

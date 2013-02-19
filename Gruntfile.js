@@ -1,11 +1,5 @@
-/*global module*/
-
 module.exports = function (grunt) {
-	'use strict';
-
 	grunt.initConfig({
-		pkg: '<json:package.json>',
-
 		nodeunit: {
 			tasks: [
 				'./test/**/!(deleteSpec.js)*.js',
@@ -21,12 +15,12 @@ module.exports = function (grunt) {
 
 		coffee: {
 			src: {
-				src: './tasks/*.coffee',
+				src: './tasks/coffee.coffee',
 				dest: './tasks/',
 				bare: true
 			},
 			test: {
-				src: './test/*.coffee',
+				src: './test/coffeeSpec.coffee',
 				dest: './test/',
 				bare: true
 			}
@@ -45,7 +39,7 @@ module.exports = function (grunt) {
 	});
 
 	grunt.loadTasks('./tasks/');
-	grunt.renameTask('test', 'nodeunit');
-	grunt.registerTask('test', 'delete nodeunit delete');
-	grunt.registerTask('default', 'test');
+	// grunt.renameTask('test', 'nodeunit');
+	// grunt.registerTask('test', 'delete nodeunit delete');
+	// grunt.registerTask('default', 'test');
 };

@@ -1,5 +1,3 @@
-###global module, require###
-
 module.exports = (grunt) ->
 	requirejs = require 'requirejs'
 

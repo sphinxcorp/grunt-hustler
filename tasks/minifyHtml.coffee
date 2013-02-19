@@ -1,10 +1,9 @@
-###global module, require###
-
 module.exports = (grunt) ->
 	prettyDiff = require 'prettydiff'
+	helpers = require('grunt-lib-legacyhelpers').init(grunt)
 
-	grunt.registerHelper 'hustler minifyHtml', (config) ->
-		normalized = grunt.helper 'hustler normalizeFiles', config
+	helpers['hustler minifyHtml'] = (config) ->
+		normalized = helpers['hustler normalizeFiles'] config
 		groups = normalized.groups
 		data = config.data
 		conditional = data.conditional ? true
@@ -32,4 +31,4 @@ module.exports = (grunt) ->
 			grunt.verbose.ok "#{src} -> #{dest}"
 
 	grunt.registerMultiTask 'minifyHtml', 'Minifies Html', ->
-		grunt.helper 'hustler minifyHtml', @
+		helpers['hustler minifyHtml'] @

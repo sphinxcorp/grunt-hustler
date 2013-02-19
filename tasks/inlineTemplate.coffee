@@ -1,14 +1,14 @@
-###global module, require###
-
 module.exports = (grunt) ->
+	helpers = require('grunt-lib-legacyhelpers').init(grunt)
+
 	wrapScript = (contents, type, id, trim) ->
 		id = id.replace(trim, '') if trim
 		script = "<script type=\"#{type}\" id=\"#{id}\">#{contents}</script>"
 
 		script
 
-	grunt.registerHelper 'hustler inlineTemplate', (config) ->
-		normalized = grunt.helper 'hustler normalizeFiles', config
+	helpers['hustler inlineTemplate'] = (config) ->
+		normalized = helpers['hustler normalizeFiles'] config
 		groups = normalized.groups
 		type = config.data.type
 		trim = config.data.trim
@@ -29,4 +29,4 @@ module.exports = (grunt) ->
 			grunt.verbose.ok "#{src} -> #{dest}"
 
 	grunt.registerMultiTask 'inlineTemplate', 'Inlines templates', ->
-		grunt.helper 'hustler inlineTemplate', @
+		helpers['hustler inlineTemplate'] @

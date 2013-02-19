@@ -1,17 +1,16 @@
-###global module, require###
-
 module.exports = (grunt) ->
 	fs = require 'fs'
+	helpers = require('grunt-lib-legacyhelpers').init(grunt)
 
-	grunt.registerHelper 'hustler copy', (data) ->
-		normalized = grunt.helper 'hustler normalizeFiles', data
+	helpers['hustler copy'] = (data) ->
+		normalized = helpers['hustler normalizeFiles'] data
 		groups = normalized.groups
 
 		for dest, src of groups
 			srcCount = src.length
 
 			if srcCount > 1
-				contents = grunt.helper 'concat', src
+				contents = helpers.name 'concat', src
 			else
 				contents = fs.readFileSync src[0]
 
@@ -19,4 +18,4 @@ module.exports = (grunt) ->
 			grunt.verbose.ok "#{src} -> #{dest}"
 
 	grunt.registerMultiTask 'copy', 'Copies files and directories', ->
-		grunt.helper 'hustler copy', @
+		helpers['hustler copy'] @

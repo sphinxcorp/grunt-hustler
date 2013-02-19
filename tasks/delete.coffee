@@ -1,8 +1,7 @@
-###global module, require###
-
 module.exports = (grunt) ->
 	fs = require 'fs'
 	rimraf = require 'rimraf'
+	helpers = require('grunt-lib-legacyhelpers').init(grunt)
 
 	deleteFileObject = (command, fileObject) ->
 		command fileObject
@@ -14,8 +13,8 @@ module.exports = (grunt) ->
 	deleteDirectory = (directory) ->
 		deleteFileObject rimraf.sync, directory
 
-	grunt.registerHelper 'hustler delete', (data) ->
-		normalized = grunt.helper 'hustler normalizeFiles', data
+	helpers['hustler delete'] = (data) ->
+		normalized = helpers['hustler normalizeFiles'] data
 		dirs = normalized.dirs
 		groups = normalized.groups
 
@@ -28,4 +27,4 @@ module.exports = (grunt) ->
 				deleteFile source if exists
 
 	grunt.registerMultiTask 'delete', 'Deletes files and directories', ->
-		grunt.helper 'hustler delete', @
+		helpers['hustler delete'] @

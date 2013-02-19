@@ -1,10 +1,9 @@
-###global module, require###
-
 module.exports = (grunt) ->
 	coffeeLint = require 'coffeelint'
+	helpers = require('grunt-lib-legacyhelpers').init(grunt)
 
-	grunt.registerHelper 'hustler coffeeLint', (data) ->
-		normalized = grunt.helper 'hustler normalizeFiles', data
+	helpers['hustler coffeeLint'] = (data) ->
+		normalized = helpers['hustler normalizeFiles'] data
 		groups = normalized.groups
 
 		for dest, src of groups
@@ -21,4 +20,4 @@ module.exports = (grunt) ->
 					grunt.log.error "##{error.lineNumber}: #{error.message} (#{error.context})"
 
 	grunt.registerMultiTask 'coffeeLint', 'Lints CoffeeScript files', ->
-		grunt.helper 'hustler coffeeLint', @
+		helpers['hustler coffeeLint'] @

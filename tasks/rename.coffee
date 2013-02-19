@@ -1,10 +1,9 @@
-###global module, require###
-
 module.exports = (grunt) ->
 	fs = require 'fs'
+	helpers = require('grunt-lib-legacyhelpers').init(grunt)
 
-	grunt.registerHelper 'hustler rename', (data) ->
-		normalized = grunt.helper 'hustler normalizeFiles', data
+	helpers['hustler rename'] = (data) ->
+		normalized = helpers['hustler normalizeFiles'] data
 		groups = normalized.groups
 
 		for dest, src of groups
@@ -13,4 +12,4 @@ module.exports = (grunt) ->
 				grunt.verbose.ok "#{source} -> #{dest}"
 
 	grunt.registerMultiTask 'rename', 'Renames files', ->
-		grunt.helper 'hustler rename', @
+		helpers['hustler rename'] @

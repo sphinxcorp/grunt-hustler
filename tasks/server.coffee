@@ -1,5 +1,3 @@
-###global module, require###
-
 module.exports = (grunt) ->
 	grunt.registerMultiTask 'server', 'Run a server', ->
 		done = @async()

@@ -1,8 +1,9 @@
 module.exports = (grunt) ->
 	crypto = require 'crypto'
+	helpers = require('grunt-lib-legacyhelpers').init(grunt)
 
-	grunt.registerHelper 'hustler template', (config) ->
-		normalized = grunt.helper 'hustler normalizeFiles', config
+	helpers['hustler template'] = (config) ->
+		normalized = helpers['hustler normalizeFiles'] config
 		groups = normalized.groups
 		config.data.include = grunt.file.read
 
@@ -30,4 +31,4 @@ module.exports = (grunt) ->
 			grunt.verbose.ok "#{src} -> #{destination}"
 
 	grunt.registerMultiTask 'template', 'Compiles templates', ->
-		grunt.helper 'hustler template', @
+		helpers['hustler template'] @
