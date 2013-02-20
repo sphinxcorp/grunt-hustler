@@ -81,6 +81,13 @@ module.exports = function (grunt) {
 				files: './test/**/*.coffee',
 				tasks: 'coffee test'
 			}
+		},
+
+		template: {
+			test: {
+				src: './tasks/zebra.template',
+				dest: './temp/zebra.html'
+			}
 		}
 	});
 
