@@ -1,4 +1,6 @@
 module.exports = (config) ->
+	return if not config.data
+
 	grunt = require 'grunt'
 	path = require 'path'
 	unTemplatedConfig = config
@@ -19,6 +21,10 @@ module.exports = (config) ->
 	dirs = {}
 	groups = {}
 	isIndexed = false
+
+	if typeof inFiles is 'string'
+		inSrc = inFiles
+		inFiles = {}
 
 	if inFiles
 		if Array.isArray inFiles

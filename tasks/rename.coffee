@@ -1,5 +1,12 @@
 module.exports = (grunt) ->
-	renameHelper = require './renameHelper'
+	fs = require 'fs'
+	normalizeFilesHelper = require './normalizeFilesHelper'
 
 	grunt.registerMultiTask 'rename', 'Renames files', ->
-		renameHelper @
+		normalized = normalizeFilesHelper @
+		groups = normalized.groups
+
+		for dest, src of groups
+			src.forEach (source) ->
+				fs.renameSync source, dest
+				grunt.verbose.ok "#{source} -> #{dest}"

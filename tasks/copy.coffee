@@ -1,5 +1,18 @@
 module.exports = (grunt) ->
-	copyHelper = require './copyHelper'
+	fs = require 'fs'
+	normalizeFilesHelper = require './normalizeFilesHelper'
 
 	grunt.registerMultiTask 'copy', 'Copies files and directories', ->
-		copyHelper @
+		normalized = normalizeFilesHelper @
+		groups = normalized.groups
+
+		for dest, src of groups
+			srcCount = src.length
+
+			if srcCount > 1
+				contents = helpers.name 'concat', src
+			else
+				contents = fs.readFileSync src[0]
+
+			grunt.file.write dest, contents
+			grunt.verbose.ok "#{src} -> #{dest}"

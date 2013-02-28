@@ -1,8 +1,17 @@
 module.exports = function (grunt) {
 	grunt.initConfig({
+		coffee: {
+			scripts: {
+				files: {
+					'./temp/scripts/': './tasks/**/*.coffee'
+				},
+				bare: true
+			}
+		},
+
 		coffeeLint: {
-			src: {
-				src: './tasks/**/*.coffee',
+			scripts: {
+				files: './tasks/**/*.coffee',
 				// Use one tab for indentation.
 				indentation: {
 					value: 1,
@@ -16,6 +25,63 @@ module.exports = function (grunt) {
 				no_tabs: {
 					level: 'ignore'
 				}
+			}
+		},
+
+		copy: {
+			scripts: {
+				files: {
+					'./temp/dest/': './tasks/'
+				}
+			}
+		},
+
+		delete: {
+			scripts: {
+				files: './temp/'
+			}
+		},
+
+		inlineTemplate: {
+			views: {
+				files: {
+					'./temp/views/views.html': './views/**/*.html'
+				},
+				type: 'text/ng-template'
+			}
+		},
+
+		less: {
+			styles: {
+				files: {
+					'./temp/styles/': './styles/**/*.less'
+				}
+			}
+		},
+
+		minifyHtml: {
+			views: {
+				files: {
+					'./temp/views/': './views/**/*.html',
+					'./temp/views/view.min.html': './views/**/*.html'
+				}
+			}
+		},
+
+		rename: {
+			views: {
+				files: {
+					'./temp/views/people.new.html': './temp/views/people.html'
+				}
+			}
+		},
+
+		template: {
+			views: {
+				files: {
+					'./temp/templateViews': './views/**/*.template'
+				},
+				environment: 'prod'
 			}
 		},
 
