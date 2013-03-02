@@ -37,7 +37,7 @@
 		"rimraf": "~2.1.4"
 	},
 	"devDependencies": {
-		"grunt-contrib-watch": "~0.3.0"
+		"grunt-contrib-watch": "~0.3.1"
 	},
 	"keywords": [
 		"gruntplugin",

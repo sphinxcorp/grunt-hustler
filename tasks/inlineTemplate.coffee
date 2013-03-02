@@ -9,6 +9,7 @@ module.exports = (grunt) ->
 
 		wrapScript = (contents, type, id, trim) ->
 			id = id.replace(trim, '') if trim
+			id = id.replace './', ''
 			script = "<script type=\"#{type}\" id=\"#{id}\">#{contents}</script>"
 
 			script
