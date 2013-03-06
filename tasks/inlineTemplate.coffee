@@ -12,8 +12,6 @@ module.exports = (grunt) ->
 			id = id.replace './', ''
 			script = "<script type=\"#{type}\" id=\"#{id}\">#{contents}</script>"
 
-			script
-
 		for dest, src of groups
 			sourceContents = []
 

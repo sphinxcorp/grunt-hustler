@@ -6,7 +6,6 @@
 * [What is grunt-hustler?](#what-is-grunt-hustler)
 * [Installation](#installation)
 * [Usage](#usage)
-* [Tasks](#tasks)
 * [Versioning](#versioning)
 * [Bug Tracker](#bug-tracker)
 * [Author](#author)
@@ -16,14 +15,17 @@
 
 A collection of [grunt](https://github.com/cowboy/grunt) tasks.
 
-* [coffee](#coffee) - Compile [CoffeeScript](http://coffeescript.org/) (.coffee) to JavaScript (.js)
-* [coffeeLint](#coffeelint) - Lint CoffeeScript files using [coffeelint](http://www.coffeelint.org/)
-* copy
-* delete
-* hash
-* requirejs
-* server
-* template
+* coffee - _deprecated_, use [grunt-contrib-coffee](https://github.com/gruntjs/grunt-contrib-coffee)
+* copy - _deprecated_, use [grunt-contrib-copy](https://github.com/gruntjs/grunt-contrib-copy)
+* delete - _deprecated_, use [grunt-contrib-clean](https://github.com/gruntjs/grunt-contrib-clean)
+* inlineTemplate - adds views to script blocks
+* less - _deprecated_, use [grunt-contrib-less](https://github.com/gruntjs/grunt-contrib-less)
+* minifyHtml - minifies html views (not using grunt-contrib until their minifier supports valueless attributes and xml namespaces)
+* ngTemplateCache - creates a JavaScript file, placing all views in the AngularJS $templateCache
+* rename - renames files
+* requirejs - _deprecated_, use [grunt-contrib-requirejs](https://github.com/gruntjs/grunt-contrib-requirejs)
+* server - starts a server using nodemon
+* template - compiles views containing Lo-Dash template commands.
 
 ## Installation
 
@@ -37,84 +39,6 @@ Include the following line in your Grunt file.
 
 ```javascript
 grunt.loadNpmTasks('grunt-hustler');
-```
-
-## Tasks
-
-### coffee
-
-Compile [CoffeeScript](http://coffeescript.org/) (*.coffee) to JavaScript (*.js)
-
-#### options
-
-* src - source directory
-* dest - destination directory
-* bare - compile the JavaScript without the [top-level function safety wrapper](http://coffeescript.org/#lexical_scope)
-
-#### Example
-
-```javascript
-// example
-module.exports = function (grunt) {
-	grunt.initConfig({
-
-		/*
-		The following will compile all .coffee files in the src directory
-		and place the corresponding .js files in the dest directory.
-		The directory hierarchy will be maintained.
-		*/
-		coffee: {
-			dist: {
-				src: '/src/scripts/',
-				dest: '/dist/scripts/',
-				bare: true
-			}
-		}
-
-	});
-
-	grunt.loadNpmTasks('grunt-hustler');
-};
-```
-
-### coffeeLint
-
-Lint CoffeeScript files using [coffeelint](http://www.coffeelint.org/)
-
-#### options
-
-* see [coffeelint](http://www.coffeelint.org/#options) for options
-
-#### Example
-
-```javascript
-// example
-module.exports = function (grunt) {
-	grunt.initConfig({
-
-		/*
-		The following will lint all .coffee files in the src directory
-		with indentation of one tab and no maximum line length
-		*/
-		coffeeLint: {
-			scripts: {
-				src: '/src/scripts/**/*.coffee',
-				indentation: {
-					value: 1
-				},
-				max_line_length: {
-					level: 'ignore'
-				},
-				no_tabs: {
-					level: 'ignore'
-				}
-			}
-		}
-
-	});
-
-	grunt.loadNpmTasks('grunt-hustler');
-};
 ```
 
 ## Versioning
@@ -149,6 +73,6 @@ https://github.com/CaryLandholt/grunt-hustler/issues
 
 ## License
 
-Copyright 2012 Cary Landholt
+Copyright 2013 Cary Landholt
 
 Licensed under the MIT license.
