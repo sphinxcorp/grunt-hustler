@@ -24,7 +24,7 @@ A collection of [grunt](https://github.com/cowboy/grunt) tasks.
 * ngTemplateCache - creates a JavaScript file, placing all views in the AngularJS $templateCache
 * rename - renames files
 * requirejs - _deprecated_, use [grunt-contrib-requirejs](https://github.com/gruntjs/grunt-contrib-requirejs)
-* server - starts a server using nodemon
+* server - _deprecated_, use [grunt-express](https://github.com/blai/grunt-express)
 * template - compiles views containing Lo-Dash template commands.
 
 ## Installation
