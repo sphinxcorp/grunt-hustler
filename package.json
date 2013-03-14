@@ -1,7 +1,7 @@
 {
 	"name": "grunt-hustler",
 	"description": "A collection of grunt tasks",
-	"version": "0.11.1",
+	"version": "0.11.2",
 	"homepage": "https://github.com/CaryLandholt/grunt-hustler",
 	"author": {
 		"name": "Cary Landholt",
@@ -26,7 +26,7 @@
 		"node": ">= 0.8.1"
 	},
 	"dependencies": {
-		"grunt": "~0.4.0",
+		"grunt": "~0.4.1",
 		"prettydiff": "0.0.146"
 	},
 	"keywords": [
