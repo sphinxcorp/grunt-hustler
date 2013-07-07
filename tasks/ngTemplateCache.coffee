@@ -12,7 +12,7 @@ module.exports = (grunt) ->
 	grunt.registerMultiTask 'ngTemplateCache', 'Creates a script file pushing all views into the template cache.', ->
 		options = @options(
 			module: 'app'
-			trim: './src'
+			trim: './.temp'
 		)
 
 		grunt.verbose.writeflags options, 'Options'
@@ -21,15 +21,15 @@ module.exports = (grunt) ->
 			prefix = "angular.module('#{options.module}').run(['$templateCache', function ($templateCache) {"
 			suffix = '}]);'
 
-			output = f.src.filter((filepath) ->
-				unless grunt.file.exists(filepath)
-					grunt.log.warn "Source file \" #{filepath}\" not found."
+			output = f.src.filter((filePath) ->
+				unless grunt.file.exists(filePath)
+					grunt.log.warn "Source file \" #{filePath}\" not found."
 
 					false
 				else
 					true
-			).map((filepath) ->
-				content = grunt.file.read filepath
+			).map((filePath) ->
+				content = grunt.file.read filePath
 
 				minifyOptions =
 					conditional: true
@@ -39,7 +39,7 @@ module.exports = (grunt) ->
 
 				minified = prettyDiff.api(minifyOptions)[0]
 				escaped = escapeContent minified
-				cache = "\t$templateCache.put('#{filepath.replace(options.trim, '')}', '#{escaped}');"
+				cache = "\t$templateCache.put('#{filePath.replace(options.trim, '')}', '#{escaped}');"
 			)
 
 			output.unshift prefix
