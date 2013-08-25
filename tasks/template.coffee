@@ -47,7 +47,6 @@ module.exports = (grunt) ->
 			separator = grunt.util.linefeed
 			contents = sourceContents.join grunt.util.normalizelf separator
 			compiled = grunt.template.process contents, data: config: data
-			# destination = dest.replace '.template', '.html'
 
 			grunt.file.write dest, compiled
 			grunt.verbose.ok "#{src} -> #{dest}"
