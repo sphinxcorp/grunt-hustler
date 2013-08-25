@@ -59,7 +59,7 @@ module.exports = (grunt) ->
 
 				loads.push file
 
-		template = grunt.file.read '/templates/main.coffee'
+		template = grunt.file.read "#{__dirname}/templates/main.coffee"
 		compiled = grunt.template.process template, data: config: shim: JSON.stringify(main.shim), loads: JSON.stringify(loads)
 
 		grunt.file.write @data.dest, compiled
