@@ -1,65 +1,89 @@
 module.exports = (grunt) ->
 	path = require 'path'
 
-	grunt.registerMultiTask 'ngShim', 'Renames files based on their hashed contents', ->
-		trim = @data.options.trim
+	trimFileExtension = (file) ->
+		ext = path.extname file
+		extLength = ext.length
+		fileLength = file.length
 
-		trimPath = (filePath) ->
-			file = filePath
+		file.substr(0, fileLength - extLength)
 
-			if trim
-				trimLength = trim.length
-				isMatch = filePath.substr(0, trimLength) is trim
-				file = filePath.substr(trimLength) if isMatch
+	trimFileExtensions = (files) ->
+		files.map (file) ->
+			trimFileExtension file
 
-			ext = path.extname file
-			extLength = ext.length
-			fileLength = file.length
-			file = file.substr(0, fileLength - extLength)
 
-		angular = trimPath @data.angular
-		modules = []
-		app = trimPath @data.app
-		bootstrap = trimPath @data.bootstrap
-		appDependencies = [angular]
-		moduleDependencies = [angular, app]
-		loads = ['require']
+	getModulePaths = (modules) ->
+		return [] if not modules.length > 0
 
-		main = {
-			shim: {}
-		}
+		paths = modules.map (mod) ->
+			for name, filePath of mod
+				filePath
 
-		@data.modules.forEach (module) ->
-			mod = trimPath module
-			main.shim[mod] = deps: [angular]
+		paths[0]
 
-			modules.push mod
-			appDependencies.push mod
-			moduleDependencies.push mod
+	getSourcePaths = (cwd, src) ->
+		grunt.file.expand("#{cwd}#{src}").map (filePath) ->
+			filePath.substr cwd.length
 
-		main.shim[app] = {deps: appDependencies}
+	writeApp = (file, cwd, modules) ->
+		mods = []
 
-		@files.forEach (f) ->
-			f.src.filter (filePath) ->
-				unless grunt.file.exists filePath
-					grunt.log.warn "Source file \" #{filePath}\" not found."
+		modules.forEach (module) ->
+			for name, filePath of module
+				sourceFilePath = "#{cwd}#{filePath}"
 
-					false
+				unless grunt.file.exists sourceFilePath
+					grunt.log.warn "Source file \" #{sourceFilePath}\" not found."
 				else
-					true
-			.map (filePath) ->
-				file = trimPath filePath
+					mods.push name
 
-				return if file is angular
-				return if modules.indexOf(file) isnt -1
-				return if file is app
-				return if file is bootstrap
+		template = grunt.file.read "#{__dirname}/templates/app.coffee"
+		dest = "#{cwd}#{file}"
+		compiled = grunt.template.process template, data: config: modules: JSON.stringify(mods)
 
-				main.shim[file] = {deps: moduleDependencies}
+		grunt.file.write dest, compiled
 
-				loads.push file
+	writeBootstrap = (file, cwd) ->
+		template = grunt.file.read "#{__dirname}/templates/bootstrap.coffee"
+		dest = "#{cwd}#{file}"
+		compiled = grunt.template.process template
+
+		grunt.file.write dest, compiled
+
+	grunt.registerMultiTask 'ngShim', 'Creates a RequireJS main file', ->
+		cwd = @data.cwd
+		src = @data.src
+		dest = "#{cwd}#{@data.dest}"
+		angularPath = @data.angular
+		angular = trimFileExtension angularPath
+		modules = @data.modules
+		modulePaths = getModulePaths modules
+		mods = trimFileExtensions modulePaths
+		appPath = 'app.coffee'
+		app = trimFileExtension appPath
+		bootstrapPath = 'bootstrap.coffee'
+		bootstrap = trimFileExtension bootstrapPath
+		sourcePaths = getSourcePaths cwd, src
+		source = trimFileExtensions sourcePaths
+		loads = ['require'].concat(source)
+
+		writeApp appPath, cwd, modules
+		writeBootstrap bootstrapPath, cwd
+
+		shim = {}
+
+		shim[angular] = deps: []
+
+		mods.forEach (modulePath) ->
+			shim[modulePath] = deps: [angular]
+
+		shim[app] = deps: [angular].concat(mods)
+
+		source.forEach (sourcePath) ->
+			shim[sourcePath] = deps: [angular].concat(mods, app)
 
 		template = grunt.file.read "#{__dirname}/templates/main.coffee"
-		compiled = grunt.template.process template, data: config: shim: JSON.stringify(main.shim), loads: JSON.stringify(loads)
+		compiled = grunt.template.process template, data: config: shim: JSON.stringify(shim), loads: JSON.stringify(loads)
 
-		grunt.file.write @data.dest, compiled
+		grunt.file.write dest, compiled
