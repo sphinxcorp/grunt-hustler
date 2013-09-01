@@ -4,8 +4,8 @@ module.exports = (grunt) ->
 	path = require 'path'
 
 	grunt.registerMultiTask 'hash', 'Renames files based on their hashed contents', ->
-		@files.forEach (f) ->
-			f.src.filter (filePath) ->
+		@files.forEach (filePair) ->
+			filePair.src.filter (filePath) ->
 				unless grunt.file.exists filePath
 					grunt.log.warn "Source file \" #{filePath}\" not found."
 
