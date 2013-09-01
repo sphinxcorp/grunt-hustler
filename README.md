@@ -16,16 +16,11 @@
 
 A collection of [grunt](https://github.com/cowboy/grunt) tasks.
 
-* coffee - _deprecated_, use [grunt-contrib-coffee](https://github.com/gruntjs/grunt-contrib-coffee)
-* copy - _deprecated_, use [grunt-contrib-copy](https://github.com/gruntjs/grunt-contrib-copy)
-* delete - _deprecated_, use [grunt-contrib-clean](https://github.com/gruntjs/grunt-contrib-clean)
-* inlineTemplate - adds views to script blocks
-* less - _deprecated_, use [grunt-contrib-less](https://github.com/gruntjs/grunt-contrib-less)
+* hash - renames files based on their hashed contents
 * minifyHtml - minifies html views (not using grunt-contrib until their minifier supports valueless attributes and xml namespaces)
+* ngShim - creates a RequireJS main file
 * ngTemplateCache - creates a JavaScript file, placing all views in the AngularJS $templateCache
 * rename - renames files
-* requirejs - _deprecated_, use [grunt-contrib-requirejs](https://github.com/gruntjs/grunt-contrib-requirejs)
-* server - _deprecated_, use [grunt-express](https://github.com/blai/grunt-express)
 * template - compiles views containing Lo-Dash template commands.
 
 ## Installation
