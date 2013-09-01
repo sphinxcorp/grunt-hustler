@@ -1,4 +1,5 @@
 [![build status](https://secure.travis-ci.org/CaryLandholt/grunt-hustler.png)](http://travis-ci.org/CaryLandholt/grunt-hustler)
+[![NPM version](https://badge.fury.io/js/grunt-hustler.png)](http://badge.fury.io/js/grunt-hustler)
 [![dependency status](https://david-dm.org/CaryLandholt/grunt-hustler.png)](https://david-dm.org/CaryLandholt/grunt-hustler)
 # grunt-hustler
 
