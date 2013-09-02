@@ -21,7 +21,6 @@ A collection of [grunt](https://github.com/cowboy/grunt) tasks.
 * minifyHtml - minifies html views (not using grunt-contrib until their minifier supports valueless attributes and xml namespaces)
 * ngShim - creates a RequireJS main file
 * ngTemplateCache - creates a JavaScript file, placing all views in the AngularJS $templateCache
-* rename - renames files
 * template - compiles views containing Lo-Dash template commands.
 
 ## Installation
