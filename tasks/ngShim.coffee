@@ -12,7 +12,6 @@ module.exports = (grunt) ->
 		files.map (file) ->
 			trimFileExtension file
 
-
 	getModulePaths = (modules) ->
 		return [] if not modules.length > 0
 
@@ -23,8 +22,8 @@ module.exports = (grunt) ->
 		paths[0]
 
 	getSourcePaths = (cwd, src) ->
-		grunt.file.expand("#{cwd}#{src}").map (filePath) ->
-			filePath.substr cwd.length
+		grunt.file.expand({cwd}, src).map (filePath) ->
+			filePath
 
 	writeApp = (file, cwd, modules) ->
 		mods = []
@@ -72,7 +71,6 @@ module.exports = (grunt) ->
 		writeBootstrap bootstrapPath, cwd
 
 		shim = {}
-
 		shim[angular] = deps: []
 
 		mods.forEach (modulePath) ->
@@ -81,7 +79,21 @@ module.exports = (grunt) ->
 		shim[app] = deps: [angular].concat(mods)
 
 		source.forEach (sourcePath) ->
-			shim[sourcePath] = deps: [angular].concat(mods, app)
+			return if sourcePath is angular
+
+			isModule = mods.indexOf(sourcePath) > -1
+			ms = []
+
+			mods.forEach (mod) ->
+				return if sourcePath is mod
+				return if isModule
+
+				ms.push mod
+
+			return if isModule
+				shim[sourcePath] = deps: [angular].concat(ms)
+
+			shim[sourcePath] = deps: [angular].concat(ms, app)
 
 		template = grunt.file.read "#{__dirname}/templates/main.coffee"
 		compiled = grunt.template.process template, data: config: shim: JSON.stringify(shim), loads: JSON.stringify(loads)
