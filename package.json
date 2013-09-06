@@ -1,7 +1,7 @@
 {
 	"name": "grunt-hustler",
 	"description": "A collection of grunt tasks",
-	"version": "3.1.0",
+	"version": "3.1.1",
 	"homepage": "https://github.com/CaryLandholt/grunt-hustler",
 	"author": {
 		"name": "Cary Landholt",
