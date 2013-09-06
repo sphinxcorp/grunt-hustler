@@ -24,7 +24,8 @@ module.exports = (grunt) ->
 					replaceFiles = grunt.file.expand file
 					if replaceFiles.length > 0
 						contents = grunt.file.read replaceFiles[0]
-						contents = contents.replace "#{base}#{ext}", newFileName
+						exp = new RegExp "#{base}#{ext}", "g"
+						contents = contents.replace exp, newFileName
 						grunt.file.write replaceFiles[0], contents
 
 				fs.renameSync filePath, newFilePath
