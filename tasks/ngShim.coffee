@@ -37,14 +37,14 @@ module.exports = (grunt) ->
 				else
 					mods.push name
 
-		template = grunt.file.read "#{__dirname}/templates/app.coffee"
+		template = grunt.file.read "#{__dirname}/ngShim-templates/app.coffee"
 		dest = "#{cwd}#{file}"
 		compiled = grunt.template.process template, data: config: modules: JSON.stringify(mods)
 
 		grunt.file.write dest, compiled
 
 	writeBootstrap = (file, cwd) ->
-		template = grunt.file.read "#{__dirname}/templates/bootstrap.coffee"
+		template = grunt.file.read "#{__dirname}/ngShim-templates/bootstrap.coffee"
 		dest = "#{cwd}#{file}"
 		compiled = grunt.template.process template
 
@@ -95,7 +95,7 @@ module.exports = (grunt) ->
 
 			shim[sourcePath] = deps: [angular].concat(ms, app)
 
-		template = grunt.file.read "#{__dirname}/templates/main.coffee"
+		template = grunt.file.read "#{__dirname}/ngShim-templates/main.coffee"
 		compiled = grunt.template.process template, data: config: shim: JSON.stringify(shim), loads: JSON.stringify(loads)
 
 		grunt.file.write dest, compiled
