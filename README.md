@@ -11,6 +11,7 @@
 * [Bust](#bust)
 * [Hash](#hash)
 * [MinifyHtml](#minifyhtml)
+* [ngTemplateCache](#ngTemplateCache)
 * [Versioning](#versioning)
 * [Bug Tracker](#bug-tracker)
 * [Author](#author)
@@ -96,6 +97,31 @@ _grunt.config('minifyHtml', {
   }
 });
 ```
+
+## ngTemplateCache
+Creates a script file pushing all views from html files into Angular's template cache.
+
+Example Config:
+```javascript
+_grunt.config('ngTemplateCache', {
+  views: {
+    files: [
+      {
+        './scripts/views.js': './views/**/*.html'
+      }
+    ]
+  }
+});
+```
+
+Options:
+Trim option allows to remove directory name from before adding the path to the ngTemplateCache's registry. If you are working in a temporary directory working directory while running the grunt task, this is particularly helpful.
+```javascript
+options: {
+  trim: '/temp'
+}
+```
+
 
 ## Versioning
 
