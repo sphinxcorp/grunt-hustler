@@ -8,6 +8,7 @@
 * [What is grunt-hustler?](#what-is-grunt-hustler)
 * [Installation](#installation)
 * [Usage](#usage)
+	* [Bust](#bust)
 * [Versioning](#versioning)
 * [Bug Tracker](#bug-tracker)
 * [Author](#author)
@@ -33,9 +34,34 @@ $ npm install grunt-hustler
 
 Include the following line in your Grunt file.
 
-```javascript
+
 grunt.loadNpmTasks('grunt-hustler');
 ```
+
+### Bust
+Bust provides cache busting by renaming files with a hash based on their contents. It also replaces all instances of the file references.
+
+#### Example Config
+
+```javascript
+
+_grunt.config('bust', {
+  images: {
+    files: [
+      {
+        cwd: '/temp/',
+        src: ['images/**/*.png'],
+        dest: '/temp/',
+        replaceIn: {
+          files: ['/temp/styles/styles.css']
+        }
+      }
+    ]
+  }
+});
+
+```
+
 
 ## Versioning
 
