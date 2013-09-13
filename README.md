@@ -10,6 +10,7 @@
 * [Usage](#usage)
 * [Bust](#bust)
 * [Hash](#hash)
+* [MinifyHtml](#minifyhtml)
 * [Versioning](#versioning)
 * [Bug Tracker](#bug-tracker)
 * [Author](#author)
@@ -73,6 +74,23 @@ _grunt.config('hash', {
         cwd: '/temp/',
         src: ['scripts/scripts.min.js'],
         dest: '/temp/scripts/'
+      }
+    ]
+  }
+});
+```
+
+## MinifyHtml
+Minifies Html
+
+Example Config:
+```javascript
+_grunt.config('minifyHtml', {
+  scripts: {
+    files: [
+      {
+        src: 'index.html',
+        dest: '/scripts/'
       }
     ]
   }
