@@ -9,6 +9,7 @@
 * [Installation](#installation)
 * [Usage](#usage)
 * [Bust](#bust)
+* [Hash](#hash)
 * [Versioning](#versioning)
 * [Bug Tracker](#bug-tracker)
 * [Author](#author)
@@ -58,7 +59,25 @@ _grunt.config('bust', {
   }
 });
 ```
+## Hash
+Renames files based on the hash of their contents.
 
+scripts.min.js -> scripts.min.abse455dcd.js
+
+Example Config:
+```javascript
+_grunt.config('hash', {
+  scripts: {
+    files: [
+      {
+        cwd: '/temp/',
+        src: ['scripts/scripts.min.js'],
+        dest: '/temp/scripts/'
+      }
+    ]
+  }
+});
+```
 
 ## Versioning
 
