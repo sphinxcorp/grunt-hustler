@@ -1,9 +1,133 @@
 module.exports = (grunt) ->
-	path = require 'path'
-
 	grunt.registerMultiTask 'shimmer', 'Creates a RequireJS main file', ->
+		src = @data.src
+
+		return grunt.log.warn('src is required') if !src
+
+		cwd = @data.cwd ? './'
+		files = grunt.file.expand {cwd}, src
+
+		return grunt.verbose.warn('No src files found') if !files.length is 0
+
+		_ = grunt.util._
+		order = @data.order ? []
+
+		return grunt.log.warn('order must be an array') if !_.isArray(order)
+
+		path = require 'path'
+
 		filter = (filePath) ->
-			grunt.file.exists filePath
+			file = path.relative cwd, filePath
+			index = files.indexOf file
+			inSrc = index isnt -1
+
+		expand = (glob) ->
+			grunt.file.expand {cwd, filter}, glob
+
+		groups = []
+
+		processGroupFilePaths = (groupFilePaths) ->
+			filtered = []
+
+			groupFilePaths.forEach (groupFilePath) ->
+				position = files.indexOf groupFilePath
+
+				if position isnt -1
+					filtered.push groupFilePath
+					delete files[position]
+
+			groups.push filtered
+
+		handleArray = (group) ->
+			groupFilePaths = []
+
+			group.forEach (nestedGroup) ->
+				nestedGroupFilePaths = expand nestedGroup
+				groupFilePaths = groupFilePaths.concat nestedGroupFilePaths
+
+			processGroupFilePaths groupFilePaths
+
+		apps = {}
+
+		handleObject = (group) ->
+			for app, modules of group
+				mods = []
+				groupFilePaths = []
+
+				for module, filePath of modules
+					mods.push module
+					groupFilePaths.push filePath
+
+				processGroupFilePaths groupFilePaths
+
+				# isNgApp = app.substr(0, 5) is 'NGAPP'
+				# appName = if isNgApp then app.split('(')[1].split(')')[0] else app
+				appName = if app is 'NGAPP' then 'app' else app
+
+				groups.push ["#{appName}.coffee"]
+
+				apps[app] = mods
+
+		handleString = (group) ->
+			groupFilePaths = expand group
+
+			processGroupFilePaths groupFilePaths
+
+		normalizeGroups = ->
+			order.forEach (group) ->
+				return handleString(group) if _.isString(group)
+				return handleArray(group) if _.isArray(group)
+				return handleObject(group) if _.isObject(group)
+
+		normalizeGroups()
+
+		getTemplate = (templateFileName) ->
+			template = grunt.file.read "#{__dirname}/shimmer-templates/#{templateFileName}"
+
+		createApp = (app, moduleNames) ->
+			template = getTemplate 'app.coffee'
+
+			config =
+				app: app
+				modules: JSON.stringify(moduleNames)
+
+			compiled = grunt.template.process template, data: config: config
+			fileName = "#{app}.coffee"
+			dest = path.resolve cwd, fileName
+
+			grunt.file.write dest, compiled
+
+		createApps = ->
+			for app, modules of apps
+				appName = if app is 'NGAPP' then 'app' else app
+
+				createApp appName, modules
+
+		createApps apps
+
+		req = @data.require
+
+		createRequire = ->
+			return if !req
+
+			req = 'bootstrap.coffee' if req is 'NGBOOTSTRAP'
+			template = getTemplate 'bootstrap.coffee'
+			compiled = grunt.template.process template
+			dest = path.resolve cwd, req
+
+			grunt.file.write dest, compiled
+
+		createRequire()
+
+		loads = []
+
+		handleRemaining = ->
+			files.forEach (file) ->
+				loads.push(file) if file
+
+			groups.push loads
+
+		handleRemaining()
 
 		getFileNameWithoutExtension = (file) ->
 			ext = path.extname file
@@ -12,117 +136,50 @@ module.exports = (grunt) ->
 
 			file.substr(0, fileLength - extLength)
 
-		removeModule = (files, moduleName) ->
-			files.filter (x) ->
-				x isnt moduleName
+		trimFiles = (preTrimmedFiles) ->
+			trimmedFiles = []
 
-		_ = grunt.util._
-		src = @data.src
-		req = @data.require
+			preTrimmedFiles.forEach (group) ->
+				trimmedGroup = []
 
-		return if !src
-			grunt.log.warn 'src is required'
+				group.forEach (module) ->
+					trimmedModule = getFileNameWithoutExtension module
 
-		cwd = @data.cwd ? './'
+					trimmedGroup.push trimmedModule
 
-		files = grunt.file.expand({cwd, filter}, src)
+				trimmedFiles.push trimmedGroup
 
-		return if !files.length is 0
-			grunt.verbose.warn 'No src files found'
+			trimmedFiles
 
-		order = @data.order ? []
-
-		return if !_.isArray order
-			grunt.log.warn 'order must be an array'
+		groups = trimFiles groups
 
 		shim = {}
 		deps = []
-		moduleNames = []
 
-		order.forEach (ord, i) ->
-			return if _.isString ord
-				if ord is 'NGAPP'
-					shim['app'] = {deps}
-					deps = ['app']
-				else
-					trimmed = getFileNameWithoutExtension ord
-					shim[trimmed] = {deps}
-					deps = [trimmed]
+		createShim = ->
+			groups.forEach (group) ->
+				group.forEach (module) ->
+					shim[module] = {deps}
 
-				files = removeModule files, ord
+				deps = group
 
-			return if _.isArray ord
-				nextDeps = []
+		createShim()
 
-				ord.forEach (o) ->
-					trimmed = getFileNameWithoutExtension o
-					shim[trimmed] = {deps}
+		loads = trimFiles([loads])[0]
 
-					nextDeps.push trimmed
-
-					files = removeModule files, o
-
-				deps = nextDeps
-
-			return if _.isObject ord
-				for key, value of ord
-					if key is 'NGMODULES'
-						nextDeps = []
-
-						for moduleName, modulePath of value
-							moduleNames.push moduleName
-
-							trimmed = getFileNameWithoutExtension modulePath
-
-							shim[trimmed] = {deps}
-
-							files = removeModule files, modulePath
-							nextDeps.push trimmed
-
-						deps = nextDeps
-
-		do ->
-			fileName = 'app.coffee'
-			template = grunt.file.read "#{__dirname}/shimmer-templates/#{fileName}"
-
-			config =
-				modules: JSON.stringify(moduleNames)
-
-			compiled = grunt.template.process template, data: config: config
-			dest = path.resolve cwd, fileName
-
-			grunt.file.write dest, compiled
-
-		do ->
-			return if !req
-			return if req isnt 'NGBOOTSTRAP'
-
-			req = 'bootstrap'
-			fileName = 'bootstrap.coffee'
-			template = grunt.file.read "#{__dirname}/shimmer-templates/#{fileName}"
-
-			compiled = grunt.template.process template
-			dest = path.resolve cwd, fileName
-
-			grunt.file.write dest, compiled
-
-		do ->
-			trimmedFiles = []
-
-			files.forEach (filePath) ->
-				trimmed = getFileNameWithoutExtension filePath
-				trimmedFiles.push trimmed
-				shim[trimmed] = {deps}
-
+		processShim = ->
 			fileName = 'main.coffee'
-			template = grunt.file.read "#{__dirname}/shimmer-templates/#{fileName}"
+			template = getTemplate fileName
+			trimmedRequire = getFileNameWithoutExtension req
 
 			config =
 				shim: JSON.stringify(shim)
-				loads: JSON.stringify(['require'].concat(trimmedFiles))
-				req: if req then "require ['#{req}']" else ''
+				loads: JSON.stringify(['require'].concat(loads))
+				req: if req then "require ['#{trimmedRequire}']" else ''
 
 			compiled = grunt.template.process template, data: config: config
 			dest = path.resolve cwd, fileName
 
 			grunt.file.write dest, compiled
+
+		processShim()

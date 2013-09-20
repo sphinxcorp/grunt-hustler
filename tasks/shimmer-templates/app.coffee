@@ -1,1 +1,1 @@
-angular.module 'app', <%= config.modules %>
+angular.module '<%= config.app %>', <%= config.modules %>
