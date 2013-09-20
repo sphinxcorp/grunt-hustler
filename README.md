@@ -23,7 +23,7 @@ A collection of [grunt](https://github.com/cowboy/grunt) tasks.
 
 * hash - renames files based on their hashed contents
 * minifyHtml - minifies html views (not using grunt-contrib until their minifier supports valueless attributes and xml namespaces)
-* ngShim - creates a RequireJS main file
+* shimmer - creates a RequireJS main file
 * ngTemplateCache - creates a JavaScript file, placing all views in the AngularJS $templateCache
 * template - compiles views containing Lo-Dash template commands.
 
