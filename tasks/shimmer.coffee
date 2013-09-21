@@ -16,9 +16,14 @@ module.exports = (grunt) ->
 
 		path = require 'path'
 
+		unixifyPath = (p) ->
+			regex = /\\/g
+			p.replace regex, '/'
+
 		filter = (filePath) ->
 			file = path.relative cwd, filePath
-			index = files.indexOf file
+			unixified = unixifyPath file
+			index = files.indexOf unixified
 			inSrc = index isnt -1
 
 		expand = (glob) ->
