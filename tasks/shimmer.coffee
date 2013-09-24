@@ -14,6 +14,16 @@ module.exports = (grunt) ->
 
 		return grunt.log.warn('order must be an array') if !_.isArray(order)
 
+		removeFromFiles = (filePath) ->
+			position = files.indexOf filePath
+
+			if position isnt -1
+				delete files[position]
+
+		mainFileName = 'main.coffee'
+
+		removeFromFiles mainFileName
+
 		path = require 'path'
 
 		unixifyPath = (p) ->
@@ -68,8 +78,10 @@ module.exports = (grunt) ->
 				# isNgApp = app.substr(0, 5) is 'NGAPP'
 				# appName = if isNgApp then app.split('(')[1].split(')')[0] else app
 				appName = if app is 'NGAPP' then 'app' else app
+				appFile = "#{appName}.coffee"
 
-				groups.push ["#{appName}.coffee"]
+				removeFromFiles appFile
+				groups.push [appFile]
 
 				apps[app] = mods
 
@@ -120,6 +132,7 @@ module.exports = (grunt) ->
 			compiled = grunt.template.process template
 			dest = path.resolve cwd, req
 
+			removeFromFiles req
 			grunt.file.write dest, compiled
 
 		createRequire()
@@ -128,6 +141,7 @@ module.exports = (grunt) ->
 
 		handleRemaining = ->
 			files.forEach (file) ->
+				console.log 'remaining', file
 				loads.push(file) if file
 
 			groups.push loads
@@ -173,8 +187,7 @@ module.exports = (grunt) ->
 		loads = trimFiles([loads])[0]
 
 		processShim = ->
-			fileName = 'main.coffee'
-			template = getTemplate fileName
+			template = getTemplate mainFileName
 			trimmedRequire = getFileNameWithoutExtension req
 
 			config =
@@ -183,7 +196,7 @@ module.exports = (grunt) ->
 				req: if req then "require ['#{trimmedRequire}']" else ''
 
 			compiled = grunt.template.process template, data: config: config
-			dest = path.resolve cwd, fileName
+			dest = path.resolve cwd, mainFileName
 
 			grunt.file.write dest, compiled
 
