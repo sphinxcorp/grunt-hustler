@@ -12,14 +12,13 @@ module.exports = (grunt) ->
 				else
 					true
 			.map (filePath) ->
-				cwd = path.normalize f.orig.cwd
+				cwd = f.orig.cwd
 				contents = grunt.file.read filePath
 				hash = crypto.createHash('sha1').update(contents).digest('hex').substr(0, 10)
-				dir = path.normalize path.dirname filePath
+				dir = path.dirname filePath
 				ext = path.extname filePath
 				base = path.basename filePath, ext
 				idir = dir.split(cwd)[1]
-				idir = idir.replace '\\', '/'
 
 				newFileName = "/#{idir}/#{base}.#{hash}#{ext}"
 				newFilePath = path.join dir, "#{base}.#{hash}#{ext}"
@@ -29,6 +28,7 @@ module.exports = (grunt) ->
 					if replaceFiles.length > 0
 						contents = grunt.file.read replaceFiles[0]
 						toReplace = "/#{idir}/#{base}#{ext}"
+
 						exp = new RegExp toReplace, "g"
 						contents = contents.replace exp, newFileName
 						grunt.file.write replaceFiles[0], contents
