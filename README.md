@@ -8,7 +8,10 @@
 * [What is grunt-hustler?](#what-is-grunt-hustler)
 * [Installation](#installation)
 * [Usage](#usage)
-	* [Bust](#bust)
+* [Bust](#bust)
+* [Hash](#hash)
+* [MinifyHtml](#minifyhtml)
+* [ngTemplateCache](#ngTemplateCache)
 * [Versioning](#versioning)
 * [Bug Tracker](#bug-tracker)
 * [Author](#author)
@@ -20,7 +23,7 @@ A collection of [grunt](https://github.com/cowboy/grunt) tasks.
 
 * hash - renames files based on their hashed contents
 * minifyHtml - minifies html views (not using grunt-contrib until their minifier supports valueless attributes and xml namespaces)
-* ngShim - creates a RequireJS main file
+* shimmer - creates a RequireJS main file
 * ngTemplateCache - creates a JavaScript file, placing all views in the AngularJS $templateCache
 * template - compiles views containing Lo-Dash template commands.
 
@@ -34,17 +37,15 @@ $ npm install grunt-hustler
 
 Include the following line in your Grunt file.
 
-
+```bash
 grunt.loadNpmTasks('grunt-hustler');
 ```
 
-### Bust
+## Bust
 Bust provides cache busting by renaming files with a hash based on their contents. It also replaces all instances of the file references.
 
-#### Example Config
-
+Example Config:
 ```javascript
-
 _grunt.config('bust', {
   images: {
     files: [
@@ -59,7 +60,66 @@ _grunt.config('bust', {
     ]
   }
 });
+```
+## Hash
+Renames files based on the hash of their contents.
 
+scripts.min.js -> scripts.min.abse455dcd.js
+
+Example Config:
+```javascript
+_grunt.config('hash', {
+  scripts: {
+    files: [
+      {
+        cwd: '/temp/',
+        src: ['scripts/scripts.min.js'],
+        dest: '/temp/scripts/'
+      }
+    ]
+  }
+});
+```
+
+## MinifyHtml
+Minifies Html
+
+Example Config:
+```javascript
+_grunt.config('minifyHtml', {
+  scripts: {
+    files: [
+      {
+        src: 'index.html',
+        dest: '/scripts/'
+      }
+    ]
+  }
+});
+```
+
+## ngTemplateCache
+Creates a script file pushing all views from html files into Angular's template cache.
+
+Example Config:
+```javascript
+_grunt.config('ngTemplateCache', {
+  views: {
+    files: [
+      {
+        './scripts/views.js': './views/**/*.html'
+      }
+    ]
+  }
+});
+```
+
+Options:
+Trim option allows to remove directory name from before adding the path to the ngTemplateCache's registry. If you are working in a temporary directory working directory while running the grunt task, this is particularly helpful.
+```javascript
+options: {
+  trim: '/temp'
+}
 ```
 
 
