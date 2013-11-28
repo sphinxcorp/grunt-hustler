@@ -6,6 +6,26 @@ module.exports = (grunt) ->
 
 		cwd = @data.cwd ? './'
 		files = grunt.file.expand {cwd}, src
+		path = require 'path'
+
+		deDupe = ->
+			previousFile = null
+
+			files.forEach (file, index) ->
+				dirname = path.dirname file
+				ext = path.extname file
+				basename = path.basename file, ext
+
+				if previousFile and previousFile.dirname is dirname and previousFile.basename is basename and previousFile.ext is '.coffee' and ext is '.js'
+					delete files[index]
+
+				previousFile = {
+					dirname
+					ext
+					basename
+				}
+
+		deDupe()
 
 		return grunt.verbose.warn('No src files found') if !files.length is 0
 
@@ -23,8 +43,6 @@ module.exports = (grunt) ->
 		mainFileName = 'main.coffee'
 
 		removeFromFiles mainFileName
-
-		path = require 'path'
 
 		unixifyPath = (p) ->
 			regex = /\\/g
