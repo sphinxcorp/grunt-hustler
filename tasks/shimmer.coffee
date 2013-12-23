@@ -1,10 +1,12 @@
 module.exports = (grunt) ->
 	grunt.registerMultiTask 'shimmer', 'Creates a RequireJS main file', ->
 		src = @data.src
+		requireConfig = @data.requireConfig ? {}
 
 		return grunt.log.warn('src is required') if !src
 
 		cwd = @data.cwd ? './'
+		destPath = @data.dest ? "./"
 		files = grunt.file.expand {cwd}, src
 		path = require 'path'
 
@@ -128,7 +130,7 @@ module.exports = (grunt) ->
 
 			compiled = grunt.template.process template, data: config: config
 			fileName = "#{app}.coffee"
-			dest = path.resolve cwd, fileName
+			dest = path.resolve cwd, destPath + fileName
 
 			grunt.file.write dest, compiled
 
@@ -148,7 +150,7 @@ module.exports = (grunt) ->
 			req = 'bootstrap.coffee' if req is 'NGBOOTSTRAP'
 			template = getTemplate 'bootstrap.coffee'
 			compiled = grunt.template.process template
-			dest = path.resolve cwd, req
+			dest = path.resolve cwd, destPath + req
 
 			removeFromFiles req
 			grunt.file.write dest, compiled
@@ -190,13 +192,13 @@ module.exports = (grunt) ->
 
 		groups = trimFiles groups
 
-		shim = {}
+		requireConfig.shim = {}
 		deps = []
 
 		createShim = ->
 			groups.forEach (group) ->
 				group.forEach (module) ->
-					shim[module] = {deps}
+					requireConfig.shim[module] = {deps}
 
 				deps = group
 
@@ -209,13 +211,15 @@ module.exports = (grunt) ->
 			trimmedRequire = getFileNameWithoutExtension req
 
 			config =
-				shim: JSON.stringify(shim)
+				requireConfig: requireConfig
 				loads: JSON.stringify(['require'].concat(loads))
 				req: if req then "require ['#{trimmedRequire}']" else ''
 
 			compiled = grunt.template.process template, data: config: config
-			dest = path.resolve cwd, mainFileName
+			dest = path.resolve cwd, destPath + mainFileName
 
 			grunt.file.write dest, compiled
+
+			console.log "written main file to #{dest}"
 
 		processShim()
